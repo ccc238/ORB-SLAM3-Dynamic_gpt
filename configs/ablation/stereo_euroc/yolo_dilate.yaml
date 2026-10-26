@@ -1,0 +1,160 @@
+%YAML:1.0
+
+#--------------------------------------------------------------------------------------------
+# System config
+#--------------------------------------------------------------------------------------------
+
+# When the variables are commented, the system doesn't load a previous session or not store the current one
+
+# If the LoadFile doesn't exist, the system give a message and create a new Atlas from scratch
+#System.LoadAtlasFromFile: "Session_MH01_MH02_MH03_Stereo60_Pseudo"
+
+# The store file is created from the current session, if a file with the same name exists it is deleted
+#System.SaveAtlasToFile: "Session_MH01_MH02_MH03_Stereo60_Pseudo"
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+File.version: "1.0"
+
+Camera.type: "PinHole"
+
+# Camera calibration and distortion parameters (OpenCV) 
+Camera1.fx: 458.654
+Camera1.fy: 457.296
+Camera1.cx: 367.215
+Camera1.cy: 248.375
+
+Camera1.k1: -0.28340811
+Camera1.k2: 0.07395907
+Camera1.p1: 0.00019359
+Camera1.p2: 1.76187114e-05
+
+Camera2.fx: 457.587
+Camera2.fy: 456.134
+Camera2.cx: 379.999
+Camera2.cy: 255.238
+
+Camera2.k1: -0.28368365
+Camera2.k2: 0.07451284
+Camera2.p1: -0.00010473
+Camera2.p2: -3.55590700e-05
+
+Camera.width: 752
+Camera.height: 480
+
+# Camera frames per second 
+Camera.fps: 20
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
+
+Stereo.ThDepth: 60.0
+Stereo.T_c1_c2: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [0.999997256477797,-0.002317135723275,-0.000343393120620,0.110074137800478,
+         0.002312067192432,0.999898048507103,-0.014090668452683,-0.000156612054392,
+         0.000376008102320,0.014089835846691,0.999900662638081,0.000889382785432,
+         0,0,0,1.000000000000000]
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1200
+
+# ORB Extractor: Scale factor between levels in the scale pyramid 	
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid	
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast			
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500.0
+Viewer.imageViewScale: 1.0
+
+# Runtime semantic modules; original calibration/ORB/optimizer settings retained.
+Yolo.Enable: 1
+Yolo.ModelPath: "/home/aaa/models/yolo/yolo11s-seg.onnx"
+Yolo.DynamicClasses: [0]
+Yolo.Confidence: 0.25
+Yolo.NmsIoU: 0.45
+Yolo.MaskThreshold: 0.5
+Yolo.IntraOpThreads: 2
+MaskPostProcess.Enable: 1
+MaskPostProcess.DilateRadius: 3
+Yolo.SaveMask: 0
+Yolo.SaveOverlay: 0
+Yolo.LogTiming: 0
+Yolo.ShowMask: 0
+Yolo.OutputDir: "."
+
+# B1: person hard feature mask
+MaskFeatureReject.Enable: 1
+
+# B2: configuration only; evidence-only B2 does not affect pose estimation.
+B2.Enable: 0
+B2.EvidenceOnly: 1
+B2.Candidate.Enable: 1
+B2.Candidate.MaxFeaturesPerInstance: 300
+B2.Candidate.ErodeRadius: 3
+B2.Candidate.MinBoundaryDistance: 3
+B2.Association.Enable: 1
+B2.Association.UseMutualMatch: 1
+B2.Association.LoweRatio: 0.75
+B2.Association.MaxHammingDistance: 64
+B2.Association.MinInstanceIoU: 0.10
+B2.Association.MaxCenterDistancePixels: 100.0
+B2.Association.MinInstanceScore: 0.30
+B2.Geometry.Enable: 1
+B2.Geometry.UseDepthMedian3x3: 1
+B2.Geometry.MinDepthMeters: 0.30
+B2.Geometry.MaxDepthMeters: 5.00
+B2.Geometry.UseNormalizedResidual: 1
+B2.Geometry.MinMatchedFeatures: 30
+B2.Geometry.MinMatchRatio: 0.15
+B2.Geometry.MinValidFeatures: 10
+B2.Geometry.MinValidMatchRatio: 0.40
+B2.Geometry.BackgroundExclusionDilateRadius: 3
+B2.Geometry.Decision.Enable: 1
+B2.Geometry.Decision.Method: "background_mad"
+B2.Geometry.Decision.DepthBinMeters: 0.50
+B2.Geometry.Decision.MinSamplesPerBin: 30
+B2.Geometry.Decision.MinBackgroundSamples: 50
+B2.Geometry.Decision.SigmaFloorMeters: 0.01
+B2.Geometry.Decision.StaticThreshold: 2.0
+B2.Geometry.Decision.MovingThreshold: 3.5
+B2.Geometry.Decision.MinMovingFraction: 0.60
+B2.Geometry.Decision.MaxStaticFraction: 0.20
+B2.Geometry.Decision.MinRawMovingMeters: 0.02
+B2.Debug.Enable: 1
+B2.Debug.SaveCsv: 1
+B2.Debug.SaveFeatureCsv: 1
+B2.Debug.SaveSummaryCsv: 1
+B2.Debug.VerbosePerFeature: 0
+B2.Debug.PrintFrameSummary: 1
+B2.Debug.ShowOverlay: 1
+B2.Debug.OutputDir: "."
+B2.Debug.DatasetName: "EuRoC"
+Experiment.FrameLog: 0
