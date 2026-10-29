@@ -153,6 +153,13 @@ public:
 
     std::unique_ptr<DynamicDetector> mpDynamicDetector;
     std::unique_ptr<InstanceTrackManager> mpInstanceTrackManager;
+    struct IdentityOptimizerUses { int coarse=0, fine=0, coarseStatic=0, fineStatic=0; };
+    std::unordered_map<int,IdentityOptimizerUses> mIdentityOptimizerUses;
+    void RecordIdentityOptimizerInputs(bool fine);
+    bool mbIdentityResetPending=false;
+    std::ofstream mAssociationCsv;
+    void ResetDynamicIdentityHistory();
+    void LogInstanceAssociations(long frameId,double timestamp);
     // B2 is intentionally independent from Frame/mLastFrame.  It is created
     // only for B2 evidence-only runs and has no tracking decision authority.
     std::unique_ptr<B2MotionEvidence> mpB2Processor;

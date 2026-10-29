@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------
+Loaded 2484 stamps and poses from: /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+Loaded 717 stamps and poses from: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_expiry_off_3loHeG/CameraTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories (nearest_time method)...
+Timestamps are sorted, using binary search for matching.
+Found 714 of max. 717 possible matching timestamps between...
+	/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+and:	/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_expiry_off_3loHeG/CameraTrajectory.txt
+..with max. time diff.: 0.02 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method...
+Rotation of alignment:
+[[ 0.99536817  0.09579735 -0.00806717]
+ [ 0.0248892  -0.17573385  0.98412303]
+ [ 0.09285871 -0.97976552 -0.1773042 ]]
+Translation of alignment:
+[-0.81240998 -3.2253165   1.37672628]
+Scale correction: 1.0
+--------------------------------------------------------------------------------
+Found 713 pairs with delta 1 (frames) among 714 poses using all pairs.
+Compared 713 relative pose pairs, delta = 1 (frames) with all pairs.
+Calculating RPE for translation part pose relation...
+--------------------------------------------------------------------------------
+RPE w.r.t. translation part (m)
+for delta = 1 (frames) using all pairs
+(with SE(3) Umeyama alignment)
+
+       max	0.294843
+      mean	0.008748
+    median	0.005899
+       min	0.000561
+      rmse	0.017062
+       sse	0.207574
+       std	0.014649
+
+--------------------------------------------------------------------------------
+Saving results to /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_expiry_off_3loHeG/rpe_trans.zip...

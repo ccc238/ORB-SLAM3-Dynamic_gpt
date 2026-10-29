@@ -1,0 +1,1 @@
+PASS previous-state filtering, BG/S allow, P/D/new/boundary/unknown reject, outlier separation, pre/post-optimization rollback, pose rollback, mapped/background guards, exception safety

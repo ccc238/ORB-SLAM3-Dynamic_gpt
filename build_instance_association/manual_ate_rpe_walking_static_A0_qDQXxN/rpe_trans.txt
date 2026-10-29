@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------
+Loaded 2484 stamps and poses from: /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+Loaded 717 stamps and poses from: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_qDQXxN/CameraTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories (nearest_time method)...
+Timestamps are sorted, using binary search for matching.
+Found 714 of max. 717 possible matching timestamps between...
+	/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+and:	/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_qDQXxN/CameraTrajectory.txt
+..with max. time diff.: 0.02 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method...
+Rotation of alignment:
+[[ 0.99286382  0.08137514  0.08717522]
+ [-0.06117878 -0.27991443  0.95807362]
+ [ 0.10236497 -0.95656991 -0.27293848]]
+Translation of alignment:
+[-0.81140315 -3.22078057  1.37879442]
+Scale correction: 1.0
+--------------------------------------------------------------------------------
+Found 713 pairs with delta 1 (frames) among 714 poses using all pairs.
+Compared 713 relative pose pairs, delta = 1 (frames) with all pairs.
+Calculating RPE for translation part pose relation...
+--------------------------------------------------------------------------------
+RPE w.r.t. translation part (m)
+for delta = 1 (frames) using all pairs
+(with SE(3) Umeyama alignment)
+
+       max	0.294221
+      mean	0.007195
+    median	0.004865
+       min	0.000381
+      rmse	0.015384
+       sse	0.168740
+       std	0.013597
+
+--------------------------------------------------------------------------------
+Saving results to /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_qDQXxN/rpe_trans.zip...

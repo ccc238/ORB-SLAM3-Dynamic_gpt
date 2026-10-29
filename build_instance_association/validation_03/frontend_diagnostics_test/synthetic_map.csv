@@ -1,0 +1,4 @@
+frame_id,timestamp,keyframe_id,stage,map_candidates_total,map_reject_P,map_reject_D,map_reject_boundary,map_reject_unknown,map_points_created
+4,1.25,0,rgbd_depth_creation,11,2,3,1,0,5
+9,1.50,1,process_keyframe,5,0,1,0,0,0
+4,1.25,0,triangulation_current,6,1,0,0,0,2

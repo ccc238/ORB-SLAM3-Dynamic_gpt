@@ -112,6 +112,7 @@ public:
     const B2Config& B2() const { return b2_; }
     const B3Config& B3() const { return b3_; }
     const B4Config& B4() const { return b4_; }
+    const InstanceAssociationConfig& Association() const { return association_; }
     bool PostProcessEnabled() const { return post_.Enabled(); }
     int PostProcessRadius() const { return post_.Radius(); }
     size_t InferenceCalls() const { return inferenceCalls_; }
@@ -132,6 +133,7 @@ private:
     B2Config b2_;
     B3Config b3_;
     B4Config b4_;
+    InstanceAssociationConfig association_;
     DynamicFrontendConfig frontend_;
     MaskPostProcessor post_;
     std::unique_ptr<YOLOSeg> segmentor_;

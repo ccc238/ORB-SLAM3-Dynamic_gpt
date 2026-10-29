@@ -1,0 +1,219 @@
+[
+  {
+    "run": "A0_legacy_sitting_static_100",
+    "frames": 100,
+    "instances": 200,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 2,
+      "CONTINUOUS_CONFIRMED": 198
+    },
+    "events": {},
+    "states": {
+      "P": 30,
+      "S": 170
+    },
+    "untrusted": 2,
+    "geometry_blocked": 2,
+    "max_track_id": 1
+  },
+  {
+    "run": "A0_legacy_walking_xyz_100",
+    "frames": 100,
+    "instances": 203,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 4,
+      "CONTINUOUS_CONFIRMED": 198,
+      "REACQUIRED": 1
+    },
+    "events": {
+      "TERMINATED": 2
+    },
+    "states": {
+      "P": 181,
+      "S": 66
+    },
+    "untrusted": 4,
+    "geometry_blocked": 5,
+    "max_track_id": 3
+  },
+  {
+    "run": "A1_global_sitting_static_100",
+    "frames": 100,
+    "instances": 200,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 2,
+      "CONTINUOUS_CONFIRMED": 198
+    },
+    "events": {
+      "NEW_TRACK": 2
+    },
+    "states": {
+      "P": 30,
+      "S": 170
+    },
+    "untrusted": 2,
+    "geometry_blocked": 2,
+    "max_track_id": 1
+  },
+  {
+    "run": "A1_global_walking_xyz_100",
+    "frames": 100,
+    "instances": 203,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 5,
+      "CONTINUOUS_CONFIRMED": 198
+    },
+    "events": {
+      "NEW_TRACK": 5,
+      "TERMINATED": 3
+    },
+    "states": {
+      "P": 152,
+      "S": 96
+    },
+    "untrusted": 5,
+    "geometry_blocked": 5,
+    "max_track_id": 4
+  },
+  {
+    "run": "A2_predict_ambiguity_sitting_static_100",
+    "frames": 100,
+    "instances": 200,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 2,
+      "CONTINUOUS_CONFIRMED": 198
+    },
+    "events": {
+      "NEW_TRACK": 2
+    },
+    "states": {
+      "P": 30,
+      "S": 170
+    },
+    "untrusted": 2,
+    "geometry_blocked": 2,
+    "max_track_id": 1
+  },
+  {
+    "run": "A2_predict_ambiguity_walking_xyz_100",
+    "frames": 100,
+    "instances": 203,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 4,
+      "CONTINUOUS_CONFIRMED": 178,
+      "AMBIGUOUS": 18,
+      "REACQUIRED": 3
+    },
+    "events": {
+      "NEW_TRACK": 4,
+      "AMBIGUOUS": 18,
+      "REACQUIRED": 3,
+      "TERMINATED": 20
+    },
+    "states": {
+      "P": 416,
+      "S": 35,
+      "D": 69
+    },
+    "untrusted": 22,
+    "geometry_blocked": 25,
+    "max_track_id": 21
+  },
+  {
+    "run": "A3_controlled_sitting_static_100",
+    "frames": 100,
+    "instances": 200,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 2,
+      "CONTINUOUS_CONFIRMED": 198
+    },
+    "events": {
+      "NEW_TRACK": 2
+    },
+    "states": {
+      "P": 30,
+      "S": 170
+    },
+    "untrusted": 2,
+    "geometry_blocked": 2,
+    "max_track_id": 1
+  },
+  {
+    "run": "A3_controlled_walking_xyz_100",
+    "frames": 100,
+    "instances": 203,
+    "camera_poses": 100,
+    "status": {
+      "NEW_TRACK": 4,
+      "CONTINUOUS_CONFIRMED": 178,
+      "AMBIGUOUS": 18,
+      "REACQUIRED": 3
+    },
+    "events": {
+      "NEW_TRACK": 4,
+      "AMBIGUOUS": 18,
+      "REACQUIRED": 3,
+      "TERMINATED": 20
+    },
+    "states": {
+      "P": 468,
+      "S": 52
+    },
+    "untrusted": 25,
+    "geometry_blocked": 25,
+    "max_track_id": 21
+  },
+  {
+    "run": "A3_controlled_sitting_static_full",
+    "frames": 680,
+    "instances": 1360,
+    "camera_poses": 680,
+    "status": {
+      "NEW_TRACK": 2,
+      "CONTINUOUS_CONFIRMED": 1358
+    },
+    "events": {
+      "NEW_TRACK": 2
+    },
+    "states": {
+      "P": 37,
+      "S": 1323
+    },
+    "untrusted": 2,
+    "geometry_blocked": 2,
+    "max_track_id": 1
+  },
+  {
+    "run": "A3_controlled_walking_xyz_full",
+    "frames": 827,
+    "instances": 1020,
+    "camera_poses": 827,
+    "status": {
+      "NEW_TRACK": 14,
+      "CONTINUOUS_CONFIRMED": 963,
+      "AMBIGUOUS": 25,
+      "REACQUIRED": 18
+    },
+    "events": {
+      "NEW_TRACK": 14,
+      "AMBIGUOUS": 25,
+      "REACQUIRED": 18,
+      "TERMINATED": 37
+    },
+    "states": {
+      "P": 1197,
+      "S": 229,
+      "D": 201
+    },
+    "untrusted": 57,
+    "geometry_blocked": 57,
+    "max_track_id": 38
+  }
+]

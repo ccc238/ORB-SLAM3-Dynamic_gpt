@@ -1,0 +1,9 @@
+row_type,frame_id,timestamp,sequence_id,instance_id,track_id,association_status,association_cost,row_margin,column_margin,allow_state_inheritance,allow_geometry_pair,reason,state_reset_reason,prediction,flow_support,depth_available,association_ms,previous_matched_frame,previous_matched_timestamp
+"INSTANCE","0","1341845688.561749","0","0","0","NEW_TRACK","","","","0","0","NO_ELIGIBLE_MATCH","NONE","NONE","0","0","0.36450700000000003","-1",""
+"INSTANCE","0","1341845688.561749","0","1","1","NEW_TRACK","","","","0","0","NO_ELIGIBLE_MATCH","NONE","NONE","0","0","0.36450700000000003","-1",""
+"EVENT","0","1341845688.561749","0","","0","NEW_TRACK","","","","","","NO_ELIGIBLE_MATCH","","","","","","",""
+"EVENT","0","1341845688.561749","0","","1","NEW_TRACK","","","","","","NO_ELIGIBLE_MATCH","","","","","","",""
+"INSTANCE","1","1341845688.5936539","0","0","0","CONTINUOUS_CONFIRMED","0.027202656684142113","","","1","1","CONFIRMED_ADJACENT","NONE","LK_FB_MEDIAN","80","1","7.6904339999999998","0","1341845688.561749"
+"INSTANCE","1","1341845688.5936539","0","1","1","CONTINUOUS_CONFIRMED","0.058772999193814436","","","1","1","CONFIRMED_ADJACENT","NONE","LK_FB_MEDIAN","80","1","7.6904339999999998","0","1341845688.561749"
+"INSTANCE","2","1341845688.629688","0","0","0","CONTINUOUS_CONFIRMED","0.023401046644520293","","","1","1","CONFIRMED_ADJACENT","NONE","LK_FB_MEDIAN","80","1","7.7400820000000001","1","1341845688.5936539"
+"INSTANCE","2","1341845688.629688","0","1","1","CONTINUOUS_CONFIRMED","0.089178005557896317","","","1","1","CONFIRMED_ADJACENT","NONE","LK_FB_MEDIAN","78","1","7.7400820000000001","1","1341845688.5936539"

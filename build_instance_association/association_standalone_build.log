@@ -1,0 +1,5 @@
+/usr/bin/ld: /tmp/cceLQeuk.o: in function `__static_initialization_and_destruction_0(int, int)':
+instance_association_test.cc:(.text+0x49ca): undefined reference to `OrtGetApiBase'
+/usr/bin/ld: /tmp/ccpnaDye.o: in function `__static_initialization_and_destruction_0(int, int)':
+InstanceTrackManager.cc:(.text+0xa27b): undefined reference to `OrtGetApiBase'
+collect2: error: ld returned 1 exit status

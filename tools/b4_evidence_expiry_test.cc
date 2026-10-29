@@ -31,7 +31,7 @@ B3FusionResult Evidence(int kind, int id=0) {
         kind == 2 ? B3_SEM_DYNAMIC_GEOM_MOVING : B3_FUSION_UNRELIABLE;
     return result;
 }
-B4Config Config() { B4Config c; c.evidenceExpiryEnable=true; return c; }
+B4Config Config() { return B4Config{}; }
 B4StateResult Step(B4TemporalStateMachine& m, long id, double time, int kind) {
     return m.Process(id,time,{Evidence(kind)},800).at(0);
 }
@@ -44,7 +44,9 @@ double MakeDynamic(B4TemporalStateMachine& m) {
     return 2/30.0;
 }
 void LegacyAndShortFreeze() {
-    B4TemporalStateMachine legacy(B4Config{});
+    Check(Config().evidenceExpiryEnable,"evidence expiry must default to enabled");
+    B4Config disabled; disabled.evidenceExpiryEnable=false;
+    B4TemporalStateMachine legacy(disabled);
     Step(legacy,0,0,2); Step(legacy,1,1/30.0,2);
     auto row=Step(legacy,2,10,0);
     Check(row.nDynamic==2 && !row.counterExpired,"disabled legacy freeze");

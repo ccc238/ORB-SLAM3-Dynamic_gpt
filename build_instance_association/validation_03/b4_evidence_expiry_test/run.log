@@ -1,0 +1,2 @@
+[MAP ADMISSION] frame=0 kf=0 stage=keyframe_snapshot map_candidates_total=103 map_reject_P=1 map_reject_D=0 map_reject_boundary=0 map_reject_unknown=0 map_points_created=0
+PASS B4 expiry: legacy, gaps, S/P/D, readonly coarse query, TTL, time/reset, reasons, fine/map admission

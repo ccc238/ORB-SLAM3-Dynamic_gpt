@@ -84,12 +84,15 @@ public:
     // Read-only preflight, also used before RGB-D inference/association.
     void ValidateTimestamp(double timestamp) const;
     void Reset();
+    void ResetTrackEvidence(int trackId);
+    void RemoveTrack(int trackId) { mB4Tracks.erase(trackId); }
 
     // Advances the state machine once per input frame. B3 values are copied;
     // they are never modified and never escape through mutable references.
     std::vector<B4StateResult> Process(long frameId, double timestamp,
                                        const std::vector<B3FusionResult>& instances,
-                                       float imageDiagonalPixels);
+                                       float imageDiagonalPixels,
+                                       const std::unordered_map<int,InstanceAssociationResult>* associations=nullptr);
 
 private:
     // Only reliable person-semantic B3 categories may advance this person's

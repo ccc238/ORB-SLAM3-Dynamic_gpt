@@ -1,0 +1,2 @@
+sequence,input_frames,camera_poses,keyframe_poses,exit_code,OK,RECENTLY_LOST,LOST,matched_poses,ate_rmse_m,ate_median_m,rpe_trans_rmse_m,rpe_rot_rmse_deg
+fr3_walking_static,717,717,161,0,717,0,0,714,0.02302730571079921,0.008688735046363524,0.015383832917649661,0.29485649123846663

@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall   -O3 -O3 -DNDEBUG -march=native CMakeFiles/coarse_pose_quality_test.dir/tools/coarse_pose_quality_test.cc.o -o bin/coarse_pose_quality_test  -Wl,-rpath,/home/aaa/ORB-SLAM3_original0/build_instance_association/lib:/home/aaa/ORB-SLAM3_original0/third_party_ort/onnxruntime-linux-x64-1.17.3/lib 

@@ -174,6 +174,8 @@ const char* FailureReasonName(B2GeometryFailureReason reason)
     case INSUFFICIENT_BACKGROUND_REFERENCE: return "INSUFFICIENT_BACKGROUND_REFERENCE";
     case AMBIGUOUS_GEOMETRIC_EVIDENCE: return "AMBIGUOUS_GEOMETRIC_EVIDENCE";
     case POSE_WEAK: return "POSE_WEAK";
+    case IDENTITY_ASSOCIATION_UNTRUSTED: return "IDENTITY_ASSOCIATION_UNTRUSTED";
+    case IDENTITY_HISTORY_MISMATCH: return "IDENTITY_HISTORY_MISMATCH";
     default: return "GEOMETRY_UNRELIABLE";
     }
 }
@@ -380,6 +382,7 @@ B2CandidateFrame B2MotionEvidence::ExtractCandidates(
         B2PersonInstance person;
         person.instanceId = static_cast<int>(i);
         person.trackId = source.trackId;
+        person.association = source.association;
         person.classId = source.classId;
         person.confidence = source.confidence;
         person.boundingBox = source.boundingBox & imageBounds;
@@ -472,6 +475,14 @@ B2CandidateFrame B2MotionEvidence::ExtractCandidates(
     return frame;
 }
 
+void B2MotionEvidence::Reset() {
+    mPreviousFrame=B2CandidateFrame();mbHasPreviousFrame=false;mbPosePairReliable=false;
+    mLastEndedTrackIds.clear();mCurrentFromPrevious=Sophus::SE3f();
+}
+void B2MotionEvidence::ForgetTrack(int trackId) {
+    auto& persons=mPreviousFrame.persons;
+    persons.erase(std::remove_if(persons.begin(),persons.end(),[&](const B2PersonInstance& p){return p.trackId==trackId;}),persons.end());
+}
 B2Result B2MotionEvidence::Process(const B2CandidateFrame& current)
 {
     Sophus::SE3f relative;
@@ -515,8 +526,15 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
     // InstanceTrackManager. B2 only joins its current instances to its own
     // previous measurements; it must never allocate or replace track IDs.
     mLastEndedTrackIds.clear();
+    for(auto& person:working.persons) person.previousInstanceId=-1;
     if (mbHasPreviousFrame)
         for (B2PersonInstance& person : working.persons) {
+            if(!person.association.allowGeometryPair) continue;
+            if(person.association.evaluated &&
+               (!std::isfinite(person.association.previousMatchedTimestamp) ||
+                person.association.previousMatchedFrame!=working.frameId-1 ||
+                person.association.previousMatchedFrame!=mPreviousFrame.frameId ||
+                std::abs(person.association.previousMatchedTimestamp-mPreviousFrame.timestamp)>1e-6)) continue;
             const auto previous = std::find_if(mPreviousFrame.persons.begin(),
                 mPreviousFrame.persons.end(), [&](const B2PersonInstance& item) {
                     return item.trackId == person.trackId && person.trackId >= 0;
@@ -540,6 +558,15 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
             person.geometryDecision = GEOM_UNRELIABLE;
             person.geometryFailureReason = POSE_WEAK;
         }
+    for(auto& person:working.persons) {
+        if(!person.association.allowGeometryPair) {
+            person.geometryDecision=GEOM_UNRELIABLE;
+            person.geometryFailureReason=IDENTITY_ASSOCIATION_UNTRUSTED;
+        } else if(person.association.evaluated && person.previousInstanceId<0) {
+            person.geometryDecision=GEOM_UNRELIABLE;
+            person.geometryFailureReason=IDENTITY_HISTORY_MISMATCH;
+        }
+    }
     B2Result result;
     result.frameId = working.frameId;
     result.processed = true;
@@ -663,7 +690,7 @@ void B2MotionEvidence::ComputeGeometryResiduals(B2CandidateFrame& current) const
     const Sophus::SE3f& currentFromPrevious = mCurrentFromPrevious;
     for (B2PersonInstance& currentPerson : current.persons)
     {
-        if (currentPerson.previousInstanceId < 0)
+        if (!currentPerson.association.allowGeometryPair || currentPerson.previousInstanceId < 0)
             continue;
         const auto previousPerson = std::find_if(mPreviousFrame.persons.begin(),
             mPreviousFrame.persons.end(), [&](const B2PersonInstance& person) {
@@ -900,7 +927,7 @@ void B2MotionEvidence::MatchAssociatedInstances(B2CandidateFrame& current)
 {
     for (B2PersonInstance& currentPerson : current.persons)
     {
-        if (currentPerson.previousInstanceId < 0)
+        if (!currentPerson.association.allowGeometryPair || currentPerson.previousInstanceId < 0)
             continue;
         const auto previous = std::find_if(mPreviousFrame.persons.begin(),
             mPreviousFrame.persons.end(), [&](const B2PersonInstance& person) {

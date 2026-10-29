@@ -9,6 +9,12 @@ using namespace ORB_SLAM3;
 
 namespace {
 
+B4Config LegacyConfig() {
+    B4Config config;
+    config.evidenceExpiryEnable = false;
+    return config;
+}
+
 bool Expect(bool condition, const std::string& message)
 {
     if (condition)
@@ -58,7 +64,7 @@ const B4StateResult& Step(B4TemporalStateMachine& machine, long frameId,
 
 bool TestPendingToStatic()
 {
-    B4TemporalStateMachine machine(B4Config{});
+    B4TemporalStateMachine machine(LegacyConfig());
     for (int frame = 1; frame <= 6; ++frame)
     {
         const B4StateResult& r = Step(machine, frame, Evidence(0, false));
@@ -72,7 +78,7 @@ bool TestPendingToStatic()
 
 bool TestPendingToDynamic()
 {
-    B4TemporalStateMachine machine(B4Config{});
+    B4TemporalStateMachine machine(LegacyConfig());
     for (int frame = 1; frame <= 3; ++frame)
     {
         const B4StateResult& r = Step(machine, frame, Evidence(1, true));
@@ -86,7 +92,7 @@ bool TestPendingToDynamic()
 
 bool TestStaticToPending()
 {
-    B4TemporalStateMachine machine(B4Config{});
+    B4TemporalStateMachine machine(LegacyConfig());
     for (int frame = 1; frame <= 6; ++frame)
         Step(machine, frame, Evidence(2, false));
     const B4StateResult& r = Step(machine, 7, Evidence(2, true));
@@ -98,7 +104,7 @@ bool TestStaticToPending()
 
 bool TestDynamicToPending()
 {
-    B4TemporalStateMachine machine(B4Config{});
+    B4TemporalStateMachine machine(LegacyConfig());
     for (int frame = 1; frame <= 3; ++frame)
         Step(machine, frame, Evidence(3, true));
     for (int frame = 4; frame <= 12; ++frame)
@@ -118,7 +124,7 @@ bool TestDynamicToPending()
 
 bool TestUnreliableFreeze()
 {
-    B4TemporalStateMachine machine(B4Config{});
+    B4TemporalStateMachine machine(LegacyConfig());
     for (int frame = 1; frame <= 3; ++frame)
         Step(machine, frame, Evidence(4, false));
     const B4StateResult& r = Step(machine, 4, UnreliableEvidence(4));
@@ -130,7 +136,7 @@ bool TestUnreliableFreeze()
 
 bool TestTrackTtl()
 {
-    B4Config config;
+    B4Config config = LegacyConfig();
     config.trackTTL = 15;
     B4TemporalStateMachine machine(config);
     Step(machine, 0, Evidence(5, false));

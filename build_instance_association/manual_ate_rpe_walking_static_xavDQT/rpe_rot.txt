@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------
+Loaded 2484 stamps and poses from: /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+Loaded 717 stamps and poses from: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_xavDQT/CameraTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories (nearest_time method)...
+Timestamps are sorted, using binary search for matching.
+Found 714 of max. 717 possible matching timestamps between...
+	/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_static/groundtruth.txt
+and:	/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_xavDQT/CameraTrajectory.txt
+..with max. time diff.: 0.02 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method...
+Rotation of alignment:
+[[ 0.99461689  0.09511333  0.04111812]
+ [-0.01837569 -0.22862408  0.97334134]
+ [ 0.10197833 -0.96885731 -0.2256456 ]]
+Translation of alignment:
+[-0.81961948 -3.22705785  1.36935457]
+Scale correction: 1.0
+--------------------------------------------------------------------------------
+Found 713 pairs with delta 1 (frames) among 714 poses using all pairs.
+Compared 713 relative pose pairs, delta = 1 (frames) with all pairs.
+Calculating RPE for rotation angle in degrees pose relation...
+--------------------------------------------------------------------------------
+RPE w.r.t. rotation angle in degrees (deg)
+for delta = 1 (frames) using all pairs
+(with SE(3) Umeyama alignment)
+
+       max	3.153943
+      mean	0.195454
+    median	0.152232
+       min	0.012864
+      rmse	0.289338
+       sse	59.689728
+       std	0.213340
+
+--------------------------------------------------------------------------------
+Saving results to /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_xavDQT/rpe_rot.zip...

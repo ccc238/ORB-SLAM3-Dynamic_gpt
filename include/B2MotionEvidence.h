@@ -59,7 +59,9 @@ enum B2GeometryFailureReason {
     LOW_VALID_MATCH_RATIO = 5,
     INSUFFICIENT_BACKGROUND_REFERENCE = 6,
     AMBIGUOUS_GEOMETRIC_EVIDENCE = 7,
-    POSE_WEAK = 8
+    POSE_WEAK = 8,
+    IDENTITY_ASSOCIATION_UNTRUSTED = 9,
+    IDENTITY_HISTORY_MISMATCH = 10
 };
 
 struct B2CandidateFeature {
@@ -105,6 +107,7 @@ struct B2PersonInstance {
     int instanceId = -1;
     int trackId = -1;
     int previousInstanceId = -1;
+    InstanceAssociationResult association;
     int classId = -1;
     float confidence = 0.0f;
     float associationScore = 0.0f;
@@ -198,6 +201,8 @@ public:
     B2Result PushCurrentFrame(const B2CandidateFrame& current) { return Process(current); }
 
     bool HasPreviousFrame() const { return mbHasPreviousFrame; }
+    void Reset();
+    void ForgetTrack(int trackId);
     const B2CandidateFrame& PreviousFrame() const { return mPreviousFrame; }
     const std::vector<int>& LastEndedTrackIds() const { return mLastEndedTrackIds; }
     const B2Config& Config() const { return mConfig; }

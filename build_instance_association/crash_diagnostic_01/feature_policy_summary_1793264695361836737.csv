@@ -1,0 +1,2 @@
+frame_id,timestamp,N,coarse_allowed_count,fine_allowed_count,map_allowed_count,background_count,S_count,P_count,D_count,boundary_count,unknown_count,previous_S_count,previous_P_count,previous_D_count,previous_unknown_count,evidence_only,policy_applied,actual_excluded_count
+0,1341845688.561749,1004,637,637,637,637,0,305,0,62,0,0,305,0,0,0,0,0

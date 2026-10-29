@@ -1,0 +1,170 @@
+[
+  {
+    "name": "instance_association_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11458943900015583,
+    "passed": true
+  },
+  {
+    "name": "identity_state_integration_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06482223100010742,
+    "passed": true
+  },
+  {
+    "name": "b4_evidence_expiry_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06429241700016064,
+    "passed": true
+  },
+  {
+    "name": "b4_state_machine_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0642163160000564,
+    "passed": true
+  },
+  {
+    "name": "instance_track_lifecycle_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06415049799988992,
+    "passed": true
+  },
+  {
+    "name": "frontend_diagnostics_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11504781700023159,
+    "passed": true
+  },
+  {
+    "name": "keyframe_decision_guard_test",
+    "exit_code": 0,
+    "duration_seconds": 0.003988777000358823,
+    "passed": true
+  },
+  {
+    "name": "map_admission_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06433450199983781,
+    "passed": true
+  },
+  {
+    "name": "fine_feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.07004728499987323,
+    "passed": true
+  },
+  {
+    "name": "coarse_feature_filter_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06476771699999517,
+    "passed": true
+  },
+  {
+    "name": "coarse_pose_quality_test",
+    "exit_code": 0,
+    "duration_seconds": 0.003997170999809896,
+    "passed": true
+  },
+  {
+    "name": "feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06427488899998934,
+    "passed": true
+  },
+  {
+    "name": "feature_semantic_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06447989700018297,
+    "passed": true
+  },
+  {
+    "name": "frontend_mask_test",
+    "exit_code": 0,
+    "duration_seconds": 0.21477634100028808,
+    "passed": true
+  },
+  {
+    "name": "b2_candidate_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11516882000023543,
+    "passed": true
+  },
+  {
+    "name": "config_A0_legacy",
+    "exit_code": 0,
+    "duration_seconds": 0.36544429100013076,
+    "passed": true
+  },
+  {
+    "name": "config_A1_global",
+    "exit_code": 0,
+    "duration_seconds": 0.315307601999848,
+    "passed": true
+  },
+  {
+    "name": "config_A2_predict_ambiguity",
+    "exit_code": 0,
+    "duration_seconds": 0.31492544499997166,
+    "passed": true
+  },
+  {
+    "name": "config_A3_controlled",
+    "exit_code": 0,
+    "duration_seconds": 0.31569858699958786,
+    "passed": true
+  },
+  {
+    "name": "invalid_default",
+    "exit_code": 0,
+    "duration_seconds": 0.06414863200006948,
+    "passed": true
+  },
+  {
+    "name": "invalid_negative_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06415373199979513,
+    "passed": true
+  },
+  {
+    "name": "invalid_large_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06447615600018253,
+    "passed": true
+  },
+  {
+    "name": "invalid_zero_cost",
+    "exit_code": 2,
+    "duration_seconds": 0.06444250000004104,
+    "passed": true
+  },
+  {
+    "name": "invalid_nan_margin",
+    "exit_code": 2,
+    "duration_seconds": 0.0642365459998473,
+    "passed": true
+  },
+  {
+    "name": "invalid_forced_pair",
+    "exit_code": 2,
+    "duration_seconds": 0.06411620400012907,
+    "passed": true
+  },
+  {
+    "name": "invalid_bad_evidence",
+    "exit_code": 2,
+    "duration_seconds": 0.06425139100019805,
+    "passed": true
+  },
+  {
+    "name": "invalid_fractional_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06462844799989398,
+    "passed": true
+  },
+  {
+    "name": "A0_legacy_sitting_static_100",
+    "exit_code": -11,
+    "duration_seconds": 3.8296988120000606,
+    "passed": false
+  }
+]

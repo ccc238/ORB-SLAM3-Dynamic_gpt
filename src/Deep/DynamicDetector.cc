@@ -179,6 +179,41 @@ std::string FileSha256(const std::string& path) {
 DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     cv::FileStorage fs(settingsPath,cv::FileStorage::READ);
     if (!fs.isOpened()) throw std::runtime_error("Cannot open settings: " + settingsPath);
+    association_.mode=Integer(fs,"InstanceAssociation.Mode",3);
+    association_.maxCost=Seconds(fs,"InstanceAssociation.MaxCost",.65);
+    association_.unmatchedTrackCost=Seconds(fs,"InstanceAssociation.UnmatchedTrackCost",.40);
+    association_.unmatchedInstanceCost=Seconds(fs,"InstanceAssociation.UnmatchedInstanceCost",.40);
+    association_.minMargin=Seconds(fs,"InstanceAssociation.MinMargin",.08);
+    association_.maxCenterDistance=Seconds(fs,"InstanceAssociation.MaxCenterDistance",1.0);
+    association_.maxScaleRatio=Seconds(fs,"InstanceAssociation.MaxScaleRatio",4.0);
+    association_.minMaskIoU=Seconds(fs,"InstanceAssociation.MinMaskIoU",.05);
+    association_.minBoxIoU=Seconds(fs,"InstanceAssociation.MinBoxIoU",.10);
+    association_.maxPredictionSeconds=Seconds(fs,"InstanceAssociation.MaxPredictionSeconds",.75);
+    association_.maxDepthDifference=Seconds(fs,"InstanceAssociation.MaxDepthDifference",.60);
+    association_.maxDepthRelative=Seconds(fs,"InstanceAssociation.MaxDepthRelative",.30);
+    association_.maxDepthMAD=Seconds(fs,"InstanceAssociation.MaxDepthMAD",.20);
+    association_.maskWeight=Seconds(fs,"InstanceAssociation.Weight.Mask",.40);
+    association_.boxWeight=Seconds(fs,"InstanceAssociation.Weight.Box",.20);
+    association_.centerWeight=Seconds(fs,"InstanceAssociation.Weight.Center",.25);
+    association_.flowWeight=Seconds(fs,"InstanceAssociation.Weight.Flow",.15);
+    association_.depthWeight=Seconds(fs,"InstanceAssociation.Weight.Depth",.15);
+    association_.mergeCoverage=Seconds(fs,"InstanceAssociation.MergeCoverage",.65);
+    association_.flowFBError=Seconds(fs,"InstanceAssociation.Flow.FBError",1.5);
+    association_.flowQuality=Seconds(fs,"InstanceAssociation.Flow.Quality",.01);
+    association_.minEvidenceTerms=Integer(fs,"InstanceAssociation.MinEvidenceTerms",2);
+    association_.flowMaxCorners=Integer(fs,"InstanceAssociation.Flow.MaxCorners",80);
+    association_.flowMinSupport=Integer(fs,"InstanceAssociation.Flow.MinSupport",8);
+    association_.safeErodeRadius=Integer(fs,"InstanceAssociation.SafeErodeRadius",3);
+    association_.minDepthSamples=Integer(fs,"InstanceAssociation.MinDepthSamples",20);
+    association_.saveCsv=Flag(fs,"InstanceAssociation.Debug.SaveCsv",true);
+    association_.printSummary=Flag(fs,"InstanceAssociation.Debug.PrintSummary",true);
+    ValidateInstanceAssociation(association_);
+    std::cout<<"[INSTANCE ASSOCIATION CONFIG] Mode="<<association_.mode
+        <<" PreExpiry="<<(association_.mode>=1)<<" Global="<<(association_.mode>=1)
+        <<" Prediction="<<(association_.mode>=2)<<" Ambiguity="<<(association_.mode>=2)
+        <<" ControlledInheritance="<<(association_.mode>=3)<<" MaxCost="<<association_.maxCost
+        <<" UnmatchedPairCost="<<association_.unmatchedTrackCost+association_.unmatchedInstanceCost
+        <<" MinMargin="<<association_.minMargin<<" initial_values_not_accuracy_validated=1"<<std::endl;
     frontend_.explicitMode = !fs["DynamicFrontend.Mode"].empty();
     frontend_.mode = static_cast<DynamicFrontendMode>(Integer(fs,"DynamicFrontend.Mode",0));
     frontend_.twoStageEnable = Flag(fs,"TwoStage.Enable",false);
@@ -318,7 +353,7 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     b4_.staticEnterCount = Integer(fs,"B4.StaticEnterCount",6);
     b4_.dynamicRecoveryCount = Integer(fs,"B4.DynamicRecoveryCount",10);
     b4_.trackTTL = Integer(fs,"B4.TrackTTL",15);
-    b4_.evidenceExpiryEnable = Flag(fs,"B4.EvidenceExpiry.Enable",false);
+    b4_.evidenceExpiryEnable = Flag(fs,"B4.EvidenceExpiry.Enable",true);
     b4_.maxEvidenceGapSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxGapSeconds",0.20);
     b4_.maxStaticAgeSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxStaticAgeSeconds",0.30);
     ValidateB4EvidenceExpiry(b4_);

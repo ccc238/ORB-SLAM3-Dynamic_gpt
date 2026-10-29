@@ -1,0 +1,1204 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 22fb9bf..f53632c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -427,6 +427,12 @@ add_executable(b4_evidence_expiry_test tools/b4_evidence_expiry_test.cc)
+ target_link_libraries(b4_evidence_expiry_test ${PROJECT_NAME})
+ add_executable(instance_track_lifecycle_test tools/instance_track_lifecycle_test.cc)
+ target_link_libraries(instance_track_lifecycle_test ${PROJECT_NAME})
++add_executable(instance_association_test tools/instance_association_test.cc)
++target_link_libraries(instance_association_test ${PROJECT_NAME})
++add_executable(identity_state_integration_test tools/identity_state_integration_test.cc)
++target_link_libraries(identity_state_integration_test ${PROJECT_NAME})
++add_executable(identity_system_reset_test tools/identity_system_reset_test.cc)
++target_link_libraries(identity_system_reset_test ${PROJECT_NAME})
+ add_executable(feature_semantic_test tools/feature_semantic_test.cc)
+ target_link_libraries(feature_semantic_test ${PROJECT_NAME})
+ add_executable(feature_policy_test tools/feature_policy_test.cc)
+diff --git a/docs/B4_EVIDENCE_EXPIRY.md b/docs/B4_EVIDENCE_EXPIRY.md
+index a4362bc..315ee72 100644
+--- a/docs/B4_EVIDENCE_EXPIRY.md
++++ b/docs/B4_EVIDENCE_EXPIRY.md
+@@ -8,12 +8,15 @@ thresholds, BA, identity matching, or historical MapPoints. It is not a solution
+ to missed person detections: without a current person mask, image features can
+ still be labeled background by the existing annotation path.
+ 
+-The implementation is disabled by default. Legacy YAML without the new keys
+-retains the old S/P/D/counter/TTL behavior for valid input sequences. New CSV
+-columns and startup diagnostics are present even when expiry is disabled.
++The implementation is now ENABLED by default. YAML without the new keys uses
++acquisition-time expiry with the limits below. This deliberately changes the
++behavior of old B4-enabled YAML that previously omitted these settings. To
++reproduce the old unlimited freeze behavior, explicitly set Enable to 0, or
++use the existing off configuration. B4.Enable itself is unchanged: this
++default does not turn on B4 in ORIGINAL/B1 modes.
+ 
+ ```yaml
+-B4.EvidenceExpiry.Enable: 0
++B4.EvidenceExpiry.Enable: 1
+ B4.EvidenceExpiry.MaxGapSeconds: 0.20
+ B4.EvidenceExpiry.MaxStaticAgeSeconds: 0.30
+ ```
+@@ -187,6 +190,10 @@ tracking coverage and ATE remain necessary before selecting expiry limits.
+ 
+ ## Validation completed in this workspace (2026-10-29)
+ 
++The following results were obtained before the default changed from off to
++on. Both dataset ablations explicitly specify Enable, so their interpretation
++is unchanged. The later default-on regression is recorded separately below.
++
+ The independent Release build and incremental rebuild both completed with
+ `-j2`. The optional RealSense SDK was not found; configured RGB-D/stereo/mono
+ and test targets built successfully. Existing upstream/compiler warnings were
+@@ -223,3 +230,31 @@ covered by unit tests and its Tracking call sites were inspected. Real D
+ expiry/recovery was tested synthetically, not claimed from these short runs.
+ No original build_yolo11 binaries, old YAML or old experiment directories were
+ overwritten, and no Git commit was made.
++
++## Default-on change
++
++Both B4Config's C++ initializer and the shared YAML reader now default to
++Enable=1. The explicit off/on YAML files are unchanged. The original legacy
++state/identity tests explicitly disable expiry because their frameId-as-time
++fixtures intentionally test unlimited freeze; enabled expiry tests continue
++to use 1/30-second intervals. The validator checks the omitted-key default,
++explicit off override, and a real B4-enabled Mode 3 YAML with expiry keys
++omitted. MaxGapSeconds=0.20 and MaxStaticAgeSeconds=0.30 are unchanged.
++
++On this 6.2 GiB RAM machine, Optimizer.cc was built separately before the
++remaining `-j2` build, retaining the original -O3/-march=native options and
++using GCC compile-time garbage collection parameters
++`--param=ggc-min-expand=10 --param=ggc-min-heapsize=32768` to reduce compiler
++memory pressure. These are compiler heap-management settings, not SLAM
++runtime parameters or changes to the optimizer source/BA objective. The
++completed heavy-object build log is
++`build_b4_expiry/optimizer_default_on_lowmem.log`.
++
++Default-on validation completed successfully: the remaining full build used
++`cmake --build build_b4_expiry -j2` (log: `default_on_build.log`). All 13
++unit/regression tests and 14 configuration checks met their expected exit
++codes. In particular, omitted fields enabled expiry, explicit Enable=0
++disabled it, and B4-enabled Mode 3 without any EvidenceExpiry fields used
++Enable=1 / 0.20 / 0.30. Results are in
++`results/B4_evidence_expiry/default_on_validation_20261029_01/summary.json`.
++No dataset sequence or ATE/RPE experiment was rerun for this default change.
+diff --git a/include/B2MotionEvidence.h b/include/B2MotionEvidence.h
+index 7587f80..e5d4f19 100644
+--- a/include/B2MotionEvidence.h
++++ b/include/B2MotionEvidence.h
+@@ -59,7 +59,9 @@ enum B2GeometryFailureReason {
+     LOW_VALID_MATCH_RATIO = 5,
+     INSUFFICIENT_BACKGROUND_REFERENCE = 6,
+     AMBIGUOUS_GEOMETRIC_EVIDENCE = 7,
+-    POSE_WEAK = 8
++    POSE_WEAK = 8,
++    IDENTITY_ASSOCIATION_UNTRUSTED = 9,
++    IDENTITY_HISTORY_MISMATCH = 10
+ };
+ 
+ struct B2CandidateFeature {
+@@ -105,6 +107,7 @@ struct B2PersonInstance {
+     int instanceId = -1;
+     int trackId = -1;
+     int previousInstanceId = -1;
++    InstanceAssociationResult association;
+     int classId = -1;
+     float confidence = 0.0f;
+     float associationScore = 0.0f;
+@@ -198,6 +201,8 @@ public:
+     B2Result PushCurrentFrame(const B2CandidateFrame& current) { return Process(current); }
+ 
+     bool HasPreviousFrame() const { return mbHasPreviousFrame; }
++    void Reset();
++    void ForgetTrack(int trackId);
+     const B2CandidateFrame& PreviousFrame() const { return mPreviousFrame; }
+     const std::vector<int>& LastEndedTrackIds() const { return mLastEndedTrackIds; }
+     const B2Config& Config() const { return mConfig; }
+diff --git a/include/B4TemporalStateMachine.h b/include/B4TemporalStateMachine.h
+index bf4a97a..af3bc77 100644
+--- a/include/B4TemporalStateMachine.h
++++ b/include/B4TemporalStateMachine.h
+@@ -84,12 +84,15 @@ public:
+     // Read-only preflight, also used before RGB-D inference/association.
+     void ValidateTimestamp(double timestamp) const;
+     void Reset();
++    void ResetTrackEvidence(int trackId);
++    void RemoveTrack(int trackId) { mB4Tracks.erase(trackId); }
+ 
+     // Advances the state machine once per input frame. B3 values are copied;
+     // they are never modified and never escape through mutable references.
+     std::vector<B4StateResult> Process(long frameId, double timestamp,
+                                        const std::vector<B3FusionResult>& instances,
+-                                       float imageDiagonalPixels);
++                                       float imageDiagonalPixels,
++                                       const std::unordered_map<int,InstanceAssociationResult>* associations=nullptr);
+ 
+ private:
+     // Only reliable person-semantic B3 categories may advance this person's
+diff --git a/include/Deep/B4Config.h b/include/Deep/B4Config.h
+index bb97519..2c69594 100644
+--- a/include/Deep/B4Config.h
++++ b/include/Deep/B4Config.h
+@@ -15,7 +15,7 @@ struct B4Config {
+     int staticEnterCount = 6;
+     int dynamicRecoveryCount = 10;
+     int trackTTL = 15;
+-    bool evidenceExpiryEnable = false;
++    bool evidenceExpiryEnable = true;
+     double maxEvidenceGapSeconds = 0.20;
+     double maxStaticAgeSeconds = 0.30;
+     bool useContinuousQuality = false;
+diff --git a/include/Deep/DynamicDetector.h b/include/Deep/DynamicDetector.h
+index d7636be..1b81c55 100644
+--- a/include/Deep/DynamicDetector.h
++++ b/include/Deep/DynamicDetector.h
+@@ -112,6 +112,7 @@ public:
+     const B2Config& B2() const { return b2_; }
+     const B3Config& B3() const { return b3_; }
+     const B4Config& B4() const { return b4_; }
++    const InstanceAssociationConfig& Association() const { return association_; }
+     bool PostProcessEnabled() const { return post_.Enabled(); }
+     int PostProcessRadius() const { return post_.Radius(); }
+     size_t InferenceCalls() const { return inferenceCalls_; }
+@@ -132,6 +133,7 @@ private:
+     B2Config b2_;
+     B3Config b3_;
+     B4Config b4_;
++    InstanceAssociationConfig association_;
+     DynamicFrontendConfig frontend_;
+     MaskPostProcessor post_;
+     std::unique_ptr<YOLOSeg> segmentor_;
+diff --git a/include/Deep/InstanceTrackManager.h b/include/Deep/InstanceTrackManager.h
+index 6b59ea6..d7ff1de 100644
+--- a/include/Deep/InstanceTrackManager.h
++++ b/include/Deep/InstanceTrackManager.h
+@@ -9,8 +9,22 @@ namespace ORB_SLAM3 {
+ 
+ class InstanceTrackManager {
+ public:
+-    explicit InstanceTrackManager(const B4Config& config) : mConfig(config) {}
++    // Compatibility entry for old synthetic/size-only callers. Production
++    // Tracking always supplies the explicitly parsed association config.
++    explicit InstanceTrackManager(const B4Config& config) : mConfig(config) { mAssociation.mode=0; }
++    InstanceTrackManager(const B4Config& config,
++        const InstanceAssociationConfig& association) : mConfig(config), mAssociation(association) {
++        ValidateInstanceAssociation(association);
++    }
+     void Associate(std::vector<YOLOSegInstance>& instances, const cv::Size& imageSize);
++    void Associate(std::vector<YOLOSegInstance>& instances, const cv::Size& imageSize,
++        long frameId,double timestamp,const cv::Mat& gray=cv::Mat(),const cv::Mat& depthMeters=cv::Mat());
++    void ValidateInputTime(long frameId,double timestamp) const;
++    void Reset(); // IDs never reused within this manager session.
++    const std::vector<InstanceAssociationEvent>& Events() const {return mEvents;}
++    double ProcessingMs() const {return mProcessingMs;}
++    int SequenceId() const {return mSequenceId;}
++    static std::vector<int> SolveAssignment(const std::vector<std::vector<double>>& squareCosts);
+ 
+ private:
+     struct Track {
+@@ -20,12 +34,25 @@ private:
+         cv::Rect boundingBox;
+         cv::Point2f center;
+         int missedFrames = 0;
++        long lastMatchedFrame=-1;
++        double lastMatchedTimestamp=0;
++        cv::Point2f velocity;
++        cv::Mat gray;
++        float depth=-1;
++        bool ambiguousTemplate=false;
+     };
+     static float MaskIoU(const cv::Mat& a, const cv::Mat& b);
+     static float BoxIoU(const cv::Rect& a, const cv::Rect& b);
+     static float CenterDistance(const cv::Point2f& a, const cv::Point2f& b,
+                                 const cv::Size& imageSize);
+     B4Config mConfig;
++    InstanceAssociationConfig mAssociation;
++    std::vector<InstanceAssociationEvent> mEvents;
++    double mProcessingMs=0, mLastTimestamp=0;
++    long mLastFrame=-1, mLegacyFrame=0;
++    int mSequenceId=0;
++    bool mHasInput=false;
++    void AssociateLegacy(std::vector<YOLOSegInstance>& instances,const cv::Size&,long,double);
+     int mNextTrackId = 0;
+     std::unordered_map<int, Track> mTracks;
+ };
+diff --git a/include/Tracking.h b/include/Tracking.h
+index f8febac..f34b033 100644
+--- a/include/Tracking.h
++++ b/include/Tracking.h
+@@ -153,6 +153,13 @@ public:
+ 
+     std::unique_ptr<DynamicDetector> mpDynamicDetector;
+     std::unique_ptr<InstanceTrackManager> mpInstanceTrackManager;
++    struct IdentityOptimizerUses { int coarse=0, fine=0, coarseStatic=0, fineStatic=0; };
++    std::unordered_map<int,IdentityOptimizerUses> mIdentityOptimizerUses;
++    void RecordIdentityOptimizerInputs(bool fine);
++    bool mbIdentityResetPending=false;
++    std::ofstream mAssociationCsv;
++    void ResetDynamicIdentityHistory();
++    void LogInstanceAssociations(long frameId,double timestamp);
+     // B2 is intentionally independent from Frame/mLastFrame.  It is created
+     // only for B2 evidence-only runs and has no tracking decision authority.
+     std::unique_ptr<B2MotionEvidence> mpB2Processor;
+diff --git a/include/YOLOSeg.h b/include/YOLOSeg.h
+index c297972..a2673d9 100644
+--- a/include/YOLOSeg.h
++++ b/include/YOLOSeg.h
+@@ -6,6 +6,7 @@
+ #include <memory>
+ #include <string>
+ #include <vector>
++#include "Deep/InstanceAssociation.h"
+ 
+ namespace ORB_SLAM3 {
+ 
+@@ -31,6 +32,7 @@ struct YOLOSegInstance {
+     // Assigned once by InstanceTrackManager immediately after inference.
+     // All later B2/B3/B4 stages consume this shared identity.
+     int trackId = -1;
++    InstanceAssociationResult association;
+ };
+ 
+ struct YOLOSegResult {
+diff --git a/src/B2MotionEvidence.cc b/src/B2MotionEvidence.cc
+index 4a12ad0..a4547f6 100644
+--- a/src/B2MotionEvidence.cc
++++ b/src/B2MotionEvidence.cc
+@@ -174,6 +174,8 @@ const char* FailureReasonName(B2GeometryFailureReason reason)
+     case INSUFFICIENT_BACKGROUND_REFERENCE: return "INSUFFICIENT_BACKGROUND_REFERENCE";
+     case AMBIGUOUS_GEOMETRIC_EVIDENCE: return "AMBIGUOUS_GEOMETRIC_EVIDENCE";
+     case POSE_WEAK: return "POSE_WEAK";
++    case IDENTITY_ASSOCIATION_UNTRUSTED: return "IDENTITY_ASSOCIATION_UNTRUSTED";
++    case IDENTITY_HISTORY_MISMATCH: return "IDENTITY_HISTORY_MISMATCH";
+     default: return "GEOMETRY_UNRELIABLE";
+     }
+ }
+@@ -380,6 +382,7 @@ B2CandidateFrame B2MotionEvidence::ExtractCandidates(
+         B2PersonInstance person;
+         person.instanceId = static_cast<int>(i);
+         person.trackId = source.trackId;
++        person.association = source.association;
+         person.classId = source.classId;
+         person.confidence = source.confidence;
+         person.boundingBox = source.boundingBox & imageBounds;
+@@ -472,6 +475,14 @@ B2CandidateFrame B2MotionEvidence::ExtractCandidates(
+     return frame;
+ }
+ 
++void B2MotionEvidence::Reset() {
++    mPreviousFrame=B2CandidateFrame();mbHasPreviousFrame=false;mbPosePairReliable=false;
++    mLastEndedTrackIds.clear();mCurrentFromPrevious=Sophus::SE3f();
++}
++void B2MotionEvidence::ForgetTrack(int trackId) {
++    auto& persons=mPreviousFrame.persons;
++    persons.erase(std::remove_if(persons.begin(),persons.end(),[&](const B2PersonInstance& p){return p.trackId==trackId;}),persons.end());
++}
+ B2Result B2MotionEvidence::Process(const B2CandidateFrame& current)
+ {
+     Sophus::SE3f relative;
+@@ -515,8 +526,15 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
+     // InstanceTrackManager. B2 only joins its current instances to its own
+     // previous measurements; it must never allocate or replace track IDs.
+     mLastEndedTrackIds.clear();
++    for(auto& person:working.persons) person.previousInstanceId=-1;
+     if (mbHasPreviousFrame)
+         for (B2PersonInstance& person : working.persons) {
++            if(!person.association.allowGeometryPair) continue;
++            if(person.association.evaluated &&
++               (!std::isfinite(person.association.previousMatchedTimestamp) ||
++                person.association.previousMatchedFrame!=working.frameId-1 ||
++                person.association.previousMatchedFrame!=mPreviousFrame.frameId ||
++                std::abs(person.association.previousMatchedTimestamp-mPreviousFrame.timestamp)>1e-6)) continue;
+             const auto previous = std::find_if(mPreviousFrame.persons.begin(),
+                 mPreviousFrame.persons.end(), [&](const B2PersonInstance& item) {
+                     return item.trackId == person.trackId && person.trackId >= 0;
+@@ -540,6 +558,15 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
+             person.geometryDecision = GEOM_UNRELIABLE;
+             person.geometryFailureReason = POSE_WEAK;
+         }
++    for(auto& person:working.persons) {
++        if(!person.association.allowGeometryPair) {
++            person.geometryDecision=GEOM_UNRELIABLE;
++            person.geometryFailureReason=IDENTITY_ASSOCIATION_UNTRUSTED;
++        } else if(person.association.evaluated && person.previousInstanceId<0) {
++            person.geometryDecision=GEOM_UNRELIABLE;
++            person.geometryFailureReason=IDENTITY_HISTORY_MISMATCH;
++        }
++    }
+     B2Result result;
+     result.frameId = working.frameId;
+     result.processed = true;
+@@ -663,7 +690,7 @@ void B2MotionEvidence::ComputeGeometryResiduals(B2CandidateFrame& current) const
+     const Sophus::SE3f& currentFromPrevious = mCurrentFromPrevious;
+     for (B2PersonInstance& currentPerson : current.persons)
+     {
+-        if (currentPerson.previousInstanceId < 0)
++        if (!currentPerson.association.allowGeometryPair || currentPerson.previousInstanceId < 0)
+             continue;
+         const auto previousPerson = std::find_if(mPreviousFrame.persons.begin(),
+             mPreviousFrame.persons.end(), [&](const B2PersonInstance& person) {
+@@ -900,7 +927,7 @@ void B2MotionEvidence::MatchAssociatedInstances(B2CandidateFrame& current)
+ {
+     for (B2PersonInstance& currentPerson : current.persons)
+     {
+-        if (currentPerson.previousInstanceId < 0)
++        if (!currentPerson.association.allowGeometryPair || currentPerson.previousInstanceId < 0)
+             continue;
+         const auto previous = std::find_if(mPreviousFrame.persons.begin(),
+             mPreviousFrame.persons.end(), [&](const B2PersonInstance& person) {
+diff --git a/src/B3SemanticGeometryFusion.cc b/src/B3SemanticGeometryFusion.cc
+index ceef92c..91a1c4f 100644
+--- a/src/B3SemanticGeometryFusion.cc
++++ b/src/B3SemanticGeometryFusion.cc
+@@ -30,6 +30,8 @@ const char* GeometryReason(B2InstanceGeometryStatus state,
+     case INSUFFICIENT_BACKGROUND_REFERENCE: return "INSUFFICIENT_BACKGROUND_REFERENCE";
+     case AMBIGUOUS_GEOMETRIC_EVIDENCE: return "AMBIGUOUS_GEOMETRIC_EVIDENCE";
+     case POSE_WEAK: return "POSE_WEAK";
++    case IDENTITY_ASSOCIATION_UNTRUSTED: return "IDENTITY_ASSOCIATION_UNTRUSTED";
++    case IDENTITY_HISTORY_MISMATCH: return "IDENTITY_HISTORY_MISMATCH";
+     default: return "GEOMETRY_UNRELIABLE";
+     }
+ }
+diff --git a/src/B4TemporalStateMachine.cc b/src/B4TemporalStateMachine.cc
+index 6ec6c84..6f1b866 100644
+--- a/src/B4TemporalStateMachine.cc
++++ b/src/B4TemporalStateMachine.cc
+@@ -133,6 +133,13 @@ void B4TemporalStateMachine::Reset() {
+     mLastProcessedFrameId = -1;
+     mLastProcessedTimestamp = 0.0;
+ }
++void B4TemporalStateMachine::ResetTrackEvidence(int trackId) {
++    const auto found=mB4Tracks.find(trackId);if(found==mB4Tracks.end()) return;
++    auto& track=found->second;track.state=B4MotionState::PENDING;
++    track.static_count=track.dynamic_count=track.recovery_count=0;
++    track.hasReliableEvidence=false;track.lastReliableTimestamp=std::numeric_limits<double>::quiet_NaN();
++    track.transition_reason="IDENTITY_REACQUIRED_RESET";
++}
+ 
+ B4StateResult B4TemporalStateMachine::ApplyEvidenceExpiry(B4TrackState& track,
+                                                          double timestamp) const {
+@@ -178,7 +185,8 @@ bool B4TemporalStateMachine::GetUsableState(int trackId, double timestamp,
+ }
+ 
+ std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double timestamp,
+-    const std::vector<B3FusionResult>& instances, float imageDiagonalPixels) {
++    const std::vector<B3FusionResult>& instances, float imageDiagonalPixels,
++    const std::unordered_map<int,InstanceAssociationResult>* associations) {
+     (void)imageDiagonalPixels; // association is already completed by InstanceTrackManager.
+     // Validate the entire update before changing ages, TTL or evidence counts.
+     // Duplicate dispatch must not silently accumulate evidence twice.
+@@ -199,6 +207,11 @@ std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double
+     mbHasProcessedFrame = true;
+     mLastProcessedFrameId = frameId;
+     mLastProcessedTimestamp = timestamp;
++    if(associations) for(const auto& instance:instances) {
++        const auto identity=associations->find(instance.track_id);
++        if(identity==associations->end() || !identity->second.allowStateInheritance)
++            ResetTrackEvidence(instance.track_id); // Idempotent; no age/TTL advancement.
++    }
+     std::unordered_map<int, B4StateResult> history;
+     for (auto& entry : mB4Tracks) {
+         history.emplace(entry.first, ApplyEvidenceExpiry(entry.second, timestamp));
+@@ -219,8 +232,15 @@ std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double
+         track.last_center = cv::Point2f(track.last_bbox.x + .5f*track.last_bbox.width,
+                                         track.last_bbox.y + .5f*track.last_bbox.height);
+         track.last_frame_id = frameId; track.missed_frames = 0; ++track.age;
+-        const B4EvidenceType evidence = ConvertB3ToB4Evidence(instance);
++        B4EvidenceType evidence = ConvertB3ToB4Evidence(instance);
++        bool identityBlocked=false;
++        if(associations) {
++            const auto identity=associations->find(id);
++            identityBlocked=identity==associations->end() || !identity->second.allowGeometryPair;
++            if(identityBlocked) evidence=B4EvidenceType::UNRELIABLE;
++        }
+         UpdateB4State(track, evidence);
++        if(identityBlocked) track.transition_reason="IDENTITY_UNTRUSTED_FREEZE";
+         if (evidence != B4EvidenceType::UNRELIABLE) {
+             track.hasReliableEvidence = true;
+             track.lastReliableTimestamp = timestamp;
+diff --git a/src/Deep/DynamicDetector.cc b/src/Deep/DynamicDetector.cc
+index f1f6b7e..3715fed 100644
+--- a/src/Deep/DynamicDetector.cc
++++ b/src/Deep/DynamicDetector.cc
+@@ -179,6 +179,41 @@ std::string FileSha256(const std::string& path) {
+ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
+     cv::FileStorage fs(settingsPath,cv::FileStorage::READ);
+     if (!fs.isOpened()) throw std::runtime_error("Cannot open settings: " + settingsPath);
++    association_.mode=Integer(fs,"InstanceAssociation.Mode",3);
++    association_.maxCost=Seconds(fs,"InstanceAssociation.MaxCost",.65);
++    association_.unmatchedTrackCost=Seconds(fs,"InstanceAssociation.UnmatchedTrackCost",.40);
++    association_.unmatchedInstanceCost=Seconds(fs,"InstanceAssociation.UnmatchedInstanceCost",.40);
++    association_.minMargin=Seconds(fs,"InstanceAssociation.MinMargin",.08);
++    association_.maxCenterDistance=Seconds(fs,"InstanceAssociation.MaxCenterDistance",1.0);
++    association_.maxScaleRatio=Seconds(fs,"InstanceAssociation.MaxScaleRatio",4.0);
++    association_.minMaskIoU=Seconds(fs,"InstanceAssociation.MinMaskIoU",.05);
++    association_.minBoxIoU=Seconds(fs,"InstanceAssociation.MinBoxIoU",.10);
++    association_.maxPredictionSeconds=Seconds(fs,"InstanceAssociation.MaxPredictionSeconds",.75);
++    association_.maxDepthDifference=Seconds(fs,"InstanceAssociation.MaxDepthDifference",.60);
++    association_.maxDepthRelative=Seconds(fs,"InstanceAssociation.MaxDepthRelative",.30);
++    association_.maxDepthMAD=Seconds(fs,"InstanceAssociation.MaxDepthMAD",.20);
++    association_.maskWeight=Seconds(fs,"InstanceAssociation.Weight.Mask",.40);
++    association_.boxWeight=Seconds(fs,"InstanceAssociation.Weight.Box",.20);
++    association_.centerWeight=Seconds(fs,"InstanceAssociation.Weight.Center",.25);
++    association_.flowWeight=Seconds(fs,"InstanceAssociation.Weight.Flow",.15);
++    association_.depthWeight=Seconds(fs,"InstanceAssociation.Weight.Depth",.15);
++    association_.mergeCoverage=Seconds(fs,"InstanceAssociation.MergeCoverage",.65);
++    association_.flowFBError=Seconds(fs,"InstanceAssociation.Flow.FBError",1.5);
++    association_.flowQuality=Seconds(fs,"InstanceAssociation.Flow.Quality",.01);
++    association_.minEvidenceTerms=Integer(fs,"InstanceAssociation.MinEvidenceTerms",2);
++    association_.flowMaxCorners=Integer(fs,"InstanceAssociation.Flow.MaxCorners",80);
++    association_.flowMinSupport=Integer(fs,"InstanceAssociation.Flow.MinSupport",8);
++    association_.safeErodeRadius=Integer(fs,"InstanceAssociation.SafeErodeRadius",3);
++    association_.minDepthSamples=Integer(fs,"InstanceAssociation.MinDepthSamples",20);
++    association_.saveCsv=Flag(fs,"InstanceAssociation.Debug.SaveCsv",true);
++    association_.printSummary=Flag(fs,"InstanceAssociation.Debug.PrintSummary",true);
++    ValidateInstanceAssociation(association_);
++    std::cout<<"[INSTANCE ASSOCIATION CONFIG] Mode="<<association_.mode
++        <<" PreExpiry="<<(association_.mode>=1)<<" Global="<<(association_.mode>=1)
++        <<" Prediction="<<(association_.mode>=2)<<" Ambiguity="<<(association_.mode>=2)
++        <<" ControlledInheritance="<<(association_.mode>=3)<<" MaxCost="<<association_.maxCost
++        <<" UnmatchedPairCost="<<association_.unmatchedTrackCost+association_.unmatchedInstanceCost
++        <<" MinMargin="<<association_.minMargin<<" initial_values_not_accuracy_validated=1"<<std::endl;
+     frontend_.explicitMode = !fs["DynamicFrontend.Mode"].empty();
+     frontend_.mode = static_cast<DynamicFrontendMode>(Integer(fs,"DynamicFrontend.Mode",0));
+     frontend_.twoStageEnable = Flag(fs,"TwoStage.Enable",false);
+@@ -318,7 +353,7 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
+     b4_.staticEnterCount = Integer(fs,"B4.StaticEnterCount",6);
+     b4_.dynamicRecoveryCount = Integer(fs,"B4.DynamicRecoveryCount",10);
+     b4_.trackTTL = Integer(fs,"B4.TrackTTL",15);
+-    b4_.evidenceExpiryEnable = Flag(fs,"B4.EvidenceExpiry.Enable",false);
++    b4_.evidenceExpiryEnable = Flag(fs,"B4.EvidenceExpiry.Enable",true);
+     b4_.maxEvidenceGapSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxGapSeconds",0.20);
+     b4_.maxStaticAgeSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxStaticAgeSeconds",0.30);
+     ValidateB4EvidenceExpiry(b4_);
+diff --git a/src/Deep/InstanceTrackManager.cc b/src/Deep/InstanceTrackManager.cc
+index ec86486..c6ec578 100644
+--- a/src/Deep/InstanceTrackManager.cc
++++ b/src/Deep/InstanceTrackManager.cc
+@@ -2,6 +2,10 @@
+ #include <algorithm>
+ #include <cmath>
+ #include <unordered_set>
++#include <opencv2/imgproc.hpp>
++#include <opencv2/video/tracking.hpp>
++#include <chrono>
++#include <limits>
+ 
+ namespace ORB_SLAM3 {
+ float InstanceTrackManager::MaskIoU(const cv::Mat& a, const cv::Mat& b) {
+@@ -17,7 +21,8 @@ float InstanceTrackManager::CenterDistance(const cv::Point2f& a, const cv::Point
+     const float dx=a.x-b.x, dy=a.y-b.y;
+     return std::sqrt(dx*dx+dy*dy)/std::max(1.f, std::sqrt(float(s.width*s.width+s.height*s.height)));
+ }
+-void InstanceTrackManager::Associate(std::vector<YOLOSegInstance>& instances, const cv::Size& imageSize) {
++void InstanceTrackManager::AssociateLegacy(std::vector<YOLOSegInstance>& instances, const cv::Size& imageSize,
++                                          long frameId,double timestamp) {
+     for (auto& entry : mTracks) ++entry.second.missedFrames;
+     struct Pair { int track; size_t instance; float score; };
+     std::vector<Pair> candidates;
+@@ -36,11 +41,244 @@ void InstanceTrackManager::Associate(std::vector<YOLOSegInstance>& instances, co
+     for (size_t i=0;i<instances.size();++i) {
+         int id=assignment[i]; if(id<0) { id=mNextTrackId++; mTracks[id].id=id; }
+         YOLOSegInstance& in=instances[i]; Track& t=mTracks[id];
++        auto& a=in.association; a=InstanceAssociationResult(); a.evaluated=true;
++        a.instanceId=i; a.trackId=id; a.allowStateInheritance=t.lastMatchedFrame>=0;
++        a.previousMatchedFrame=t.lastMatchedFrame; a.previousMatchedTimestamp=t.lastMatchedTimestamp;
++        a.allowGeometryPair=t.lastMatchedFrame>=0 && t.lastMatchedFrame==frameId-1;
++        a.associationStatus=t.lastMatchedFrame<0 ? AssociationStatus::NEW_TRACK :
++            a.allowGeometryPair ? AssociationStatus::CONTINUOUS_CONFIRMED : AssociationStatus::REACQUIRED;
++        a.reason="A0_LEGACY_GREEDY";
+         in.trackId=id; t.classId=in.classId; t.mask=in.mask.clone(); t.boundingBox=in.boundingBox;
+         t.center=cv::Point2f(in.boundingBox.x+.5f*in.boundingBox.width,in.boundingBox.y+.5f*in.boundingBox.height); t.missedFrames=0;
++        t.lastMatchedFrame=frameId; t.lastMatchedTimestamp=timestamp;
+     }
+     for(auto it=mTracks.begin();it!=mTracks.end();) {
+-        if(it->second.missedFrames>mConfig.trackTTL) it=mTracks.erase(it); else ++it;
++        if(it->second.missedFrames>mConfig.trackTTL) {
++            mEvents.push_back({it->first,"TERMINATED","TRACK_TTL_EXPIRED"});it=mTracks.erase(it);
++        } else ++it;
+     }
+ }
++
++namespace {
++double Median(std::vector<float> values) {
++    if(values.empty()) return -1;
++    auto middle=values.begin()+values.size()/2;std::nth_element(values.begin(),middle,values.end());
++    return *middle;
++}
++cv::Point2f Center(const cv::Rect& b) {return cv::Point2f(b.x+b.width*.5f,b.y+b.height*.5f);}
++float Depth(const cv::Mat& depth,const cv::Mat& mask,const InstanceAssociationConfig& cfg) {
++    if(depth.empty()) return -1;
++    std::vector<float> samples;
++    for(int y=0;y<depth.rows;y+=4) for(int x=0;x<depth.cols;x+=4)
++        if(mask.at<uchar>(y,x)) {
++            float z=depth.at<float>(y,x);
++            if(std::isfinite(z)&&z>=.3f&&z<=5.f) samples.push_back(z);
++        }
++    if(samples.size()<size_t(cfg.minDepthSamples)) return -1;
++    const float middle=Median(samples);
++    for(float& z:samples) z=std::abs(z-middle);
++    return Median(samples)<=cfg.maxDepthMAD*middle ? middle : -1;
++}
++}
++
++void InstanceTrackManager::ValidateInputTime(long frameId,double timestamp) const {
++    if(frameId<0 || !std::isfinite(timestamp) ||
++        (mHasInput && (frameId<=mLastFrame || timestamp<=mLastTimestamp)))
++        throw std::runtime_error("InstanceAssociation requires strictly advancing finite acquisition times/frame IDs; reset before sequence switch");
++}
++void InstanceTrackManager::Reset() {
++    mEvents.clear();
++    for(const auto& t:mTracks) mEvents.push_back({t.first,"TERMINATED","SEQUENCE_RESET"});
++    mTracks.clear();mHasInput=false;mLastFrame=-1;mLastTimestamp=0;mLegacyFrame=0;++mSequenceId;
++}
++void InstanceTrackManager::Associate(std::vector<YOLOSegInstance>& instances,const cv::Size& size) {
++    if(mAssociation.mode!=0) throw std::runtime_error("Enhanced association requires acquisition timestamp/frame input");
++    Associate(instances,size,mLegacyFrame,mLegacyFrame/30.0);
++    ++mLegacyFrame;
++}
++std::vector<int> InstanceTrackManager::SolveAssignment(const std::vector<std::vector<double>>& a) {
++    const int n=a.size();if(!n) return {};
++    for(const auto& row:a) {
++        if(row.size()!=size_t(n)) throw std::runtime_error("Assignment matrix must be square");
++        for(double cost:row) if(!std::isfinite(cost)) throw std::runtime_error("Assignment costs must be finite");
++    }
++    std::vector<double> u(n+1),v(n+1);
++    std::vector<int> p(n+1),way(n+1);
++    for(int i=1;i<=n;++i) {
++        p[0]=i;int j0=0;std::vector<double> minv(n+1,1e12);std::vector<bool> used(n+1,false);
++        do {
++            used[j0]=true;int i0=p[j0],j1=0;double delta=1e12;
++            for(int j=1;j<=n;++j) if(!used[j]) {
++                double cur=a[i0-1][j-1]-u[i0]-v[j];
++                if(cur<minv[j]) {minv[j]=cur;way[j]=j0;}
++                if(minv[j]<delta) {delta=minv[j];j1=j;}
++            }
++            for(int j=0;j<=n;++j) {if(used[j]) {u[p[j]]+=delta;v[j]-=delta;} else minv[j]-=delta;}
++            j0=j1;
++        } while(p[j0]!=0);
++        do {int j1=way[j0];p[j0]=p[j1];j0=j1;} while(j0);
++    }
++    std::vector<int> out(n,-1);for(int j=1;j<=n;++j) out[p[j]-1]=j-1;return out;
++}
++void InstanceTrackManager::Associate(std::vector<YOLOSegInstance>& instances,const cv::Size& size,
++    long frameId,double timestamp,const cv::Mat& gray,const cv::Mat& depth) {
++    const auto started=std::chrono::steady_clock::now();
++    ValidateInputTime(frameId,timestamp);
++    if(size.width<=0||size.height<=0 || (!gray.empty()&&(gray.type()!=CV_8UC1||gray.size()!=size)) ||
++       (!depth.empty()&&(depth.type()!=CV_32FC1||depth.size()!=size)))
++        throw std::runtime_error("InstanceAssociation image/depth size/type mismatch");
++    const cv::Rect bounds(0,0,size.width,size.height);
++    for(const auto& in:instances) {
++        if(in.classId<0 || !std::isfinite(in.confidence) || in.confidence<0 || in.confidence>1 ||
++           in.boundingBox.empty() || (in.boundingBox&bounds)!=in.boundingBox ||
++           in.mask.type()!=CV_8UC1||in.mask.size()!=size||!cv::countNonZero(in.mask))
++            throw std::runtime_error("Invalid InstanceAssociation instance/mask/bbox");
++        if(cv::countNonZero((in.mask!=0)&(in.mask!=255)))
++            throw std::runtime_error("InstanceAssociation mask must be binary 0/255");
++    }
++    mEvents.clear();
++    if(mAssociation.mode==0) AssociateLegacy(instances,size,frameId,timestamp);
++    else {
++        // A returning detection after exactly TTL missed images may match;
++        // TTL+1 missed images must be removed BEFORE assignment can reset age.
++        for(auto it=mTracks.begin();it!=mTracks.end();) {
++            if(frameId-it->second.lastMatchedFrame-1>mConfig.trackTTL) {
++                mEvents.push_back({it->first,"TERMINATED","PRE_ASSIGNMENT_TTL_EXPIRED"});it=mTracks.erase(it);
++            } else ++it;
++        }
++        std::vector<int> ids;for(const auto& entry:mTracks) ids.push_back(entry.first);
++        std::sort(ids.begin(),ids.end());
++        struct Prediction {cv::Mat mask;cv::Rect box;int flow=0;std::string source="NONE";bool usable=true;};
++        std::vector<Prediction> predictions;
++        const auto& c=mAssociation;
++        for(int id:ids) {
++            const Track& track=mTracks.at(id);Prediction pred;pred.mask=track.mask;pred.box=track.boundingBox;
++            const double dt=timestamp-track.lastMatchedTimestamp;
++            pred.usable=!track.ambiguousTemplate && (c.mode<2 || dt<=c.maxPredictionSeconds);
++            if(c.mode>=2 && pred.usable) {
++                cv::Point2f displacement=track.velocity*float(dt);
++                pred.source="VELOCITY_LOW_CONFIDENCE";
++                if(!gray.empty()&&!track.gray.empty()&&track.gray.size()==gray.size()) {
++                    cv::Mat safe;
++                    cv::erode(track.mask,safe,cv::getStructuringElement(cv::MORPH_ELLIPSE,
++                        cv::Size(2*c.safeErodeRadius+1,2*c.safeErodeRadius+1)));
++                    std::vector<cv::Point2f> points,next,back;
++                    cv::goodFeaturesToTrack(track.gray,points,c.flowMaxCorners,c.flowQuality,5,safe);
++                    if(!points.empty()) {
++                        std::vector<uchar> forwardStatus,backStatus;std::vector<float> error;
++                        try {
++                            cv::calcOpticalFlowPyrLK(track.gray,gray,points,next,forwardStatus,error);
++                            cv::calcOpticalFlowPyrLK(gray,track.gray,next,back,backStatus,error);
++                            std::vector<float> dx,dy;
++                            for(size_t k=0;k<points.size();++k)
++                                if(forwardStatus[k]&&backStatus[k]&&cv::norm(points[k]-back[k])<=c.flowFBError &&
++                                   next[k].x>=0&&next[k].y>=0&&next[k].x<size.width&&next[k].y<size.height) {
++                                    dx.push_back(next[k].x-points[k].x);dy.push_back(next[k].y-points[k].y);
++                                }
++                            pred.flow=dx.size();
++                            if(pred.flow>=c.flowMinSupport) {displacement=cv::Point2f(Median(dx),Median(dy));pred.source="LK_FB_MEDIAN";}
++                        } catch(const cv::Exception&) {pred.flow=0;pred.source="LK_FAILED_VELOCITY";}
++                    }
++                }
++                // Bound both extrapolation time and its spatial reach.
++                const double maximum=c.maxCenterDistance*std::hypot(track.boundingBox.width,track.boundingBox.height);
++                const double distance=cv::norm(displacement);
++                if(distance>maximum) displacement*=float(maximum/distance);
++                cv::Mat affine=(cv::Mat_<double>(2,3)<<1,0,displacement.x,0,1,displacement.y);
++                cv::warpAffine(track.mask,pred.mask,affine,size,cv::INTER_NEAREST,cv::BORDER_CONSTANT,cv::Scalar(0));
++                pred.box=cv::Rect(track.boundingBox.x+cvRound(displacement.x),track.boundingBox.y+cvRound(displacement.y),
++                                  track.boundingBox.width,track.boundingBox.height)&bounds;
++                pred.usable=pred.usable&&!pred.box.empty();
++            }
++            predictions.push_back(pred);
++        }
++        const int t=ids.size(),d=instances.size(),n=t+d;const double invalid=1e6;
++        std::vector<float> depths;for(const auto& in:instances) depths.push_back(Depth(depth,in.mask,c));
++        std::vector<bool> merged(d,false);
++        if(c.mode>=2) for(int j=0;j<d;++j) {
++            int covered=0;
++            for(int i=0;i<t;++i) if(predictions[i].usable && mTracks.at(ids[i]).classId==instances[j].classId) {
++                cv::Mat inter;cv::bitwise_and(predictions[i].mask,instances[j].mask,inter);
++                if(double(cv::countNonZero(inter))/std::max(1,cv::countNonZero(predictions[i].mask))>=c.mergeCoverage) ++covered;
++            }
++            merged[j]=covered>=2;
++        }
++        std::vector<std::vector<double>> cost(t,std::vector<double>(d,invalid));
++        for(int i=0;i<t;++i) for(int j=0;j<d;++j) {
++            const Track& track=mTracks.at(ids[i]);const auto& pred=predictions[i];const auto& in=instances[j];
++            if(!pred.usable||merged[j]||track.classId!=in.classId) continue;
++            double scale=double(in.boundingBox.area())/std::max(1,pred.box.area());
++            double distance=cv::norm(Center(pred.box)-Center(in.boundingBox))/
++                std::max(1.,std::hypot(pred.box.width,pred.box.height));
++            const double gate=c.maxCenterDistance*(c.mode>=2&&pred.flow<c.flowMinSupport?.75:1.);
++            if(scale>c.maxScaleRatio || scale<1/c.maxScaleRatio || distance>gate) continue;
++            const double mask=MaskIoU(pred.mask,in.mask),box=BoxIoU(pred.box,in.boundingBox);
++            if(mask<c.minMaskIoU && box<c.minBoxIoU) continue;
++            double weighted=0,weights=0;int terms=0;
++            auto add=[&](double weight,double value,bool evidence=false){if(weight>0){weighted+=weight*value;weights+=weight;if(evidence)++terms;}};
++            add(c.maskWeight,1-mask,true);add(c.boxWeight,1-box,true);add(c.centerWeight,std::min(1.,distance/c.maxCenterDistance));
++            if(c.mode>=2 && pred.flow>=c.flowMinSupport) add(c.flowWeight,1-std::min(1.,double(pred.flow)/c.flowMaxCorners));
++            if(track.depth>0 && depths[j]>0) {
++                double limit=std::max(c.maxDepthDifference,c.maxDepthRelative*track.depth);
++                double diff=std::abs(track.depth-depths[j]);if(diff>limit) continue;
++                add(c.depthWeight,diff/limit,true);
++            }
++            if(weights>0&&terms>=c.minEvidenceTerms&&weighted/weights<=c.maxCost) cost[i][j]=weighted/weights;
++        }
++        std::vector<std::vector<double>> matrix(n,std::vector<double>(n,invalid));
++        for(int i=0;i<t;++i) {for(int j=0;j<d;++j) matrix[i][j]=cost[i][j];matrix[i][d+i]=c.unmatchedTrackCost;}
++        for(int j=0;j<d;++j) {matrix[t+j][j]=c.unmatchedInstanceCost;for(int i=0;i<t;++i)matrix[t+j][d+i]=0;}
++        const auto assignment=SolveAssignment(matrix);
++        std::vector<int> matched(d,-1);for(int i=0;i<t;++i) if(assignment[i]<d&&cost[i][assignment[i]]<invalid) matched[assignment[i]]=i;
++        for(int j=0;j<d;++j) {
++            auto& in=instances[j];InstanceAssociationResult a;a.evaluated=true;a.instanceId=j;
++            int i=matched[j];bool ambiguous=merged[j];
++            if(i<0 && c.mode>=2)
++                for(int k=0;k<t;++k) if(cost[k][j]<invalid) ambiguous=true;
++            if(i>=0) {
++                a.associationCost=cost[i][j];double rowSecond=invalid,columnSecond=invalid;
++                for(int k=0;k<d;++k) if(k!=j) rowSecond=std::min(rowSecond,cost[i][k]);
++                for(int k=0;k<t;++k) if(k!=i) columnSecond=std::min(columnSecond,cost[k][j]);
++                if(rowSecond<invalid) a.rowMargin=rowSecond-cost[i][j];
++                if(columnSecond<invalid) a.columnMargin=columnSecond-cost[i][j];
++                if(c.mode>=2) ambiguous=ambiguous ||
++                    (std::isfinite(a.rowMargin)&&a.rowMargin<c.minMargin) ||
++                    (std::isfinite(a.columnMargin)&&a.columnMargin<c.minMargin) ||
++                    c.unmatchedTrackCost+c.unmatchedInstanceCost-cost[i][j]<c.minMargin;
++                a.prediction=predictions[i].source;a.flowSupport=predictions[i].flow;
++            }
++            if(i<0||ambiguous) {
++                const int id=mNextTrackId++;Track fresh;fresh.id=id;fresh.ambiguousTemplate=ambiguous;mTracks.emplace(id,fresh);
++                a.trackId=id;a.associationStatus=ambiguous?AssociationStatus::AMBIGUOUS:AssociationStatus::NEW_TRACK;
++                a.reason=merged[j]?"MERGED_INSTANCES":ambiguous?"ASSIGNMENT_AMBIGUOUS":"NO_ELIGIBLE_MATCH";
++                mEvents.push_back({id,AssociationStatusName(a.associationStatus),a.reason});
++            } else {
++                const Track& old=mTracks.at(ids[i]);a.trackId=ids[i];
++                a.previousMatchedFrame=old.lastMatchedFrame;a.previousMatchedTimestamp=old.lastMatchedTimestamp;
++                const bool adjacent=frameId==old.lastMatchedFrame+1;
++                a.associationStatus=adjacent?AssociationStatus::CONTINUOUS_CONFIRMED:AssociationStatus::REACQUIRED;
++                a.allowStateInheritance=adjacent||c.mode<3;
++                a.allowGeometryPair=adjacent;
++                a.resetEvidence=!adjacent&&c.mode>=3;
++                a.stateResetReason=a.resetEvidence?"REACQUIRED_RESET_TO_P":"NONE";
++                a.reason=adjacent?"CONFIRMED_ADJACENT":"REACQUIRED_MEASUREMENT_BASELINE";
++                if(!adjacent) mEvents.push_back({a.trackId,"REACQUIRED",a.stateResetReason});
++            }
++            Track& track=mTracks.at(a.trackId);
++            a.depthAvailable=i>=0&&!ambiguous&&track.depth>0&&depths[j]>0;
++            if(track.lastMatchedFrame>=0) track.velocity=(Center(in.boundingBox)-track.center)/float(timestamp-track.lastMatchedTimestamp);
++            track.classId=in.classId;track.mask=in.mask.clone();track.boundingBox=in.boundingBox;track.center=Center(in.boundingBox);
++            track.gray=gray.clone();track.depth=depths[j];track.lastMatchedFrame=frameId;track.lastMatchedTimestamp=timestamp;track.missedFrames=0;
++            in.trackId=a.trackId;in.association=a;
++        }
++        for(auto it=mTracks.begin();it!=mTracks.end();) {
++            it->second.missedFrames=frameId-it->second.lastMatchedFrame;
++            if(it->second.missedFrames>mConfig.trackTTL) {
++                mEvents.push_back({it->first,"TERMINATED","TRACK_TTL_EXPIRED"});it=mTracks.erase(it);
++            } else ++it;
++        }
++    }
++    mHasInput=true;mLastFrame=frameId;mLastTimestamp=timestamp;
++    mProcessingMs=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();
++}
+ }
+diff --git a/src/FrontendDiagnosticLog.cc b/src/FrontendDiagnosticLog.cc
+index ef7ef9c..6485926 100644
+--- a/src/FrontendDiagnosticLog.cc
++++ b/src/FrontendDiagnosticLog.cc
+@@ -38,6 +38,9 @@ const std::vector<std::string>& FrontendDiagnosticLog::Columns() {
+         "row_type","frame_id","timestamp","tracking_state","instance_id","track_id","semantic_region","feature_count",
+         "previous_b4_state","current_b4_state","Ns","Nd","Nr","missed_frames","b4_transition_reason",
+         "historical_b4_state","has_reliable_history","evidence_age_seconds","counter_expired","counters_reset",
++        "coarse_optimizer_feature_uses","fine_optimizer_feature_uses","coarse_S_feature_uses","fine_S_feature_uses",
++        "association_status","association_cost","association_row_margin","association_column_margin",
++        "allow_state_inheritance","allow_geometry_pair","association_reason","state_reset_reason","association_ms",
+         "static_state_expired","expiry_reason","expiry_previous_state","expiry_current_state","current_update_reason",
+         "b2_raw_r3d","b2_norm_r3d","b2_high_ratio","b2_reliable","b2_reason",
+         "b3_fusion_category","b3_reliable","b3_reason","allow_coarse","allow_fine","allow_map",
+diff --git a/src/Tracking.cc b/src/Tracking.cc
+index 5a6f22b..99f49bb 100644
+--- a/src/Tracking.cc
++++ b/src/Tracking.cc
+@@ -197,7 +197,17 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
+             sensor != System::RGBD && sensor != System::IMU_RGBD)
+             throw std::runtime_error("FeatureSemantic annotation currently supports RGB-D input only");
+         // One identity authority for YOLO instances, B2, B3, and B4.
+-        mpInstanceTrackManager.reset(new InstanceTrackManager(mB4Config));
++        mpInstanceTrackManager.reset(new InstanceTrackManager(mB4Config,mpDynamicDetector->Association()));
++        if(mpDynamicDetector->Enabled() && mpDynamicDetector->Association().saveCsv) {
++            const auto path=mB2Config.csvOutputParent+"/instance_association_"+
++                std::to_string(std::chrono::system_clock::now().time_since_epoch().count())+".csv";
++            if(std::ifstream(path).good()) throw std::runtime_error("Association CSV already exists");
++            mAssociationCsv.open(path);
++            if(!mAssociationCsv) throw std::runtime_error("Cannot create association CSV: "+path);
++            mAssociationCsv<<"row_type,frame_id,timestamp,sequence_id,instance_id,track_id,association_status,association_cost,"
++                "row_margin,column_margin,allow_state_inheritance,allow_geometry_pair,reason,state_reset_reason,"
++                "prediction,flow_support,depth_available,association_ms,previous_matched_frame,previous_matched_timestamp\n";
++        }
+         if (mB3Config.enable)
+         {
+             mpB3Fusion.reset(new B3Fusion(mB3Config.evidenceOnly,
+@@ -1675,11 +1685,66 @@ Sophus::SE3f Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat
+ }
+ 
+ 
++void Tracking::ResetDynamicIdentityHistory() {
++    // A map may be created inside Track(). Finish/retire the current owned
++    // input once; clear the pending identity/geometry stream before next RGB-D.
++    if(mbRGBDEvidenceReady) {
++        mbIdentityResetPending=true;
++        if(mpB4StateMachine) mpB4StateMachine->Reset();
++        mCurrentB4Results.clear();
++        return;
++    }
++    if(mpInstanceTrackManager) {mpInstanceTrackManager->Reset();LogInstanceAssociations(-1,-1);}
++    if(mpB2Processor) mpB2Processor->Reset();
++    if(mpB4StateMachine) mpB4StateMachine->Reset();
++    mCurrentB3Results.clear();mCurrentB4Results.clear();
++    mPendingRGBDB2Frame=B2CandidateFrame();mRGBDCoarsePolicySnapshot.clear();
++    mbRGBDEvidenceProcessed=false;mbIdentityResetPending=false;
++    mLastCoarseMapId=-1;mbCoarseRecoveryPending=false;
++}
++void Tracking::LogInstanceAssociations(long frameId,double timestamp) {
++    const auto& cfg=mpDynamicDetector->Association();
++    auto number=[](double value) {std::ostringstream out;if(std::isfinite(value))out<<std::setprecision(17)<<value;return out.str();};
++    auto write=[&](const std::vector<std::string>& fields) {
++        if(!mAssociationCsv) return;
++        for(size_t i=0;i<fields.size();++i) {
++            if(i) mAssociationCsv<<',';mAssociationCsv<<'"';
++            for(char c:fields[i]) {if(c=='"')mAssociationCsv<<'"';mAssociationCsv<<c;}
++            mAssociationCsv<<'"';
++        }
++        mAssociationCsv<<'\n';
++    };
++    const auto sequence=number(mpInstanceTrackManager->SequenceId());
++    if(frameId>=0) for(const auto& person:mpDynamicDetector->LastRGBDInstances()) {
++        const auto& a=person.association;
++        write({"INSTANCE",number(frameId),number(timestamp),sequence,number(a.instanceId),number(a.trackId),
++            AssociationStatusName(a.associationStatus),number(a.associationCost),number(a.rowMargin),number(a.columnMargin),
++            number(a.allowStateInheritance),number(a.allowGeometryPair),a.reason,a.stateResetReason,a.prediction,
++            number(a.flowSupport),number(a.depthAvailable),number(mpInstanceTrackManager->ProcessingMs()),
++            number(a.previousMatchedFrame),number(a.previousMatchedTimestamp)});
++        if(cfg.printSummary) std::cout<<"[ASSOC] frame="<<frameId<<" inst="<<a.instanceId<<" track="<<a.trackId
++            <<" status="<<AssociationStatusName(a.associationStatus)<<" cost="<<number(a.associationCost)
++            <<" row_margin="<<number(a.rowMargin)<<" column_margin="<<number(a.columnMargin)
++            <<" inherit="<<a.allowStateInheritance<<" geometry_pair="<<a.allowGeometryPair
++            <<" reason="<<a.reason<<" reset="<<a.stateResetReason<<" prediction="<<a.prediction
++            <<" flow="<<a.flowSupport<<" association_ms="<<mpInstanceTrackManager->ProcessingMs()<<std::endl;
++    }
++    for(const auto& event:mpInstanceTrackManager->Events()) {
++        std::vector<std::string> fields(20);fields[0]="EVENT";fields[1]=number(frameId);
++        fields[2]=timestamp>=0?number(timestamp):"";fields[3]=sequence;fields[5]=number(event.trackId);
++        fields[6]=event.type;fields[12]=event.reason;write(fields);
++        if(cfg.printSummary) std::cout<<"[ASSOC EVENT] track="<<event.trackId<<" type="<<event.type<<" reason="<<event.reason<<std::endl;
++    }
++    if(mAssociationCsv) {mAssociationCsv.flush();if(!mAssociationCsv)throw std::runtime_error("Association CSV write failed");}
++}
+ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const double &timestamp, string filename)
+ {
++    if(mbIdentityResetPending) ResetDynamicIdentityHistory();
++    if(mpInstanceTrackManager) mpInstanceTrackManager->ValidateInputTime(Frame::nNextId,timestamp);
+     if (mpB4StateMachine && mB4Config.evidenceExpiryEnable)
+         mpB4StateMachine->ValidateTimestamp(timestamp);
+     mDiagnosticStages=FrontendStageMetrics();
++    mIdentityOptimizerUses.clear();
+     mbCollectStageDiagnostics=mpDynamicDetector->Frontend().CollectDiagnostics();
+     mbRGBDEvidenceReady = false;
+     mbRGBDEvidenceProcessed = false;
+@@ -1705,26 +1770,6 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
+         mLastCoarseMapId = mapId;
+     }
+     const cv::Mat dynamicMask = mpDynamicDetector->Detect(imRGB, mbRGB, timestamp);
+-    if (mpInstanceTrackManager)
+-    {
+-        mpInstanceTrackManager->Associate(mpDynamicDetector->MutableLastRGBDInstances(), imRGB.size());
+-        std::unordered_set<int> assignedIds;
+-        std::ostringstream ids;
+-        for (const auto& person : mpDynamicDetector->LastRGBDInstances())
+-        {
+-            if (person.trackId < 0 || !assignedIds.insert(person.trackId).second)
+-                throw std::runtime_error("Person track_id must be valid and unique before Frame construction");
+-            if (assignedIds.size() > 1) ids << ';';
+-            ids << person.trackId;
+-        }
+-        if (mB4Config.enable && mB4Config.printFrameSummary)
+-        {
+-            std::ostringstream association;
+-            association << "[INSTANCE TRACK] timestamp=" << std::setprecision(17) << timestamp
+-                        << " persons=" << assignedIds.size() << " track_ids=" << ids.str();
+-            cout << association.str() << endl;
+-        }
+-    }
+     const DynamicFrontendConfig& frontend = mpDynamicDetector->Frontend();
+     // Explicit modes own the extraction policy. In particular, evidence-only
+     // mode keeps person features in the main Frame; its independent B2 ORB
+@@ -1755,6 +1800,25 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
+     if((fabs(mDepthMapFactor-1.0f)>1e-5) || imDepth.type()!=CV_32F)
+         imDepth.convertTo(imDepth,CV_32F,mDepthMapFactor);
+ 
++    if(mpInstanceTrackManager) {
++        auto& instances=mpDynamicDetector->MutableLastRGBDInstances();
++        mpInstanceTrackManager->Associate(instances,mImGray.size(),Frame::nNextId,timestamp,mImGray,imDepth);
++        for(const auto& event:mpInstanceTrackManager->Events()) if(event.type=="TERMINATED") {
++            if(mpB4StateMachine) mpB4StateMachine->RemoveTrack(event.trackId);
++            if(mpB2Processor) mpB2Processor->ForgetTrack(event.trackId);
++        }
++        std::unordered_set<int> ids;
++        for(const auto& person:instances) {
++            if(person.trackId<0||!ids.insert(person.trackId).second)
++                throw std::runtime_error("Person track_id must be unique before Frame construction");
++            if(person.association.resetEvidence) {
++                if(mpB4StateMachine) mpB4StateMachine->ResetTrackEvidence(person.trackId);
++                if(mpB2Processor) mpB2Processor->ForgetTrack(person.trackId);
++            }
++        }
++        LogInstanceAssociations(Frame::nNextId,timestamp);
++    }
++
+     B2CandidateFrame b2Frame;
+     if (mpB2Processor)
+         b2Frame = mpB2Processor->ExtractCandidates(
+@@ -1777,7 +1841,8 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
+             for (const auto& person : mpDynamicDetector->LastRGBDInstances())
+             {
+                 B4MotionState state = B4MotionState::PENDING;
+-                mpB4StateMachine->GetUsableState(person.trackId, timestamp, state); // NEW/stale S starts P.
++                if(person.association.allowStateInheritance)
++                    mpB4StateMachine->GetUsableState(person.trackId, timestamp, state);
+                 previousStates[person.trackId] = temporalState(state);
+             }
+         AnnotateRGBDFeatures(mCurrentFrame, mImGray.size(), imDepth,
+@@ -1991,6 +2056,7 @@ void Tracking::OptimizeNormalInitialPose(int& matches, const char* branch)
+ 
+ int Tracking::OptimizeInitialPoseWithDiagnostics()
+ {
++    RecordIdentityOptimizerInputs(false);
+     const bool active = mbRGBDEvidenceReady && mpDynamicDetector->Frontend().useCoarsePoseForB2;
+     if (!active) return Optimizer::PoseOptimization(&mCurrentFrame);
+     mCoarsePoseQuality = CoarsePoseQuality();
+@@ -2369,9 +2435,11 @@ void Tracking::RunB4TemporalStateMachine(double timestamp)
+         return;
+     const float imageDiagonal = std::sqrt(float(mImGray.cols * mImGray.cols +
+                                                 mImGray.rows * mImGray.rows));
++    std::unordered_map<int,InstanceAssociationResult> associations;
++    for(const auto& person:mpDynamicDetector->LastRGBDInstances()) associations.emplace(person.trackId,person.association);
+     mCurrentB4Results = mpB4StateMachine->Process(
+         mbRGBDEvidenceReady ? mPendingRGBDB2Frame.frameId : mCurrentFrame.mnId, timestamp,
+-                                                   mCurrentB3Results, imageDiagonal);
++        mCurrentB3Results, imageDiagonal,mpDynamicDetector->Association().mode>=3 ? &associations : nullptr);
+ }
+ 
+ void Tracking::UpdateDynamicLogs()
+@@ -3774,10 +3842,7 @@ void Tracking::CreateInitialMapMonocular()
+ 
+ void Tracking::CreateMapInAtlas()
+ {
+-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+-        mpB4StateMachine->Reset();
+-        mCurrentB4Results.clear();
+-    }
++    ResetDynamicIdentityHistory();
+     if (mbRGBDEvidenceReady && mpDynamicDetector->Frontend().useCoarsePoseForB2)
+         mCoarsePoseContext.new_map = true;
+     mnLastInitFrameId = mCurrentFrame.mnId;
+@@ -4107,6 +4172,7 @@ bool Tracking::TrackLocalMap()
+         }
+ 
+     if(finePolicy) VerifyFineOptimizerInputs(mCurrentFrame);
++    RecordIdentityOptimizerInputs(true);
+     int inliers;
+     if (!mpAtlas->isImuInitialized())
+         Optimizer::PoseOptimization(&mCurrentFrame);
+@@ -5051,10 +5117,7 @@ bool Tracking::Relocalization()
+ 
+ void Tracking::Reset(bool bLocMap)
+ {
+-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+-        mpB4StateMachine->Reset();
+-        mCurrentB4Results.clear();
+-    }
++    ResetDynamicIdentityHistory();
+     Verbose::PrintMess("System Reseting", Verbose::VERBOSITY_NORMAL);
+ 
+     if(mpViewer)
+@@ -5116,10 +5179,7 @@ void Tracking::Reset(bool bLocMap)
+ 
+ void Tracking::ResetActiveMap(bool bLocMap)
+ {
+-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+-        mpB4StateMachine->Reset();
+-        mCurrentB4Results.clear();
+-    }
++    ResetDynamicIdentityHistory();
+     Verbose::PrintMess("Active map Reseting", Verbose::VERBOSITY_NORMAL);
+     if(mpViewer)
+     {
+diff --git a/src/TrackingDiagnostics.cc b/src/TrackingDiagnostics.cc
+index a115870..ed21cd0 100644
+--- a/src/TrackingDiagnostics.cc
++++ b/src/TrackingDiagnostics.cc
+@@ -8,6 +8,17 @@
+ #include <stdexcept>
+ #include <cmath>
+ namespace ORB_SLAM3 {
++void Tracking::RecordIdentityOptimizerInputs(bool fine) {
++    if(!mbRGBDEvidenceReady || !mCurrentFrame.mbSemanticAnnotated || !mbCollectStageDiagnostics) return;
++    if(!mCurrentFrame.SemanticMetadataAligned()) throw std::runtime_error("Optimizer identity audit metadata mismatch");
++    for(int i=0;i<mCurrentFrame.N;++i) {
++        if(!mCurrentFrame.mvpMapPoints[i] || mCurrentFrame.mvTrackId[i]<0) continue;
++        auto& uses=mIdentityOptimizerUses[mCurrentFrame.mvTrackId[i]];
++        const auto state=fine ? mCurrentFrame.mvCurrentB4State[i] : mCurrentFrame.mvPreviousB4State[i];
++        if(fine) {++uses.fine;if(state==TemporalState::STATIC)++uses.fineStatic;}
++        else {++uses.coarse;if(state==TemporalState::STATIC)++uses.coarseStatic;}
++    }
++}
+ namespace {
+ template<class T> std::string Number(T value) {
+     std::ostringstream text; text << std::setprecision(17) << value; return text.str();
+@@ -114,13 +125,32 @@ void Tracking::CollectDynamicDiagnostics() {
+     const auto instance=[&](int id,int track,const cv::Rect& box,const B4StateResult* b4) {
+         DiagnosticRow row=base("INSTANCE");
+         row["instance_id"]=Number(id); row["track_id"]=Number(track);
++        const auto uses=mIdentityOptimizerUses.find(track);
++        const IdentityOptimizerUses empty;
++        const auto& used=uses==mIdentityOptimizerUses.end() ? empty : uses->second;
++        row["coarse_optimizer_feature_uses"]=Number(used.coarse);
++        row["fine_optimizer_feature_uses"]=Number(used.fine);
++        row["coarse_S_feature_uses"]=Number(used.coarseStatic);
++        row["fine_S_feature_uses"]=Number(used.fineStatic);
+         const bool visible=id>=0;
++        if(visible && size_t(id)<mpDynamicDetector->LastRGBDInstances().size()) {
++            const auto& a=mpDynamicDetector->LastRGBDInstances()[id].association;
++            row["association_status"]=AssociationStatusName(a.associationStatus);
++            if(std::isfinite(a.associationCost))row["association_cost"]=Number(a.associationCost);
++            if(std::isfinite(a.rowMargin))row["association_row_margin"]=Number(a.rowMargin);
++            if(std::isfinite(a.columnMargin))row["association_column_margin"]=Number(a.columnMargin);
++            row["allow_state_inheritance"]=Number(int(a.allowStateInheritance));
++            row["allow_geometry_pair"]=Number(int(a.allowGeometryPair));
++            row["association_reason"]=a.reason;row["state_reset_reason"]=a.stateResetReason;
++            row["association_ms"]=Number(mpInstanceTrackManager->ProcessingMs());
++        }
+         row["semantic_region"]=visible ? "PERSON_INSTANCE" : "NOT_VISIBLE";
+         TemporalState previous=TemporalState::UNKNOWN,current=TemporalState::UNKNOWN;
+         if(b4) {
+             // Coarse policy used the timestamp-aware pre-evidence query, not
+             // the unexpired raw state. Keep both histories in the CSV.
+             previous=Temporal(b4->stateAfterExpiry); current=Temporal(b4->state);
++            if(visible && row["allow_state_inheritance"]=="0") previous=TemporalState::PENDING;
+             row["historical_b4_state"]=B4MotionStateName(b4->previousState);
+             row["has_reliable_history"]=Number(int(b4->hasReliableHistory));
+             if(std::isfinite(b4->evidenceAgeSeconds)) row["evidence_age_seconds"]=Number(b4->evidenceAgeSeconds);
+diff --git a/tools/b2_candidate_test.cc b/tools/b2_candidate_test.cc
+index 556e7bd..eebec0e 100644
+--- a/tools/b2_candidate_test.cc
++++ b/tools/b2_candidate_test.cc
+@@ -107,6 +107,7 @@ int main()
+         semantics.front().boundingBox = nearby.boundingBox;
+         tracks.Associate(semantics, image.size());
+         nearby.trackId = semantics.front().trackId;
++        nearby.association.allowGeometryPair = true; // Isolated legacy join fixture, not managed capture times.
+         associated.persons.push_back(nearby);
+         evidence.Process(associated);
+         const auto& linked = evidence.PreviousFrame().persons[0];
+@@ -179,6 +180,7 @@ int main()
+         ORB_SLAM3::B2PersonInstance matchingCurrentPerson;
+         matchingCurrentPerson.instanceId = 0;
+         matchingCurrentPerson.trackId = 0;
++        matchingCurrentPerson.association.allowGeometryPair = true;
+         matchingCurrentPerson.classId = 0;
+         matchingCurrentPerson.boundingBox = cv::Rect(72, 46, 180, 150);
+         matchingCurrentPerson.features = {makeFeature(10, 0, true), makeFeature(11, 255, false)};
+@@ -191,6 +193,7 @@ int main()
+         ORB_SLAM3::B2PersonInstance sparseCurrentPerson;
+         sparseCurrentPerson.instanceId = 1;
+         sparseCurrentPerson.trackId = 1;
++        sparseCurrentPerson.association.allowGeometryPair = true;
+         sparseCurrentPerson.classId = 0;
+         sparseCurrentPerson.boundingBox = cv::Rect(11, 11, 35, 35);
+         sparseCurrentPerson.features = {makeFeature(12, 17, true)};
+diff --git a/tools/b4_evidence_expiry_test.cc b/tools/b4_evidence_expiry_test.cc
+index e750162..406c492 100644
+--- a/tools/b4_evidence_expiry_test.cc
++++ b/tools/b4_evidence_expiry_test.cc
+@@ -31,7 +31,7 @@ B3FusionResult Evidence(int kind, int id=0) {
+         kind == 2 ? B3_SEM_DYNAMIC_GEOM_MOVING : B3_FUSION_UNRELIABLE;
+     return result;
+ }
+-B4Config Config() { B4Config c; c.evidenceExpiryEnable=true; return c; }
++B4Config Config() { return B4Config{}; }
+ B4StateResult Step(B4TemporalStateMachine& m, long id, double time, int kind) {
+     return m.Process(id,time,{Evidence(kind)},800).at(0);
+ }
+@@ -44,7 +44,9 @@ double MakeDynamic(B4TemporalStateMachine& m) {
+     return 2/30.0;
+ }
+ void LegacyAndShortFreeze() {
+-    B4TemporalStateMachine legacy(B4Config{});
++    Check(Config().evidenceExpiryEnable,"evidence expiry must default to enabled");
++    B4Config disabled; disabled.evidenceExpiryEnable=false;
++    B4TemporalStateMachine legacy(disabled);
+     Step(legacy,0,0,2); Step(legacy,1,1/30.0,2);
+     auto row=Step(legacy,2,10,0);
+     Check(row.nDynamic==2 && !row.counterExpired,"disabled legacy freeze");
+diff --git a/tools/b4_state_machine_test.cc b/tools/b4_state_machine_test.cc
+index 79920fa..7478b01 100644
+--- a/tools/b4_state_machine_test.cc
++++ b/tools/b4_state_machine_test.cc
+@@ -9,6 +9,12 @@ using namespace ORB_SLAM3;
+ 
+ namespace {
+ 
++B4Config LegacyConfig() {
++    B4Config config;
++    config.evidenceExpiryEnable = false;
++    return config;
++}
++
+ bool Expect(bool condition, const std::string& message)
+ {
+     if (condition)
+@@ -58,7 +64,7 @@ const B4StateResult& Step(B4TemporalStateMachine& machine, long frameId,
+ 
+ bool TestPendingToStatic()
+ {
+-    B4TemporalStateMachine machine(B4Config{});
++    B4TemporalStateMachine machine(LegacyConfig());
+     for (int frame = 1; frame <= 6; ++frame)
+     {
+         const B4StateResult& r = Step(machine, frame, Evidence(0, false));
+@@ -72,7 +78,7 @@ bool TestPendingToStatic()
+ 
+ bool TestPendingToDynamic()
+ {
+-    B4TemporalStateMachine machine(B4Config{});
++    B4TemporalStateMachine machine(LegacyConfig());
+     for (int frame = 1; frame <= 3; ++frame)
+     {
+         const B4StateResult& r = Step(machine, frame, Evidence(1, true));
+@@ -86,7 +92,7 @@ bool TestPendingToDynamic()
+ 
+ bool TestStaticToPending()
+ {
+-    B4TemporalStateMachine machine(B4Config{});
++    B4TemporalStateMachine machine(LegacyConfig());
+     for (int frame = 1; frame <= 6; ++frame)
+         Step(machine, frame, Evidence(2, false));
+     const B4StateResult& r = Step(machine, 7, Evidence(2, true));
+@@ -98,7 +104,7 @@ bool TestStaticToPending()
+ 
+ bool TestDynamicToPending()
+ {
+-    B4TemporalStateMachine machine(B4Config{});
++    B4TemporalStateMachine machine(LegacyConfig());
+     for (int frame = 1; frame <= 3; ++frame)
+         Step(machine, frame, Evidence(3, true));
+     for (int frame = 4; frame <= 12; ++frame)
+@@ -118,7 +124,7 @@ bool TestDynamicToPending()
+ 
+ bool TestUnreliableFreeze()
+ {
+-    B4TemporalStateMachine machine(B4Config{});
++    B4TemporalStateMachine machine(LegacyConfig());
+     for (int frame = 1; frame <= 3; ++frame)
+         Step(machine, frame, Evidence(4, false));
+     const B4StateResult& r = Step(machine, 4, UnreliableEvidence(4));
+@@ -130,7 +136,7 @@ bool TestUnreliableFreeze()
+ 
+ bool TestTrackTtl()
+ {
+-    B4Config config;
++    B4Config config = LegacyConfig();
+     config.trackTTL = 15;
+     B4TemporalStateMachine machine(config);
+     Step(machine, 0, Evidence(5, false));
+diff --git a/tools/instance_track_lifecycle_test.cc b/tools/instance_track_lifecycle_test.cc
+index 6b23493..a339d39 100644
+--- a/tools/instance_track_lifecycle_test.cc
++++ b/tools/instance_track_lifecycle_test.cc
+@@ -32,6 +32,7 @@ static B3FusionResult Evidence(int id, bool reliable = false, bool moving = fals
+ 
+ static void TestRecoveryAndExpiry() {
+     B4Config config;
++    config.evidenceExpiryEnable = false; // Identity/legacy-freeze test, not time expiry.
+     config.trackTTL = 15;
+     InstanceTrackManager manager(config);
+     B4TemporalStateMachine states(config);
+@@ -81,7 +82,9 @@ static void TestRecoveryAndExpiry() {
+ }
+ 
+ static void TestDuplicateUpdates() {
+-    B4TemporalStateMachine states(B4Config{});
++    B4Config config;
++    config.evidenceExpiryEnable = false;
++    B4TemporalStateMachine states(config);
+     auto row = states.Process(0, 0., {Evidence(0, true, true)}, 800.f).at(0);
+     Require(row.nDynamic == 1, "First evidence must increment once");
+     bool rejected = false;
+diff --git a/tools/validate_b4_evidence_expiry.py b/tools/validate_b4_evidence_expiry.py
+index 2504041..cf20682 100644
+--- a/tools/validate_b4_evidence_expiry.py
++++ b/tools/validate_b4_evidence_expiry.py
+@@ -59,7 +59,8 @@ def main():
+     # Config-only Mode 0 needs no model; new parameters are always validated.
+     base = (ROOT/'configs/frontend_modes/rgbd_tum3/mode0_original.yaml').read_text()
+     cases = [
+-        ('default_off', '', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=0'),
++        ('default_on', '', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=1'),
++        ('explicit_off', 'Enable: 0', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=0'),
+         ('valid_on', 'Enable: 1\nMaxGapSeconds: 0.20\nMaxStaticAgeSeconds: 0.30', 0, 'Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3'),
+         ('equal_limits', 'MaxGapSeconds: 0.25\nMaxStaticAgeSeconds: 0.25', 0, 'MaxGapSeconds=0.25'),
+         ('zero_gap', 'MaxGapSeconds: 0', 2, 'B4.EvidenceExpiry'),
+@@ -80,6 +81,12 @@ def main():
+         config = configs/f'mode3_b4_evidence_expiry_{switch}.yaml'
+         run('config_mode3_'+switch, [build/'bin/yolo_seg_smoke', '--config-only', config])
+ 
++    missing_expiry = output/'mode3_missing_expiry.yaml'
++    missing_expiry.write_text(re.sub(r'^B4\.EvidenceExpiry\.[^\n]*\n?', '',
++        (configs/'mode3_b4_evidence_expiry_on.yaml').read_text(), flags=re.M))
++    run('config_mode3_missing_expiry', [build/'bin/yolo_seg_smoke', '--config-only', missing_expiry],
++        text_required='Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3')
++
+     if args.short_sequences:
+         runs = []
+         for switch in ('off', 'on'):

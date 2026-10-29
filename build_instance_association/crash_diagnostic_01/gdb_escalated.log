@@ -1,0 +1,169 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+ORB-SLAM3 Copyright (C) 2017-2020 Carlos Campos, Richard Elvira, Juan J. Gómez, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
+ORB-SLAM2 Copyright (C) 2014-2016 Raúl Mur-Artal, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
+This program comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions. See LICENSE.txt.
+
+Input sensor was set to: RGB-D
+Loading settings from /home/aaa/ORB-SLAM3_original0/configs/instance_association/rgbd_tum3/A0_legacy.yaml
+Camera1.k3 optional parameter does not exist...
+	-Loaded camera 1
+Camera.newHeight optional parameter does not exist...
+Camera.newWidth optional parameter does not exist...
+	-Loaded image info
+	-Loaded RGB-D calibration
+	-Loaded ORB settings
+Viewer.imageViewScale optional parameter does not exist...
+	-Loaded viewer settings
+System.LoadAtlasFromFile optional parameter does not exist...
+System.SaveAtlasToFile optional parameter does not exist...
+	-Loaded Atlas settings
+System.thFarPoints optional parameter does not exist...
+	-Loaded misc parameters
+----------------------------------
+SLAM settings: 
+	-Camera 1 parameters (Pinhole): [ 535.4 539.2 320.1 247.6 ]
+	-Camera 1 distortion parameters: [  0 0 0 0 ]
+	-Original image size: [ 640 , 480 ]
+	-Current image size: [ 640 , 480 ]
+	-Sequence FPS: 30
+	-RGB-D depth map factor: 5000
+	-Features per image: 1000
+	-ORB scale factor: 1.2
+	-ORB number of scales: 8
+	-Initial FAST threshold: 20
+	-Min FAST threshold: 7
+
+
+Loading ORB Vocabulary. This could take a while...
+Vocabulary loaded!
+
+Initialization of Atlas from scratch 
+Creation of new map with id: 0
+Creation of new map with last KF id: 0
+Seq. Name: 
+[INSTANCE ASSOCIATION CONFIG] Mode=0 PreExpiry=0 Global=0 Prediction=0 Ambiguity=0 ControlledInheritance=0 MaxCost=0.65 UnmatchedPairCost=0.8 MinMargin=0.08 initial_values_not_accuracy_validated=1
+[FRONTEND DIAGNOSTICS] SaveCsv=1 ShowOverlay=0 SaveOverlay=0
+[B2 CONFIG] New Geometry.*Threshold keys override legacy instance gates; Decision.MovingThreshold still defines the point-level high_ratio cutoff.
+[Detaching after vfork from child process 8375]
+[FEATURE POLICY CONFIG] Enable=1 EvidenceOnly=0 SaveSummaryCsv=1 PrintFrameSummary=1 CoarseAction=1 FineAction=1 MapAction=0
+[FEATURE SEMANTIC CONFIG] Enable=1 SafeBoundaryDistancePixels=3 DepthEdge.Enable=1 DepthEdge.Radius=1 DepthEdge.AbsoluteMeters=0.05 DepthEdge.Relative=0.02 ShowOverlay=1
+[DYNAMIC FRONTEND CONFIG] mode=TWO_STAGE_ACTION TwoStage.Enable=1 CoarseFilter.Enable=1 UseCoarsePoseForB2=1 FinePolicy.Enable=1 MapAdmission.Enable=1 Fallback.Enable=1 MinCoarseInliers=30 MinCoarseInlierRatio=0.3
+[DYNAMIC FRONTEND STAGE] coarse filtering enabled; fine filtering=1; map admission disabled; B2/B3 remain evidence-only; B4 policy scope=FINE_POSE_ONLY
+[MODULES] Yolo.Enable=1 MaskPostProcess.Enable=0 DilateRadius=3 Yolo.ShowMask=0 MaskFeatureReject.Enable=0
+[B2 CONFIG]
+Enable=1
+EvidenceOnly=1
+Candidate.Enable=1 Candidate.MaxFeaturesPerInstance=300 Candidate.ErodeRadius=3 Candidate.MinBoundaryDistance=3
+Association.Enable=1 Association.UseMutualMatch=1 Association.LoweRatio=0.75 Association.MaxHammingDistance=64 Association.MinInstanceIoU=0.1 Association.MaxCenterDistancePixels=100 Association.MinInstanceScore=0.3
+Geometry.Enable=1 Geometry.UseDepthMedian3x3=1 Geometry.MinDepthMeters=0.3 Geometry.MaxDepthMeters=5 Geometry.UseNormalizedResidual=1 Geometry.MinMatchedFeatures=30 Geometry.MinMatchRatio=0.15 Geometry.MinValidFeatures=10 Geometry.MinValidMatchRatio=0.4 Geometry.BackgroundExclusionDilateRadius=3
+Geometry.Decision.Enable=1 Geometry.Decision.Method=background_mad Geometry.Decision.DepthBinMeters=0.5 Geometry.Decision.MinSamplesPerBin=30 Geometry.Decision.MinBackgroundSamples=50 Geometry.Decision.SigmaFloorMeters=0.01 Geometry.RawMovingThreshold=0.02 Geometry.NormMovingThreshold=0.4 Geometry.HighRatioMovingThreshold=0.1 Geometry.RawStaticThreshold=0.018 Geometry.NormStaticThreshold=0.1 Geometry.HighRatioStaticThreshold=0.06 HighRatio.PointNormCutoff=3.5
+Debug.Enable=1 Debug.SaveCsv=1 Debug.SaveFeatureCsv=0 Debug.SaveSummaryCsv=1 Debug.VerbosePerFeature=0 Debug.PrintFrameSummary=1 Debug.ShowOverlay=1
+[B3 CONFIG]
+Enable=1
+EvidenceOnly=1
+Semantic.PersonAsDynamicPrior=1
+Debug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1
+[B4 EVIDENCE EXPIRY CONFIG] Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3 clock=image_acquisition expiry=strict_greater_than
+[B4 CONFIG]
+Enable=1
+EvidenceOnly=0
+DynamicEnterCount=3 StaticEnterCount=6 DynamicRecoveryCount=10 TrackTTL=15
+UseContinuousQuality=0 QualityMin=0.65
+Track.MinMaskIoU=0.05 Track.MinBoxIoU=0.1 Track.MaxCenterDistance=0.15 (normalized image diagonal; mask-IoU deferred)
+Pending.UseForPose=0 Pending.AllowMapCreation=0 Dynamic.AllowMapCreation=0
+Debug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1
+[Detaching after vfork from child process 8377]
+[New Thread 0x7fffd87ea600 (LWP 8379)]
+[YOLO] output output0 [1 116 8400 ]
+[YOLO] output output1 [1 32 160 160 ]
+[YOLO] input images [1 3 640 640] FP32 ORT=1.17.3
+[YOLO] loaded /home/aaa/models/yolo/yolo11s-seg.onnx using CPU
+[B2 CSV] output_directory=./b2_evidence_1793264695366877484_8352
+There are 1 cameras in the atlas
+Camera 0 is pinhole
+[New Thread 0x7fffcffff600 (LWP 8380)]
+[New Thread 0x7fffcf7fe600 (LWP 8381)]
+[New Thread 0x7fffceffd600 (LWP 8383)]
+[New Thread 0x7fffcebfc600 (LWP 8384)]
+[New Thread 0x7fffce7fb600 (LWP 8385)]
+[ASSOC] frame=0 inst=0 track=0 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=1 reason=A0_LEGACY_GREEDY reset=NONE prediction=NONE flow=0 association_ms=0.161988
+[ASSOC] frame=0 inst=1 track=1 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=1 reason=A0_LEGACY_GREEDY reset=NONE prediction=NONE flow=0 association_ms=0.161988
+[DYNAMIC FRONTEND] frame_id=0 dynamic_frontend_mode=3 raw_fast=7880 b1_mask_rejected=0 final_orb=1004 person_main_orb=367
+[MAP ADMISSION] frame=0 kf=0 stage=keyframe_snapshot map_candidates_total=1004 map_reject_P=305 map_reject_D=0 map_reject_boundary=62 map_reject_unknown=0 map_points_created=0
+First KF:0; Map init KF:0
+New Map created with 443 points
+[TWO STAGE] frame=0 event=bootstrap_keyframe reason=INITIAL_MAP_REQUIRED
+[KEYFRAME STAGE] frame=0 phase=bootstrap coarse_matches=0 coarse_inliers=0 final_inliers=-1 decision_inliers=-1 required_static_support=0 allowed=1 reason=BOOTSTRAP_INITIAL_MAP_REQUIRED needed=0 created=1 bootstrap=1
+[MAP ADMISSION] frame=0 kf=0 stage=rgbd_bootstrap map_candidates_total=807 map_reject_P=304 map_reject_D=0 map_reject_boundary=60 map_reject_unknown=0 map_points_created=443
+[COARSE QUALITY] frame=0 matches=0 inliers=0 inlier_ratio=0 median_reprojection_error=-1 background_features=573 background_inliers=393 reliable=0 fallback_reason=NOT_INITIALIZED
+[B2 INPUT] frame=0 previous_frame=-1 pose_source=coarse current_pose_reliable=0 pair_pose_reliable=0 explicit_relative=1
+[B2 READONLY] frame=0 map_points_unchanged=1 frame_pose_unchanged=1 descriptors_unchanged=1 applied_action=NONE_EVIDENCE_ONLY
+[FEATURE POLICY] frame_id=0 coarse_allowed=637 fine_allowed=637 map_allowed=637 applied=0 actual_excluded=0
+[FEATURE SEMANTICS] frame_id=0 N=1004 background=637 person_interior=305 person_boundary=62 unknown=0 normal=1004 excluded=0 aligned=1
+[TWO STAGE] frame=0 event=evidence_complete pose_source=bootstrap_or_unavailable pose_reliable=0 b4_updates=1 applied=0
+[TWO STAGE] frame=0 event=frame_complete fine_completed=0 evidence_updates=1 applied=0 evidence_applied=0
+[KEYFRAME STAGE] frame=0 phase=frame_summary coarse_matches=0 coarse_inliers=0 final_inliers=-1 decision_inliers=-1 required_static_support=0 allowed=1 reason=BOOTSTRAP_INITIAL_MAP_REQUIRED needed=0 created=1 bootstrap=1
+[B3] frame=0 track=0 inst=0 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_HISTORY_MISMATCH
+[B3] frame=0 track=1 inst=1 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_HISTORY_MISMATCH
+[B4] frame=0 track=0 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_FINE_NOT_RUN
+[B4] frame=0 track=1 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_FINE_NOT_RUN
+[MAP ADMISSION] frame=0 kf=0 stage=process_keyframe map_candidates_total=1004 map_reject_P=305 map_reject_D=0 map_reject_boundary=62 map_reject_unknown=0 map_points_created=0
+
+Thread 1 "ablation_sequen" received signal SIGSEGV, Segmentation fault.
+0x00007ffff672cb1c in cv::Mat::total() const () from /lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+
+Thread 7 (Thread 0x7fffce7fb600 (LWP 8385) "ablation_sequen"):
+#0  syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+#1  0x00007ffff5ce464d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#2  0x00007ffff5ce468d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#3  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#4  0x00007ffff5b268e0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+Thread 6 (Thread 0x7fffcebfc600 (LWP 8384) "ablation_sequen"):
+#0  syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+#1  0x00007ffff5ce464d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#2  0x00007ffff5ce468d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#3  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#4  0x00007ffff5b268e0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+Thread 5 (Thread 0x7fffceffd600 (LWP 8383) "ablation_sequen"):
+#0  syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+#1  0x00007ffff5ce464d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#2  0x00007ffff5ce468d in ?? () from /lib/x86_64-linux-gnu/libtbb.so.2
+#3  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#4  0x00007ffff5b268e0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+Thread 4 (Thread 0x7fffcf7fe600 (LWP 8381) "ablation_sequen"):
+#0  0x00007ffff5ae57b8 in __GI___clock_nanosleep (clock_id=clock_id@entry=0, flags=flags@entry=0, req=req@entry=0x7fffcf7fbb70, rem=rem@entry=0x0) at ../sysdeps/unix/sysv/linux/clock_nanosleep.c:78
+#1  0x00007ffff5aea637 in __GI___nanosleep (req=req@entry=0x7fffcf7fbb70, rem=rem@entry=0x0) at ../sysdeps/unix/sysv/linux/nanosleep.c:25
+#2  0x00007ffff5b1c07f in usleep (useconds=<optimized out>) at ../sysdeps/posix/usleep.c:31
+#3  0x00007ffff7c5c9da in ORB_SLAM3::LoopClosing::Run() () from /home/aaa/ORB-SLAM3_original0/build_instance_association/lib/libORB_SLAM3.so
+#4  0x00007ffff5edc253 in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+#5  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+
+Thread 3 (Thread 0x7fffcffff600 (LWP 8380) "ablation_sequen"):
+#0  0x00007ffff5ae57b8 in __GI___clock_nanosleep (clock_id=clock_id@entry=0, flags=flags@entry=0, req=req@entry=0x7fffcfffcd30, rem=rem@entry=0x0) at ../sysdeps/unix/sysv/linux/clock_nanosleep.c:78
+#1  0x00007ffff5aea637 in __GI___nanosleep (req=req@entry=0x7fffcfffcd30, rem=rem@entry=0x0) at ../sysdeps/unix/sysv/linux/nanosleep.c:25
+#2  0x00007ffff5b1c07f in usleep (useconds=<optimized out>) at ../sysdeps/posix/usleep.c:31
+#3  0x00007ffff7c4b9e5 in ORB_SLAM3::LocalMapping::Run() () from /home/aaa/ORB-SLAM3_original0/build_instance_association/lib/libORB_SLAM3.so
+#4  0x00007ffff5edc253 in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+#5  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+
+Thread 2 (Thread 0x7fffd87ea600 (LWP 8379) "ablation_sequen"):
+#0  0x00007ffff7347ce8 in ?? () from /home/aaa/ORB-SLAM3_original0/third_party_ort/onnxruntime-linux-x64-1.17.3/lib/libonnxruntime.so.1.17.3
+#1  0x00007ffff73491c4 in ?? () from /home/aaa/ORB-SLAM3_original0/third_party_ort/onnxruntime-linux-x64-1.17.3/lib/libonnxruntime.so.1.17.3
+#2  0x00007ffff73739ea in ?? () from /home/aaa/ORB-SLAM3_original0/third_party_ort/onnxruntime-linux-x64-1.17.3/lib/libonnxruntime.so.1.17.3
+#3  0x00007ffff5a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#4  0x00007ffff5b268e0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+Thread 1 (Thread 0x7fffe8e67700 (LWP 8352) "ablation_sequen"):
+#0  0x00007ffff672cb1c in cv::Mat::total() const () from /lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+#1  0x00007ffff672cb54 in cv::Mat::empty() const () from /lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+#2  0x00007ffff66c5614 in cv::Mat::copyTo(cv::_OutputArray const&) const () from /lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+#3  0x00007ffff7c7ec29 in ORB_SLAM3::FrameDrawer::Update(ORB_SLAM3::Tracking*) () from /home/aaa/ORB-SLAM3_original0/build_instance_association/lib/libORB_SLAM3.so
+#4  0x00007ffff7c01aa7 in ORB_SLAM3::Tracking::EmitFrontendDiagnostics() () from /home/aaa/ORB-SLAM3_original0/build_instance_association/lib/libORB_SLAM3.so
+#5  0x00007ffff7c20042 in ORB_SLAM3::Tracking::GrabImageRGBD(cv::Mat const&, cv::Mat const&, double const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) () from /home/aaa/ORB-SLAM3_original0/build_instance_association/lib/libORB_SLAM3.so

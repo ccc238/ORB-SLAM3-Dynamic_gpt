@@ -32,6 +32,7 @@ static B3FusionResult Evidence(int id, bool reliable = false, bool moving = fals
 
 static void TestRecoveryAndExpiry() {
     B4Config config;
+    config.evidenceExpiryEnable = false; // Identity/legacy-freeze test, not time expiry.
     config.trackTTL = 15;
     InstanceTrackManager manager(config);
     B4TemporalStateMachine states(config);
@@ -81,7 +82,9 @@ static void TestRecoveryAndExpiry() {
 }
 
 static void TestDuplicateUpdates() {
-    B4TemporalStateMachine states(B4Config{});
+    B4Config config;
+    config.evidenceExpiryEnable = false;
+    B4TemporalStateMachine states(config);
     auto row = states.Process(0, 0., {Evidence(0, true, true)}, 800.f).at(0);
     Require(row.nDynamic == 1, "First evidence must increment once");
     bool rejected = false;

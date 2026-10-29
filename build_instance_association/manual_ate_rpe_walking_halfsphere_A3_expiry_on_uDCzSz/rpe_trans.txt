@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------
+Loaded 3582 stamps and poses from: /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_halfsphere/groundtruth.txt
+Loaded 1021 stamps and poses from: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/CameraTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories (nearest_time method)...
+Timestamps are sorted, using binary search for matching.
+Found 1018 of max. 1021 possible matching timestamps between...
+	/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_halfsphere/groundtruth.txt
+and:	/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/CameraTrajectory.txt
+..with max. time diff.: 0.02 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method...
+Rotation of alignment:
+[[ 9.95027687e-01  1.56551389e-04 -9.95985783e-02]
+ [ 9.87828831e-02 -1.29281269e-01  9.86675375e-01]
+ [-1.27217652e-02 -9.91607951e-01 -1.28653907e-01]]
+Translation of alignment:
+[-0.53721561 -2.88998501  1.53275671]
+Scale correction: 1.0
+--------------------------------------------------------------------------------
+Found 1017 pairs with delta 1 (frames) among 1018 poses using all pairs.
+Compared 1017 relative pose pairs, delta = 1 (frames) with all pairs.
+Calculating RPE for translation part pose relation...
+--------------------------------------------------------------------------------
+RPE w.r.t. translation part (m)
+for delta = 1 (frames) using all pairs
+(with SE(3) Umeyama alignment)
+
+       max	0.086237
+      mean	0.010942
+    median	0.009283
+       min	0.000707
+      rmse	0.013254
+       sse	0.178643
+       std	0.007478
+
+--------------------------------------------------------------------------------
+Saving results to /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/rpe_trans.zip...

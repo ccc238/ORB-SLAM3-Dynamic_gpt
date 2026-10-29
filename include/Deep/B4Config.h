@@ -15,7 +15,7 @@ struct B4Config {
     int staticEnterCount = 6;
     int dynamicRecoveryCount = 10;
     int trackTTL = 15;
-    bool evidenceExpiryEnable = false;
+    bool evidenceExpiryEnable = true;
     double maxEvidenceGapSeconds = 0.20;
     double maxStaticAgeSeconds = 0.30;
     bool useContinuousQuality = false;

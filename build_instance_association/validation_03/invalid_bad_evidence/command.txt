@@ -1,0 +1,1 @@
+/home/aaa/ORB-SLAM3_original0/build_instance_association/bin/yolo_seg_smoke --config-only /home/aaa/ORB-SLAM3_original0/build_instance_association/validation_03/bad_evidence.yaml

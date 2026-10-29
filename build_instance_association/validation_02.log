@@ -1,0 +1,36 @@
+instance_association_test 0
+identity_state_integration_test 0
+b4_evidence_expiry_test 0
+b4_state_machine_test 0
+instance_track_lifecycle_test 0
+frontend_diagnostics_test 0
+keyframe_decision_guard_test 0
+map_admission_test 0
+fine_feature_policy_test 0
+coarse_feature_filter_test 0
+coarse_pose_quality_test 0
+feature_policy_test 0
+feature_semantic_test 0
+frontend_mask_test 0
+b2_candidate_test 0
+config_A0_legacy 0
+config_A1_global 0
+config_A2_predict_ambiguity 0
+config_A3_controlled 0
+invalid_default 0
+invalid_negative_mode 2
+invalid_large_mode 2
+invalid_zero_cost 2
+invalid_nan_margin 2
+invalid_forced_pair 2
+invalid_bad_evidence 2
+invalid_fractional_mode 2
+A0_legacy_sitting_static_100 -11
+Traceback (most recent call last):
+  File "/home/aaa/ORB-SLAM3_original0/tools/validate_instance_association.py", line 136, in <module>
+    if __name__=='__main__': main()
+  File "/home/aaa/ORB-SLAM3_original0/tools/validate_instance_association.py", line 129, in main
+    folder = run(f'{NAMES[mode]}_{seq}_{limit or "full"}',cmd,timeout=900,config=config)
+  File "/home/aaa/ORB-SLAM3_original0/tools/validate_instance_association.py", line 57, in run
+    assert entry['passed'], (name, text[-5000:])
+AssertionError: ('A0_legacy_sitting_static_100', 'ateRadius=3\nGeometry.Decision.Enable=1 Geometry.Decision.Method=background_mad Geometry.Decision.DepthBinMeters=0.5 Geometry.Decision.MinSamplesPerBin=30 Geometry.Decision.MinBackgroundSamples=50 Geometry.Decision.SigmaFloorMeters=0.01 Geometry.RawMovingThreshold=0.02 Geometry.NormMovingThreshold=0.4 Geometry.HighRatioMovingThreshold=0.1 Geometry.RawStaticThreshold=0.018 Geometry.NormStaticThreshold=0.1 Geometry.HighRatioStaticThreshold=0.06 HighRatio.PointNormCutoff=3.5\nDebug.Enable=1 Debug.SaveCsv=1 Debug.SaveFeatureCsv=0 Debug.SaveSummaryCsv=1 Debug.VerbosePerFeature=0 Debug.PrintFrameSummary=1 Debug.ShowOverlay=1\n[B3 CONFIG]\nEnable=1\nEvidenceOnly=1\nSemantic.PersonAsDynamicPrior=1\nDebug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1\n[B4 EVIDENCE EXPIRY CONFIG] Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3 clock=image_acquisition expiry=strict_greater_than\n[B4 CONFIG]\nEnable=1\nEvidenceOnly=0\nDynamicEnterCount=3 StaticEnterCount=6 DynamicRecoveryCount=10 TrackTTL=15\nUseContinuousQuality=0 QualityMin=0.65\nTrack.MinMaskIoU=0.05 Track.MinBoxIoU=0.1 Track.MaxCenterDistance=0.15 (normalized image diagonal; mask-IoU deferred)\nPending.UseForPose=0 Pending.AllowMapCreation=0 Dynamic.AllowMapCreation=0\nDebug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1\n[YOLO] output output0 [1 116 8400 ]\n[YOLO] output output1 [1 32 160 160 ]\n[YOLO] input images [1 3 640 640] FP32 ORT=1.17.3\n[YOLO] loaded /home/aaa/models/yolo/yolo11s-seg.onnx using CPU\n[B2 CSV] output_directory=./b2_evidence_1793262754182124170_115\nThere are 1 cameras in the atlas\nCamera 0 is pinhole\n[ASSOC] frame=0 inst=0 track=0 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=1 reason=A0_LEGACY_GREEDY reset=NONE prediction=NONE flow=0 association_ms=0.240184\n[ASSOC] frame=0 inst=1 track=1 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=1 reason=A0_LEGACY_GREEDY reset=NONE prediction=NONE flow=0 association_ms=0.240184\n[DYNAMIC FRONTEND] frame_id=0 dynamic_frontend_mode=3 raw_fast=7880 b1_mask_rejected=0 final_orb=1004 person_main_orb=367\n[MAP ADMISSION] frame=0 kf=0 stage=keyframe_snapshot map_candidates_total=1004 map_reject_P=305 map_reject_D=0 map_reject_boundary=62 map_reject_unknown=0 map_points_created=0\nFirst KF:0; Map init KF:0\nNew Map created with 443 points\n[TWO STAGE] frame=0 event=bootstrap_keyframe reason=INITIAL_MAP_REQUIRED\n[KEYFRAME STAGE] frame=0 phase=bootstrap coarse_matches=0 coarse_inliers=0 final_inliers=-1 decision_inliers=-1 required_static_support=0 allowed=1 reason=BOOTSTRAP_INITIAL_MAP_REQUIRED needed=0 created=1 bootstrap=1\n[MAP ADMISSION] frame=0 kf=0 stage=rgbd_bootstrap map_candidates_total=807 map_reject_P=304 map_reject_D=0 map_reject_boundary=60 map_reject_unknown=0 map_points_created=443\n[COARSE QUALITY] frame=0 matches=0 inliers=0 inlier_ratio=0 median_reprojection_error=-1 background_features=573 background_inliers=393 reliable=0 fallback_reason=NOT_INITIALIZED\n[B2 INPUT] frame=0 previous_frame=-1 pose_source=coarse current_pose_reliable=0 pair_pose_reliable=0 explicit_relative=1\n[B2 READONLY] frame=0 map_points_unchanged=1 frame_pose_unchanged=1 descriptors_unchanged=1 applied_action=NONE_EVIDENCE_ONLY\n[FEATURE POLICY] frame_id=0 coarse_allowed=637 fine_allowed=637 map_allowed=637 applied=0 actual_excluded=0\n[FEATURE SEMANTICS] frame_id=0 N=1004 background=637 person_interior=305 person_boundary=62 unknown=0 normal=1004 excluded=0 aligned=1\n[TWO STAGE] frame=0 event=evidence_complete pose_source=bootstrap_or_unavailable pose_reliable=0 b4_updates=1 applied=0\n[TWO STAGE] frame=0 event=frame_complete fine_completed=0 evidence_updates=1 applied=0 evidence_applied=0\n[KEYFRAME STAGE] frame=0 phase=frame_summary coarse_matches=0 coarse_inliers=0 final_inliers=-1 decision_inliers=-1 required_static_support=0 allowed=1 reason=BOOTSTRAP_INITIAL_MAP_REQUIRED needed=0 created=1 bootstrap=1\n[B3] frame=0 track=0 inst=0 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_HISTORY_MISMATCH\n[B3] frame=0 track=1 inst=1 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_HISTORY_MISMATCH\n[B4] frame=0 track=0 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_FINE_NOT_RUN\n[B4] frame=0 track=1 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_FINE_NOT_RUN\n')

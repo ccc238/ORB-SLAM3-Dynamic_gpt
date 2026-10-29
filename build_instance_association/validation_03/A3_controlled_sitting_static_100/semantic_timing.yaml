@@ -1,0 +1,13 @@
+%YAML:1.0
+---
+yolo_enabled: 1
+postprocess_enabled: 0
+mask_feature_reject_enabled: 0
+b2_enabled: 1
+b2_evidence_only: 1
+show_mask: 0
+dilate_radius: 3
+inference_calls: 100.
+postprocess_calls: 0.
+inference_total_ms: 1.6606351180999995e+04
+postprocess_total_ms: 0.

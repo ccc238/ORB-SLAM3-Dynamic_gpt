@@ -1,0 +1,49 @@
+instance_association_test 0
+identity_state_integration_test 0
+b4_evidence_expiry_test 0
+b4_state_machine_test 0
+instance_track_lifecycle_test 0
+frontend_diagnostics_test 0
+keyframe_decision_guard_test 0
+map_admission_test 0
+fine_feature_policy_test 0
+coarse_feature_filter_test 0
+coarse_pose_quality_test 0
+feature_policy_test 0
+feature_semantic_test 0
+frontend_mask_test 0
+b2_candidate_test 0
+config_A0_legacy 0
+config_A1_global 0
+config_A2_predict_ambiguity 0
+config_A3_controlled 0
+invalid_default 0
+invalid_negative_mode 2
+invalid_large_mode 2
+invalid_zero_cost 2
+invalid_nan_margin 2
+invalid_forced_pair 2
+invalid_bad_evidence 2
+invalid_fractional_mode 2
+system_reset 0
+A0_legacy_sitting_static_100 0
+{"run": "A0_legacy_sitting_static_100", "frames": 100, "instances": 200, "camera_poses": 100, "status": {"NEW_TRACK": 2, "CONTINUOUS_CONFIRMED": 198}, "events": {}, "states": {"P": 30, "S": 170}, "untrusted": 2, "geometry_blocked": 2, "max_track_id": 1}
+A0_legacy_walking_xyz_100 0
+{"run": "A0_legacy_walking_xyz_100", "frames": 100, "instances": 203, "camera_poses": 100, "status": {"NEW_TRACK": 4, "CONTINUOUS_CONFIRMED": 198, "REACQUIRED": 1}, "events": {"TERMINATED": 2}, "states": {"P": 181, "S": 66}, "untrusted": 4, "geometry_blocked": 5, "max_track_id": 3}
+A1_global_sitting_static_100 0
+{"run": "A1_global_sitting_static_100", "frames": 100, "instances": 200, "camera_poses": 100, "status": {"NEW_TRACK": 2, "CONTINUOUS_CONFIRMED": 198}, "events": {"NEW_TRACK": 2}, "states": {"P": 30, "S": 170}, "untrusted": 2, "geometry_blocked": 2, "max_track_id": 1}
+A1_global_walking_xyz_100 0
+{"run": "A1_global_walking_xyz_100", "frames": 100, "instances": 203, "camera_poses": 100, "status": {"NEW_TRACK": 5, "CONTINUOUS_CONFIRMED": 198}, "events": {"NEW_TRACK": 5, "TERMINATED": 3}, "states": {"P": 152, "S": 96}, "untrusted": 5, "geometry_blocked": 5, "max_track_id": 4}
+A2_predict_ambiguity_sitting_static_100 0
+{"run": "A2_predict_ambiguity_sitting_static_100", "frames": 100, "instances": 200, "camera_poses": 100, "status": {"NEW_TRACK": 2, "CONTINUOUS_CONFIRMED": 198}, "events": {"NEW_TRACK": 2}, "states": {"P": 30, "S": 170}, "untrusted": 2, "geometry_blocked": 2, "max_track_id": 1}
+A2_predict_ambiguity_walking_xyz_100 0
+{"run": "A2_predict_ambiguity_walking_xyz_100", "frames": 100, "instances": 203, "camera_poses": 100, "status": {"NEW_TRACK": 4, "CONTINUOUS_CONFIRMED": 178, "AMBIGUOUS": 18, "REACQUIRED": 3}, "events": {"NEW_TRACK": 4, "AMBIGUOUS": 18, "REACQUIRED": 3, "TERMINATED": 20}, "states": {"P": 416, "S": 35, "D": 69}, "untrusted": 22, "geometry_blocked": 25, "max_track_id": 21}
+A3_controlled_sitting_static_100 0
+{"run": "A3_controlled_sitting_static_100", "frames": 100, "instances": 200, "camera_poses": 100, "status": {"NEW_TRACK": 2, "CONTINUOUS_CONFIRMED": 198}, "events": {"NEW_TRACK": 2}, "states": {"P": 30, "S": 170}, "untrusted": 2, "geometry_blocked": 2, "max_track_id": 1}
+A3_controlled_walking_xyz_100 0
+{"run": "A3_controlled_walking_xyz_100", "frames": 100, "instances": 203, "camera_poses": 100, "status": {"NEW_TRACK": 4, "CONTINUOUS_CONFIRMED": 178, "AMBIGUOUS": 18, "REACQUIRED": 3}, "events": {"NEW_TRACK": 4, "AMBIGUOUS": 18, "REACQUIRED": 3, "TERMINATED": 20}, "states": {"P": 468, "S": 52}, "untrusted": 25, "geometry_blocked": 25, "max_track_id": 21}
+A3_controlled_sitting_static_full 0
+{"run": "A3_controlled_sitting_static_full", "frames": 680, "instances": 1360, "camera_poses": 680, "status": {"NEW_TRACK": 2, "CONTINUOUS_CONFIRMED": 1358}, "events": {"NEW_TRACK": 2}, "states": {"P": 37, "S": 1323}, "untrusted": 2, "geometry_blocked": 2, "max_track_id": 1}
+A3_controlled_walking_xyz_full 0
+{"run": "A3_controlled_walking_xyz_full", "frames": 827, "instances": 1020, "camera_poses": 827, "status": {"NEW_TRACK": 14, "CONTINUOUS_CONFIRMED": 963, "AMBIGUOUS": 25, "REACQUIRED": 18}, "events": {"NEW_TRACK": 14, "AMBIGUOUS": 25, "REACQUIRED": 18, "TERMINATED": 37}, "states": {"P": 1197, "S": 229, "D": 201}, "untrusted": 57, "geometry_blocked": 57, "max_track_id": 38}
+PASS requested identity-association regressions

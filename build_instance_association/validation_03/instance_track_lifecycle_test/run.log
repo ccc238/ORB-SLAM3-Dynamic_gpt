@@ -1,0 +1,1 @@
+PASS shared IDs, NEW->P, one-to-one, unreliable freeze, TTL recovery/expiry, duplicate-update guards

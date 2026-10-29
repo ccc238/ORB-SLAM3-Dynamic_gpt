@@ -1,0 +1,17 @@
+START full walking_static A3, viewer disabled: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_xavDQT
+SLAM finished: [RUN] frames=717 OK=717 RECENTLY_LOST=0 LOST=0 {'CameraTrajectory.txt': 717, 'KeyFrameTrajectory.txt': 155}
+{
+  "sequence": "fr3_walking_static",
+  "input_frames": 717,
+  "camera_poses": 717,
+  "keyframe_poses": 155,
+  "exit_code": 0,
+  "OK": 717,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 714,
+  "ate_rmse_m": 0.01868236662084787,
+  "ate_median_m": 0.009014597087841615,
+  "rpe_trans_rmse_m": 0.014813157616431294,
+  "rpe_rot_rmse_deg": 0.2893377056175398
+}

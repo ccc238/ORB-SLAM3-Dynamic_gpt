@@ -1,0 +1,62 @@
+{
+  "sequence": "fr3_walking_halfsphere",
+  "input_frames": 1021,
+  "camera_poses": 1021,
+  "keyframe_poses": 250,
+  "exit_code": 0,
+  "OK": 1021,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 1018,
+  "ate": {
+    "stats": {
+      "rmse": 0.026343737822009695,
+      "mean": 0.022897531056596337,
+      "median": 0.020156537687620033,
+      "std": 0.013026726140784204,
+      "min": 0.0017600838439468525,
+      "max": 0.07564257582936194,
+      "sse": 0.7064843878386102
+    },
+    "info": {
+      "title": "APE w.r.t. translation part (m)\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_halfsphere/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/CameraTrajectory.txt",
+      "label": "APE (m)"
+    }
+  },
+  "rpe_trans": {
+    "stats": {
+      "rmse": 0.013253545429450342,
+      "mean": 0.010942346071104662,
+      "median": 0.009283260287957368,
+      "std": 0.0074780698653251695,
+      "min": 0.000706790410866956,
+      "max": 0.08623667346225675,
+      "sse": 0.1786426263801626
+    },
+    "info": {
+      "title": "RPE w.r.t. translation part (m)\nfor delta = 1 (frames) using all pairs\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_halfsphere/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/CameraTrajectory.txt",
+      "label": "RPE (m)"
+    }
+  },
+  "rpe_rot": {
+    "stats": {
+      "rmse": 0.4025411273502645,
+      "mean": 0.34177945654455916,
+      "median": 0.3043107076792383,
+      "std": 0.21266443589027212,
+      "min": 0.018529741466434834,
+      "max": 2.037585353013427,
+      "sse": 164.79402831496503
+    },
+    "info": {
+      "title": "RPE w.r.t. rotation angle in degrees (deg)\nfor delta = 1 (frames) using all pairs\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_halfsphere/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A3_expiry_on_uDCzSz/CameraTrajectory.txt",
+      "label": "RPE (deg)"
+    }
+  }
+}

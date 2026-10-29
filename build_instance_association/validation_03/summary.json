@@ -1,0 +1,230 @@
+[
+  {
+    "name": "instance_association_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11473922899949685,
+    "passed": true
+  },
+  {
+    "name": "identity_state_integration_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06716068300011102,
+    "passed": true
+  },
+  {
+    "name": "b4_evidence_expiry_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06412413899943203,
+    "passed": true
+  },
+  {
+    "name": "b4_state_machine_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06407652899997629,
+    "passed": true
+  },
+  {
+    "name": "instance_track_lifecycle_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06423836999965715,
+    "passed": true
+  },
+  {
+    "name": "frontend_diagnostics_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06426171699968108,
+    "passed": true
+  },
+  {
+    "name": "keyframe_decision_guard_test",
+    "exit_code": 0,
+    "duration_seconds": 0.003890843000590394,
+    "passed": true
+  },
+  {
+    "name": "map_admission_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06431119500030036,
+    "passed": true
+  },
+  {
+    "name": "fine_feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0642812119995142,
+    "passed": true
+  },
+  {
+    "name": "coarse_feature_filter_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06433019999985845,
+    "passed": true
+  },
+  {
+    "name": "coarse_pose_quality_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0036643820003519068,
+    "passed": true
+  },
+  {
+    "name": "feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06430748299953848,
+    "passed": true
+  },
+  {
+    "name": "feature_semantic_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06427399499989406,
+    "passed": true
+  },
+  {
+    "name": "frontend_mask_test",
+    "exit_code": 0,
+    "duration_seconds": 0.21503353499974764,
+    "passed": true
+  },
+  {
+    "name": "b2_candidate_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11448237300010078,
+    "passed": true
+  },
+  {
+    "name": "config_A0_legacy",
+    "exit_code": 0,
+    "duration_seconds": 0.31494163099978323,
+    "passed": true
+  },
+  {
+    "name": "config_A1_global",
+    "exit_code": 0,
+    "duration_seconds": 0.3160522820007827,
+    "passed": true
+  },
+  {
+    "name": "config_A2_predict_ambiguity",
+    "exit_code": 0,
+    "duration_seconds": 0.31521369900019636,
+    "passed": true
+  },
+  {
+    "name": "config_A3_controlled",
+    "exit_code": 0,
+    "duration_seconds": 0.3151316220000808,
+    "passed": true
+  },
+  {
+    "name": "invalid_default",
+    "exit_code": 0,
+    "duration_seconds": 0.06460262200016587,
+    "passed": true
+  },
+  {
+    "name": "invalid_negative_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.0649364399996557,
+    "passed": true
+  },
+  {
+    "name": "invalid_large_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06465853900044749,
+    "passed": true
+  },
+  {
+    "name": "invalid_zero_cost",
+    "exit_code": 2,
+    "duration_seconds": 0.06421284899988677,
+    "passed": true
+  },
+  {
+    "name": "invalid_nan_margin",
+    "exit_code": 2,
+    "duration_seconds": 0.06469815200034645,
+    "passed": true
+  },
+  {
+    "name": "invalid_forced_pair",
+    "exit_code": 2,
+    "duration_seconds": 0.06438437499946303,
+    "passed": true
+  },
+  {
+    "name": "invalid_bad_evidence",
+    "exit_code": 2,
+    "duration_seconds": 0.06436174600003142,
+    "passed": true
+  },
+  {
+    "name": "invalid_fractional_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06427362500016898,
+    "passed": true
+  },
+  {
+    "name": "system_reset",
+    "exit_code": 0,
+    "duration_seconds": 5.384786876000362,
+    "passed": true
+  },
+  {
+    "name": "A0_legacy_sitting_static_100",
+    "exit_code": 0,
+    "duration_seconds": 25.560702411999955,
+    "passed": true
+  },
+  {
+    "name": "A0_legacy_walking_xyz_100",
+    "exit_code": 0,
+    "duration_seconds": 26.023792834000233,
+    "passed": true
+  },
+  {
+    "name": "A1_global_sitting_static_100",
+    "exit_code": 0,
+    "duration_seconds": 25.126914128999488,
+    "passed": true
+  },
+  {
+    "name": "A1_global_walking_xyz_100",
+    "exit_code": 0,
+    "duration_seconds": 25.06907684199996,
+    "passed": true
+  },
+  {
+    "name": "A2_predict_ambiguity_sitting_static_100",
+    "exit_code": 0,
+    "duration_seconds": 26.054403584000283,
+    "passed": true
+  },
+  {
+    "name": "A2_predict_ambiguity_walking_xyz_100",
+    "exit_code": 0,
+    "duration_seconds": 26.065754956999626,
+    "passed": true
+  },
+  {
+    "name": "A3_controlled_sitting_static_100",
+    "exit_code": 0,
+    "duration_seconds": 26.063907656000083,
+    "passed": true
+  },
+  {
+    "name": "A3_controlled_walking_xyz_100",
+    "exit_code": 0,
+    "duration_seconds": 25.916378125999472,
+    "passed": true
+  },
+  {
+    "name": "A3_controlled_sitting_static_full",
+    "exit_code": 0,
+    "duration_seconds": 162.56741573,
+    "passed": true
+  },
+  {
+    "name": "A3_controlled_walking_xyz_full",
+    "exit_code": 0,
+    "duration_seconds": 194.44668198099953,
+    "passed": true
+  }
+]

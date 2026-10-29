@@ -1,0 +1,182 @@
+[
+  {
+    "name": "instance_association_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11477924399969197,
+    "passed": true
+  },
+  {
+    "name": "identity_state_integration_test",
+    "exit_code": 0,
+    "duration_seconds": 0.1171185590001187,
+    "passed": true
+  },
+  {
+    "name": "b4_evidence_expiry_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0649218500002462,
+    "passed": true
+  },
+  {
+    "name": "b4_state_machine_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06408735700006218,
+    "passed": true
+  },
+  {
+    "name": "instance_track_lifecycle_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06419989499954681,
+    "passed": true
+  },
+  {
+    "name": "frontend_diagnostics_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06463531000008516,
+    "passed": true
+  },
+  {
+    "name": "keyframe_decision_guard_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0037161279997235397,
+    "passed": true
+  },
+  {
+    "name": "map_admission_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06438911199984432,
+    "passed": true
+  },
+  {
+    "name": "fine_feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06550241900004039,
+    "passed": true
+  },
+  {
+    "name": "coarse_feature_filter_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06444862099942839,
+    "passed": true
+  },
+  {
+    "name": "coarse_pose_quality_test",
+    "exit_code": 0,
+    "duration_seconds": 0.003727500999957556,
+    "passed": true
+  },
+  {
+    "name": "feature_policy_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06525334200068755,
+    "passed": true
+  },
+  {
+    "name": "feature_semantic_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0643416740003886,
+    "passed": true
+  },
+  {
+    "name": "frontend_mask_test",
+    "exit_code": 0,
+    "duration_seconds": 0.21577366000019538,
+    "passed": true
+  },
+  {
+    "name": "b2_candidate_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11467804099993373,
+    "passed": true
+  },
+  {
+    "name": "config_A0_legacy",
+    "exit_code": 0,
+    "duration_seconds": 0.3148595610000484,
+    "passed": true
+  },
+  {
+    "name": "config_A1_global",
+    "exit_code": 0,
+    "duration_seconds": 0.3155543980001312,
+    "passed": true
+  },
+  {
+    "name": "config_A2_predict_ambiguity",
+    "exit_code": 0,
+    "duration_seconds": 0.3168955629998891,
+    "passed": true
+  },
+  {
+    "name": "config_A3_controlled",
+    "exit_code": 0,
+    "duration_seconds": 0.31592178600021725,
+    "passed": true
+  },
+  {
+    "name": "invalid_default",
+    "exit_code": 0,
+    "duration_seconds": 0.06432234499970946,
+    "passed": true
+  },
+  {
+    "name": "invalid_negative_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06459174500014342,
+    "passed": true
+  },
+  {
+    "name": "invalid_large_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06426878699949157,
+    "passed": true
+  },
+  {
+    "name": "invalid_zero_cost",
+    "exit_code": 2,
+    "duration_seconds": 0.06448840800021571,
+    "passed": true
+  },
+  {
+    "name": "invalid_nan_margin",
+    "exit_code": 2,
+    "duration_seconds": 0.06482399899960001,
+    "passed": true
+  },
+  {
+    "name": "invalid_forced_pair",
+    "exit_code": 2,
+    "duration_seconds": 0.06436549699992611,
+    "passed": true
+  },
+  {
+    "name": "invalid_bad_evidence",
+    "exit_code": 2,
+    "duration_seconds": 0.06456524999975954,
+    "passed": true
+  },
+  {
+    "name": "invalid_fractional_mode",
+    "exit_code": 2,
+    "duration_seconds": 0.06477403300050355,
+    "passed": true
+  },
+  {
+    "name": "compat_mode0_original",
+    "exit_code": 0,
+    "duration_seconds": 3.1766209839997828,
+    "passed": true
+  },
+  {
+    "name": "compat_mode1_b1_hard_mask",
+    "exit_code": 0,
+    "duration_seconds": 3.92684476300019,
+    "passed": true
+  },
+  {
+    "name": "compat_mode2_evidence_only",
+    "exit_code": 0,
+    "duration_seconds": 3.976673703000415,
+    "passed": true
+  }
+]

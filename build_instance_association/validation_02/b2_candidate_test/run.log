@@ -1,0 +1,16 @@
+[B2 CSV] output_directory=build_yolo11/validation/b2_evidence_1793262748771808137_64
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=60 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=0 candidate=0 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 CSV] output_directory=build_yolo11/validation/b2_evidence_1793262748784204946_64
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=2 matched=2 valid=1 match_ratio=1 valid_match_ratio=0.5 bg_n=50 bg_median=0 bg_sigma=0.01 raw_median=0 norm_median=0 high_ratio=0 state=GEOM_STATIC_CANDIDATE reason=GEOMETRY_DECISION_VALID
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=1 candidate=1 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=50 bg_median=0 bg_sigma=0.01 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=INSUFFICIENT_MATCHES
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=2 matched=2 valid=0 match_ratio=1 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=1 candidate=1 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=2 matched=2 valid=0 match_ratio=1 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=1 candidate=1 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 CSV] output_directory=build_yolo11/validation/b2_evidence_1793262748784452287_64
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=2 matched=2 valid=1 match_ratio=1 valid_match_ratio=0.5 bg_n=50 bg_median=0.1 bg_sigma=0.01 raw_median=0.1 norm_median=1.49012e-06 high_ratio=0 state=GEOM_STATIC_CANDIDATE reason=GEOMETRY_DECISION_VALID
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=1 candidate=1 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=50 bg_median=0.1 bg_sigma=0.01 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=INSUFFICIENT_MATCHES
+[B2 SUMMARY] frame=-1 track_id=0 instance_id=0 candidate=2 matched=2 valid=0 match_ratio=1 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+[B2 SUMMARY] frame=-1 track_id=1 instance_id=1 candidate=1 matched=0 valid=0 match_ratio=0 valid_match_ratio=0 bg_n=0 bg_median=-1 bg_sigma=-1 raw_median=-1 norm_median=-1 high_ratio=-1 state=GEOM_UNRELIABLE reason=POSE_WEAK
+PASS explicit_motion=authoritative coarse_final_mix=rejected candidates=60 invalid_coarse_and_previous_pose_gates=passed

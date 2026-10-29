@@ -1,0 +1,244 @@
+%YAML:1.0
+# Batch 11: coarse + fine feature policy and indexed persistent-map admission.
+FeaturePolicy.Enable: 1
+FeaturePolicy.EvidenceOnly: 0
+FeaturePolicy.SaveSummaryCsv: 1
+FeaturePolicy.PrintFrameSummary: 1
+# Whole-image ORB; coarse uses previous B4 states, fine uses current B4 states.
+FeatureSemantic.Enable: 1
+FeatureSemantic.SafeBoundaryDistancePixels: 3.0
+FeatureSemantic.DepthEdge.Enable: 1
+FeatureSemantic.DepthEdge.Radius: 1
+FeatureSemantic.DepthEdge.AbsoluteMeters: 0.05
+FeatureSemantic.DepthEdge.Relative: 0.02
+FeatureSemantic.ShowOverlay: 1
+# Explicit frontend mode; complete TUM3 calibration and ORB parameters retained.
+DynamicFrontend.Mode: 3
+TwoStage.Enable: 1
+TwoStage.CoarseFilter.Enable: 1
+TwoStage.UseCoarsePoseForB2: 1
+TwoStage.FinePolicy.Enable: 1
+TwoStage.MapAdmission.Enable: 1
+TwoStage.Fallback.Enable: 1
+TwoStage.MinCoarseInliers: 30
+TwoStage.MinCoarseInlierRatio: 0.30
+# Independent B2 balanced validation; copied from TUM3.yaml.
+# Action mode uses fixed ND=3, NS=6, NR=10, TTL=15 for all association ablations.
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+File.version: "1.0"
+
+Camera.type: "PinHole"
+
+# Camera calibration and distortion parameters (OpenCV) 
+Camera1.fx: 535.4
+Camera1.fy: 539.2
+Camera1.cx: 320.1
+Camera1.cy: 247.6
+
+Camera1.k1: 0.0
+Camera1.k2: 0.0
+Camera1.p1: 0.0
+Camera1.p2: 0.0
+
+Camera.width: 640
+Camera.height: 480
+
+# Camera frames per second 
+Camera.fps: 30
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
+
+# Close/Far threshold. Baseline times.
+Stereo.ThDepth: 40.0
+Stereo.b: 0.0747
+
+# Depth map values factor
+RGBD.DepthMapFactor: 5000.0
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1000
+
+# ORB Extractor: Scale factor between levels in the scale pyramid 	
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid	
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast			
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+# Semantic front-end input. B3 consumes the same raw person instances as B2;
+# keeping YOLO enabled is therefore mandatory for this B3 evidence config.
+Yolo.Enable: 1
+Yolo.ModelPath: "/home/aaa/models/yolo/yolo11s-seg.onnx"
+Yolo.DynamicClasses: [0]
+Yolo.Confidence: 0.25
+Yolo.NmsIoU: 0.45
+Yolo.MaskThreshold: 0.5
+Yolo.IntraOpThreads: 2
+MaskPostProcess.Enable: 0
+MaskPostProcess.DilateRadius: 3
+Yolo.SaveMask: 0
+Yolo.SaveOverlay: 0
+Yolo.LogTiming: 0
+Yolo.ShowMask: 0
+Yolo.OutputDir: "."
+
+# B1: person hard feature mask. It has no effect unless Yolo.Enable is enabled.
+MaskFeatureReject.Enable: 0
+
+# B2: 3D motion evidence configuration. B2 is disabled by default, so legacy
+# configurations without these keys retain their former behavior as well.
+B2.Enable: 1
+B2.EvidenceOnly: 1
+B2.Candidate.Enable: 1
+B2.Candidate.MaxFeaturesPerInstance: 300
+B2.Candidate.ErodeRadius: 3
+B2.Candidate.MinBoundaryDistance: 3
+B2.Association.Enable: 1
+B2.Association.UseMutualMatch: 1
+B2.Association.LoweRatio: 0.75
+B2.Association.MaxHammingDistance: 64
+B2.Association.MinInstanceIoU: 0.10
+B2.Association.MaxCenterDistancePixels: 100.0
+B2.Association.MinInstanceScore: 0.30
+B2.Geometry.Enable: 1
+B2.Geometry.UseDepthMedian3x3: 1
+B2.Geometry.MinDepthMeters: 0.30
+B2.Geometry.MaxDepthMeters: 5.00
+B2.Geometry.UseNormalizedResidual: 1
+B2.Geometry.MinMatchedFeatures: 30
+B2.Geometry.MinMatchRatio: 0.15
+B2.Geometry.MinValidFeatures: 10
+B2.Geometry.MinValidMatchRatio: 0.40
+# Background references exclude raw person masks plus this circular boundary.
+B2.Geometry.BackgroundExclusionDilateRadius: 3
+B2.Geometry.Decision.Enable: 1
+B2.Geometry.Decision.Method: "background_mad"
+B2.Geometry.Decision.DepthBinMeters: 0.50
+B2.Geometry.Decision.MinSamplesPerBin: 30
+B2.Geometry.Decision.MinBackgroundSamples: 50
+B2.Geometry.Decision.SigmaFloorMeters: 0.01
+B2.Geometry.Decision.StaticThreshold: 2.0
+B2.Geometry.Decision.MovingThreshold: 3.5
+B2.Geometry.Decision.MinMovingFraction: 0.60
+B2.Geometry.Decision.MaxStaticFraction: 0.20
+B2.Geometry.Decision.MinRawMovingMeters: 0.02
+# B2 calibrated three-zone thresholds.  These take precedence over the
+# legacy B2.Geometry.Decision.* gate names above, which are retained only so
+# old configuration files still parse with their historical behaviour.
+# Decision.MovingThreshold above still defines the per-feature e_i>=3.5
+# cutoff used to compute high_ratio; NormMovingThreshold gates its median.
+B2.Geometry.RawMovingThreshold: 0.020
+B2.Geometry.NormMovingThreshold: 0.40
+B2.Geometry.HighRatioMovingThreshold: 0.10
+B2.Geometry.RawStaticThreshold: 0.018
+B2.Geometry.NormStaticThreshold: 0.10
+B2.Geometry.HighRatioStaticThreshold: 0.06
+B2.Debug.Enable: 1
+B2.Debug.SaveCsv: 1
+B2.Debug.SaveFeatureCsv: 0
+B2.Debug.SaveSummaryCsv: 1
+B2.Debug.VerbosePerFeature: 0
+B2.Debug.PrintFrameSummary: 1
+B2.Debug.ShowOverlay: 1
+B2.Debug.OutputDir: "."
+B2.Debug.DatasetName: "TUM_RGBD"
+
+# B3 remains evidence-only; B4 current states drive the existing feature policy.
+B3.Enable: 1
+B3.EvidenceOnly: 1
+B3.Semantic.PersonAsDynamicPrior: 1
+B3.Debug.PrintFrameSummary: 1
+B3.Debug.SaveSummaryCsv: 1
+B3.Debug.ShowOverlay: 1
+
+# B4 current-state output drives fine-pose feature policy through Tracking.
+# Indexed map admission is ON and identical across A0--A3.
+B4.Enable: 1
+B4.EvidenceOnly: 0
+B4.DynamicEnterCount: 3
+B4.StaticEnterCount: 6
+B4.DynamicRecoveryCount: 10
+B4.TrackTTL: 15
+B4.UseContinuousQuality: 0
+B4.QualityMin: 0.65
+B4.Track.MinMaskIoU: 0.05
+B4.Track.MinBoxIoU: 0.10
+B4.Track.MaxCenterDistance: 0.15
+B4.Pending.UseForPose: 0
+B4.Pending.AllowMapCreation: 0
+B4.Dynamic.AllowMapCreation: 0
+B4.Debug.PrintFrameSummary: 1
+B4.Debug.SaveSummaryCsv: 1
+B4.Debug.ShowOverlay: 1
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500.0
+
+# Batch 13: independent output switches; disable all three for formal timing.
+DynamicFrontend.Debug.SaveCsv: 1
+DynamicFrontend.Debug.ShowOverlay: 0
+DynamicFrontend.Debug.SaveOverlay: 0
+
+
+# Controlled B4 acquisition-time expiry ablation; thresholds are debugging defaults.
+B4.EvidenceExpiry.Enable: 0
+B4.EvidenceExpiry.MaxGapSeconds: 0.20
+B4.EvidenceExpiry.MaxStaticAgeSeconds: 0.30
+
+
+# Association engineering initial values, not accuracy-validated.
+InstanceAssociation.Mode: 0
+InstanceAssociation.MaxCost: 0.65
+InstanceAssociation.UnmatchedTrackCost: 0.40
+InstanceAssociation.UnmatchedInstanceCost: 0.40
+InstanceAssociation.MinMargin: 0.08
+InstanceAssociation.MaxCenterDistance: 1.0
+InstanceAssociation.MaxScaleRatio: 4.0
+InstanceAssociation.MinMaskIoU: 0.05
+InstanceAssociation.MinBoxIoU: 0.10
+InstanceAssociation.MaxPredictionSeconds: 0.75
+InstanceAssociation.MaxDepthDifference: 0.60
+InstanceAssociation.MaxDepthRelative: 0.30
+InstanceAssociation.MaxDepthMAD: 0.20
+InstanceAssociation.Weight.Mask: 0.40
+InstanceAssociation.Weight.Box: 0.20
+InstanceAssociation.Weight.Center: 0.25
+InstanceAssociation.Weight.Flow: 0.15
+InstanceAssociation.Weight.Depth: 0.15
+InstanceAssociation.MergeCoverage: 0.65
+InstanceAssociation.Flow.FBError: 1.5
+InstanceAssociation.Flow.Quality: 0.01
+InstanceAssociation.Flow.MaxCorners: 80
+InstanceAssociation.Flow.MinSupport: 8
+InstanceAssociation.MinEvidenceTerms: 2
+InstanceAssociation.SafeErodeRadius: 3
+InstanceAssociation.MinDepthSamples: 20
+InstanceAssociation.Debug.SaveCsv: 1
+InstanceAssociation.Debug.PrintSummary: 1
+
+

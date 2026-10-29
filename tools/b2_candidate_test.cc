@@ -107,6 +107,7 @@ int main()
         semantics.front().boundingBox = nearby.boundingBox;
         tracks.Associate(semantics, image.size());
         nearby.trackId = semantics.front().trackId;
+        nearby.association.allowGeometryPair = true; // Isolated legacy join fixture, not managed capture times.
         associated.persons.push_back(nearby);
         evidence.Process(associated);
         const auto& linked = evidence.PreviousFrame().persons[0];
@@ -179,6 +180,7 @@ int main()
         ORB_SLAM3::B2PersonInstance matchingCurrentPerson;
         matchingCurrentPerson.instanceId = 0;
         matchingCurrentPerson.trackId = 0;
+        matchingCurrentPerson.association.allowGeometryPair = true;
         matchingCurrentPerson.classId = 0;
         matchingCurrentPerson.boundingBox = cv::Rect(72, 46, 180, 150);
         matchingCurrentPerson.features = {makeFeature(10, 0, true), makeFeature(11, 255, false)};
@@ -191,6 +193,7 @@ int main()
         ORB_SLAM3::B2PersonInstance sparseCurrentPerson;
         sparseCurrentPerson.instanceId = 1;
         sparseCurrentPerson.trackId = 1;
+        sparseCurrentPerson.association.allowGeometryPair = true;
         sparseCurrentPerson.classId = 0;
         sparseCurrentPerson.boundingBox = cv::Rect(11, 11, 35, 35);
         sparseCurrentPerson.features = {makeFeature(12, 17, true)};

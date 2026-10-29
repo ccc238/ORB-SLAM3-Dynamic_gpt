@@ -1,0 +1,37 @@
+ M CMakeLists.txt
+ M docs/B4_EVIDENCE_EXPIRY.md
+ M include/B2MotionEvidence.h
+ M include/B4TemporalStateMachine.h
+ M include/Deep/B4Config.h
+ M include/Deep/DynamicDetector.h
+ M include/Deep/InstanceTrackManager.h
+ M include/Tracking.h
+ M include/YOLOSeg.h
+ M src/B2MotionEvidence.cc
+ M src/B3SemanticGeometryFusion.cc
+ M src/B4TemporalStateMachine.cc
+ M src/Deep/DynamicDetector.cc
+ M src/Deep/InstanceTrackManager.cc
+ M src/FrontendDiagnosticLog.cc
+ M src/Tracking.cc
+ M src/TrackingDiagnostics.cc
+ M tools/b2_candidate_test.cc
+ M tools/b4_evidence_expiry_test.cc
+ M tools/b4_state_machine_test.cc
+ M tools/instance_track_lifecycle_test.cc
+ M tools/validate_b4_evidence_expiry.py
+?? build_b4_expiry/default_on_build.log
+?? build_b4_expiry/optimizer_default_on.log
+?? build_b4_expiry/optimizer_default_on_lowmem.log
+?? build_b4_expiry/optimizer_default_on_resume.log
+?? build_instance_association/
+?? configs/instance_association/
+?? docs/INSTANCE_ASSOCIATION.md
+?? include/Deep/InstanceAssociation.h
+?? tools/evaluate_instance_identity.py
+?? tools/identity_state_integration_test.cc
+?? tools/identity_system_reset_test.cc
+?? tools/instance_association_test.cc
+?? tools/summarize_instance_association_runs.py
+?? tools/test_instance_identity_evaluation.py
+?? tools/validate_instance_association.py

@@ -1,0 +1,2 @@
+CameraTrajectory.txt: 717
+KeyFrameTrajectory.txt: 170

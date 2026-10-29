@@ -1,0 +1,1 @@
+No human identity/motion ground truth. System ID continuity is descriptive only, not ID switches/fragments against truth. Coarse fallback may use P; actual uses include optimization retries. No ATE improvement claim.

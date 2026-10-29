@@ -1,0 +1,17 @@
+START full walking_static A0, evidence expiry OFF, viewer disabled: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_static_A0_expiry_off_3loHeG
+SLAM finished: [RUN] frames=717 OK=717 RECENTLY_LOST=0 LOST=0 {'CameraTrajectory.txt': 717, 'KeyFrameTrajectory.txt': 170}
+{
+  "sequence": "fr3_walking_static",
+  "input_frames": 717,
+  "camera_poses": 717,
+  "keyframe_poses": 170,
+  "exit_code": 0,
+  "OK": 717,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 714,
+  "ate_rmse_m": 0.01955135092646011,
+  "ate_median_m": 0.00931863994044349,
+  "rpe_trans_rmse_m": 0.01706244817709465,
+  "rpe_rot_rmse_deg": 0.2937566102678408
+}

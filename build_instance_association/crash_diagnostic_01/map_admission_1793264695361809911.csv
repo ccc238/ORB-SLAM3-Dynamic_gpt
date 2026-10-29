@@ -1,0 +1,4 @@
+frame_id,timestamp,keyframe_id,stage,map_candidates_total,map_reject_P,map_reject_D,map_reject_boundary,map_reject_unknown,map_points_created
+0,1341845688.561749,0,keyframe_snapshot,1004,305,0,62,0,0
+0,1341845688.561749,0,rgbd_bootstrap,807,304,0,60,0,443
+0,1341845688.561749,0,process_keyframe,1004,305,0,62,0,0

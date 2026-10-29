@@ -1,0 +1,9 @@
+%YAML:1.0
+---
+frames: 3
+track_mean_ms: 1.0543196333333333e+01
+track_median_ms: 1.1351486000000000e+01
+ok_frames: 3
+recently_lost_frames: 0
+lost_frames: 0
+preview_user_stopped: 0

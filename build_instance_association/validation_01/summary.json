@@ -1,0 +1,32 @@
+[
+  {
+    "name": "instance_association_test",
+    "exit_code": 0,
+    "duration_seconds": 0.2651578300001347,
+    "passed": true
+  },
+  {
+    "name": "identity_state_integration_test",
+    "exit_code": 0,
+    "duration_seconds": 0.11909878999995271,
+    "passed": true
+  },
+  {
+    "name": "b4_evidence_expiry_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06444684999996753,
+    "passed": true
+  },
+  {
+    "name": "b4_state_machine_test",
+    "exit_code": 0,
+    "duration_seconds": 0.0644708710001396,
+    "passed": true
+  },
+  {
+    "name": "instance_track_lifecycle_test",
+    "exit_code": 0,
+    "duration_seconds": 0.06592819099978442,
+    "passed": true
+  }
+]

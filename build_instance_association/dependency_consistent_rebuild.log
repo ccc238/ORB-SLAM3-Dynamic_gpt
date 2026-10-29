@@ -1,0 +1,1655 @@
+make: Entering directory '/home/aaa/ORB-SLAM3_original0/build_instance_association'
+[ 42%] Building CXX object CMakeFiles/ORB_SLAM3.dir/src/LocalMapping.cc.o
+[ 42%] Building CXX object CMakeFiles/ORB_SLAM3.dir/src/TrackingDiagnostics.cc.o
+In file included from /home/aaa/ORB-SLAM3_original0/include/Frame.h:30,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h: In member function ‘void ORB_SLAM3::IMU::Preintegrated::printMeasurements() const’:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h:204:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<ORB_SLAM3::IMU::Preintegrated::integrable>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  204 |         for(int i=0; i<mvMeasurements.size(); i++){
+      |                      ~^~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: At global scope:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Frame.h:30,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h: In member function ‘void ORB_SLAM3::IMU::Preintegrated::printMeasurements() const’:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h:204:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<ORB_SLAM3::IMU::Preintegrated::integrable>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  204 |         for(int i=0; i<mvMeasurements.size(); i++){
+      |                      ~^~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: At global scope:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:25,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:25,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:47:9: warning:   when initialized here [-Wreorder]
+   47 |         KannalaBrandt8(const std::vector<float> _vParameters) : GeometricCamera(_vParameters), precision(1e-6), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:25,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/src/TrackingDiagnostics.cc:1:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>, float)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:53:9: warning:   when initialized here [-Wreorder]
+   53 |         KannalaBrandt8(const std::vector<float> _vParameters, const float _precision) : GeometricCamera(_vParameters),
+      |         ^~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(ORB_SLAM3::KannalaBrandt8*)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:59:9: warning:   when initialized here [-Wreorder]
+   59 |         KannalaBrandt8(KannalaBrandt8* pKannala) : GeometricCamera(pKannala->mvParameters), precision(pKannala->precision), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:47:9: warning:   when initialized here [-Wreorder]
+   47 |         KannalaBrandt8(const std::vector<float> _vParameters) : GeometricCamera(_vParameters), precision(1e-6), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>, float)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:53:9: warning:   when initialized here [-Wreorder]
+   53 |         KannalaBrandt8(const std::vector<float> _vParameters, const float _precision) : GeometricCamera(_vParameters),
+      |         ^~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(ORB_SLAM3::KannalaBrandt8*)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:59:9: warning:   when initialized here [-Wreorder]
+   59 |         KannalaBrandt8(KannalaBrandt8* pKannala) : GeometricCamera(pKannala->mvParameters), precision(pKannala->precision), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h: In constructor ‘ORB_SLAM3::LocalMapping::LocalMapping(ORB_SLAM3::System*, ORB_SLAM3::Atlas*, float, bool, const string&)’:
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:185:10: warning: ‘ORB_SLAM3::LocalMapping::bInitializing’ will be initialized after [-Wreorder]
+  185 |     bool bInitializing;
+      |          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:172:10: warning:   ‘bool ORB_SLAM3::LocalMapping::mbAbortBA’ [-Wreorder]
+  172 |     bool mbAbortBA;
+      |          ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:34:1: warning:   when initialized here [-Wreorder]
+   34 | LocalMapping::LocalMapping(System* pSys, Atlas *pAtlas, const float bMonocular, bool bInertial, const string &_strSeqName):
+      | ^~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:179:10: warning: ‘ORB_SLAM3::LocalMapping::mbAcceptKeyFrames’ will be initialized after [-Wreorder]
+  179 |     bool mbAcceptKeyFrames;
+      |          ^~~~~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:94:18: warning:   ‘unsigned int ORB_SLAM3::LocalMapping::mIdxInit’ [-Wreorder]
+   94 |     unsigned int mIdxInit;
+      |                  ^~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:34:1: warning:   when initialized here [-Wreorder]
+   34 | LocalMapping::LocalMapping(System* pSys, Atlas *pAtlas, const float bMonocular, bool bInertial, const string &_strSeqName):
+      | ^~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:94:18: warning: ‘ORB_SLAM3::LocalMapping::mIdxInit’ will be initialized after [-Wreorder]
+   94 |     unsigned int mIdxInit;
+      |                  ^~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:89:12: warning:   ‘double ORB_SLAM3::LocalMapping::mScale’ [-Wreorder]
+   89 |     double mScale;
+      |            ^~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:34:1: warning:   when initialized here [-Wreorder]
+   34 | LocalMapping::LocalMapping(System* pSys, Atlas *pAtlas, const float bMonocular, bool bInertial, const string &_strSeqName):
+      | ^~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:20:
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:105:10: warning: ‘ORB_SLAM3::LocalMapping::mbNotBA2’ will be initialized after [-Wreorder]
+  105 |     bool mbNotBA2;
+      |          ^~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/LocalMapping.h:101:9: warning:   ‘int ORB_SLAM3::LocalMapping::mIdxIteration’ [-Wreorder]
+  101 |     int mIdxIteration;
+      |         ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:34:1: warning:   when initialized here [-Wreorder]
+   34 | LocalMapping::LocalMapping(System* pSys, Atlas *pAtlas, const float bMonocular, bool bInertial, const string &_strSeqName):
+      | ^~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::Run()’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:119:18: warning: variable ‘b_doneLBA’ set but not used [-Wunused-but-set-variable]
+  119 |             bool b_doneLBA = false;
+      |                  ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::CreateNewMapPoints()’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:406:33: warning: comparison of integer expressions of different signedness: ‘std::vector<ORB_SLAM3::KeyFrame*>::size_type’ {aka ‘long unsigned int’} and ‘int’ [-Wsign-compare]
+  406 |         while((vpNeighKFs.size()<=nn)&&(pKF->mPrevKF)&&(count++<nn))
+      |                ~~~~~~~~~~~~~~~~~^~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:485:22: warning: unused variable ‘invfx2’ [-Wunused-variable]
+  485 |         const float &invfx2 = pKF2->invfx;
+      |                      ^~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:486:22: warning: unused variable ‘invfy2’ [-Wunused-variable]
+  486 |         const float &invfy2 = pKF2->invfy;
+      |                      ^~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:430:18: warning: unused variable ‘invfx1’ [-Wunused-variable]
+  430 |     const float &invfx1 = mpCurrentKeyFrame->invfx;
+      |                  ^~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:431:18: warning: unused variable ‘invfy1’ [-Wunused-variable]
+  431 |     const float &invfy1 = mpCurrentKeyFrame->invfy;
+      |                  ^~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::KeyFrameCulling()’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:981:75: warning: comparison of integer expressions of different signedness: ‘size_t’ {aka ‘long unsigned int’} and ‘const int’ [-Wsign-compare]
+  981 |                                                                      : (i < pKF -> NLeft) ? pKF -> mvKeys[i].octave
+      |                                                                         ~~^~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::InitializeIMU(float, float, bool)’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1204:33: warning: comparison of integer expressions of different signedness: ‘long unsigned int’ and ‘int’ [-Wsign-compare]
+ 1204 |     if(mpAtlas->KeyFramesInMap()<nMinKF)
+      |        ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1218:19: warning: comparison of integer expressions of different signedness: ‘std::vector<ORB_SLAM3::KeyFrame*>::size_type’ {aka ‘long unsigned int’} and ‘int’ [-Wsign-compare]
+ 1218 |     if(vpKF.size()<nMinKF)
+      |        ~~~~~~~~~~~^~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1278:43: warning: variable ‘t0’ set but not used [-Wunused-but-set-variable]
+ 1278 |     std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1281:43: warning: variable ‘t1’ set but not used [-Wunused-but-set-variable]
+ 1281 |     std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1315:43: warning: variable ‘t4’ set but not used [-Wunused-but-set-variable]
+ 1315 |     std::chrono::steady_clock::time_point t4 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1324:43: warning: variable ‘t5’ set but not used [-Wunused-but-set-variable]
+ 1324 |     std::chrono::steady_clock::time_point t5 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::ScaleRefinement()’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1467:15: warning: unused variable ‘N’ [-Wunused-variable]
+ 1467 |     const int N = vpKF.size();
+      |               ^
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1486:43: warning: variable ‘t2’ set but not used [-Wunused-but-set-variable]
+ 1486 |     std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1493:43: warning: variable ‘t3’ set but not used [-Wunused-but-set-variable]
+ 1493 |     std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+      |                                           ^~
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1502:12: warning: unused variable ‘t_inertial_only’ [-Wunused-variable]
+ 1502 |     double t_inertial_only = std::chrono::duration_cast<std::chrono::duration<double> >(t1 - t0).count();
+      |            ^~~~~~~~~~~~~~~
+[ 42%] Building CXX object CMakeFiles/ORB_SLAM3.dir/src/FrameDrawer.cc.o
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc: In member function ‘void ORB_SLAM3::LocalMapping::KeyFrameCulling()’:
+/home/aaa/ORB-SLAM3_original0/src/LocalMapping.cc:1036:48: warning: ‘last_ID’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 1036 |                     if((bInitImu && (pKF->mnId<last_ID) && t<3.) || (t<0.5))
+      |                                                ^~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Frame.h:30,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h: In member function ‘void ORB_SLAM3::IMU::Preintegrated::printMeasurements() const’:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h:204:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<ORB_SLAM3::IMU::Preintegrated::integrable>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  204 |         for(int i=0; i<mvMeasurements.size(); i++){
+      |                      ~^~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: At global scope:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/LU:11,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/KeyFrame.h:28,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapPoint.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Map.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:22,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:47:9: warning:   when initialized here [-Wreorder]
+   47 |         KannalaBrandt8(const std::vector<float> _vParameters) : GeometricCamera(_vParameters), precision(1e-6), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/include/Atlas.h:27,
+                 from /home/aaa/ORB-SLAM3_original0/include/MapDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/include/Viewer.h:24,
+                 from /home/aaa/ORB-SLAM3_original0/include/Tracking.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/FrameDrawer.h:23,
+                 from /home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:19:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(std::vector<float>, float)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:53:9: warning:   when initialized here [-Wreorder]
+   53 |         KannalaBrandt8(const std::vector<float> _vParameters, const float _precision) : GeometricCamera(_vParameters),
+      |         ^~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h: In constructor ‘ORB_SLAM3::KannalaBrandt8::KannalaBrandt8(ORB_SLAM3::KannalaBrandt8*)’:
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:102:21: warning: ‘ORB_SLAM3::KannalaBrandt8::precision’ will be initialized after [-Wreorder]
+  102 |         const float precision;
+      |                     ^~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:88:26: warning:   ‘std::vector<int> ORB_SLAM3::KannalaBrandt8::mvLappingArea’ [-Wreorder]
+   88 |         std::vector<int> mvLappingArea;
+      |                          ^~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/include/CameraModels/KannalaBrandt8.h:59:9: warning:   when initialized here [-Wreorder]
+   59 |         KannalaBrandt8(KannalaBrandt8* pKannala) : GeometricCamera(pKannala->mvParameters), precision(pKannala->precision), mvLappingArea(2,0) ,tvr(nullptr) {
+      |         ^~~~~~~~~~~~~~
+/home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc: In member function ‘cv::Mat ORB_SLAM3::FrameDrawer::DrawFrame(float)’:
+/home/aaa/ORB-SLAM3_original0/src/FrameDrawer.cc:113:11: warning: variable ‘thDepth’ set but not used [-Wunused-but-set-variable]
+  113 |     float thDepth;
+      |           ^~~~~~~
+make: Leaving directory '/home/aaa/ORB-SLAM3_original0/build_instance_association'

@@ -1,0 +1,17 @@
+START full walking_xyz A3, viewer disabled: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv
+SLAM finished: [RUN] frames=827 OK=827 RECENTLY_LOST=0 LOST=0 {'CameraTrajectory.txt': 827, 'KeyFrameTrajectory.txt': 154}
+{
+  "sequence": "fr3_walking_xyz",
+  "input_frames": 827,
+  "camera_poses": 827,
+  "keyframe_poses": 154,
+  "exit_code": 0,
+  "OK": 827,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 826,
+  "ate_rmse_m": 0.020816791469196832,
+  "ate_median_m": 0.01157596275685327,
+  "rpe_trans_rmse_m": 0.014306363856596508,
+  "rpe_rot_rmse_deg": 0.4222944570892539
+}

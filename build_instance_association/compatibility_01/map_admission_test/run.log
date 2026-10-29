@@ -1,0 +1,5 @@
+[MAP ADMISSION] frame=0 kf=0 stage=keyframe_snapshot map_candidates_total=304 map_reject_P=1 map_reject_D=1 map_reject_boundary=1 map_reject_unknown=1 map_points_created=0
+[MAP ADMISSION] frame=0 kf=2 stage=keyframe_snapshot map_candidates_total=304 map_reject_P=304 map_reject_D=0 map_reject_boundary=0 map_reject_unknown=0 map_points_created=0
+[MAP ADMISSION] frame=0 kf=2 stage=neighbor_fuse map_candidates_total=1 map_reject_P=1 map_reject_D=0 map_reject_boundary=0 map_reject_unknown=0 map_points_created=0
+[MAP ADMISSION] frame=0 kf=2 stage=sim3_fuse map_candidates_total=1 map_reject_P=1 map_reject_D=0 map_reject_boundary=0 map_reject_unknown=0 map_points_created=0
+PASS snapshot/copy, indexed observation guards, P/D/boundary/unknown exclusion, new archive round-trip, legacy defaults, both Fuse overloads, replacement, disabled legacy fusion

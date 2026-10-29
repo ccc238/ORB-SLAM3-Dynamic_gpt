@@ -1,0 +1,21 @@
+[  1%] Built target coarse_pose_quality_test
+[  2%] Built target keyframe_decision_guard_test
+[  7%] Built target yolo_seg_smoke
+Consolidate compiler generated dependencies of target ORB_SLAM3
+[  8%] Building CXX object CMakeFiles/ORB_SLAM3.dir/src/Deep/InstanceTrackManager.cc.o
+[  9%] Linking CXX shared library lib/libORB_SLAM3.so
+[ 40%] Built target ORB_SLAM3
+Consolidate compiler generated dependencies of target rgbd_tum
+Consolidate compiler generated dependencies of target stereo_kitti
+[ 41%] Linking CXX executable bin/rgbd_tum
+[ 42%] Linking CXX executable bin/stereo_kitti
+/usr/bin/ld: lib/libORB_SLAM3.so: undefined reference to `ORB_SLAM3::Tracking::RecordIdentityOptimizerInputs(bool)'
+/usr/bin/ld: lib/libORB_SLAM3.so: undefined reference to `ORB_SLAM3::Tracking::RecordIdentityOptimizerInputs(bool)'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/stereo_kitti.dir/build.make:174: bin/stereo_kitti] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:217: CMakeFiles/stereo_kitti.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/rgbd_tum.dir/build.make:174: bin/rgbd_tum] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:191: CMakeFiles/rgbd_tum.dir/all] Error 2
+gmake: *** [Makefile:91: all] Error 2

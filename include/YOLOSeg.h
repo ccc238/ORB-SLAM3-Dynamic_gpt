@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Deep/InstanceAssociation.h"
 
 namespace ORB_SLAM3 {
 
@@ -31,6 +32,7 @@ struct YOLOSegInstance {
     // Assigned once by InstanceTrackManager immediately after inference.
     // All later B2/B3/B4 stages consume this shared identity.
     int trackId = -1;
+    InstanceAssociationResult association;
 };
 
 struct YOLOSegResult {

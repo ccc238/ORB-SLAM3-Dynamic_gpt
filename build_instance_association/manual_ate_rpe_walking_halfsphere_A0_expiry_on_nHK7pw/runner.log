@@ -1,0 +1,17 @@
+START full walking_halfsphere A0, evidence expiry ON, viewer disabled: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_halfsphere_A0_expiry_on_nHK7pw
+SLAM finished: [RUN] frames=1021 OK=1021 RECENTLY_LOST=0 LOST=0 {'CameraTrajectory.txt': 1021, 'KeyFrameTrajectory.txt': 242}
+{
+  "sequence": "fr3_walking_halfsphere",
+  "input_frames": 1021,
+  "camera_poses": 1021,
+  "keyframe_poses": 242,
+  "exit_code": 0,
+  "OK": 1021,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 1018,
+  "ate_rmse_m": 0.03158376947056124,
+  "ate_median_m": 0.023249159024959068,
+  "rpe_trans_rmse_m": 0.013567133859774188,
+  "rpe_rot_rmse_deg": 0.42173159120038267
+}

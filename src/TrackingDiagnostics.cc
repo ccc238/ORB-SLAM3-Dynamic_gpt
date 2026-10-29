@@ -8,6 +8,17 @@
 #include <stdexcept>
 #include <cmath>
 namespace ORB_SLAM3 {
+void Tracking::RecordIdentityOptimizerInputs(bool fine) {
+    if(!mbRGBDEvidenceReady || !mCurrentFrame.mbSemanticAnnotated || !mbCollectStageDiagnostics) return;
+    if(!mCurrentFrame.SemanticMetadataAligned()) throw std::runtime_error("Optimizer identity audit metadata mismatch");
+    for(int i=0;i<mCurrentFrame.N;++i) {
+        if(!mCurrentFrame.mvpMapPoints[i] || mCurrentFrame.mvTrackId[i]<0) continue;
+        auto& uses=mIdentityOptimizerUses[mCurrentFrame.mvTrackId[i]];
+        const auto state=fine ? mCurrentFrame.mvCurrentB4State[i] : mCurrentFrame.mvPreviousB4State[i];
+        if(fine) {++uses.fine;if(state==TemporalState::STATIC)++uses.fineStatic;}
+        else {++uses.coarse;if(state==TemporalState::STATIC)++uses.coarseStatic;}
+    }
+}
 namespace {
 template<class T> std::string Number(T value) {
     std::ostringstream text; text << std::setprecision(17) << value; return text.str();
@@ -114,13 +125,32 @@ void Tracking::CollectDynamicDiagnostics() {
     const auto instance=[&](int id,int track,const cv::Rect& box,const B4StateResult* b4) {
         DiagnosticRow row=base("INSTANCE");
         row["instance_id"]=Number(id); row["track_id"]=Number(track);
+        const auto uses=mIdentityOptimizerUses.find(track);
+        const IdentityOptimizerUses empty;
+        const auto& used=uses==mIdentityOptimizerUses.end() ? empty : uses->second;
+        row["coarse_optimizer_feature_uses"]=Number(used.coarse);
+        row["fine_optimizer_feature_uses"]=Number(used.fine);
+        row["coarse_S_feature_uses"]=Number(used.coarseStatic);
+        row["fine_S_feature_uses"]=Number(used.fineStatic);
         const bool visible=id>=0;
+        if(visible && size_t(id)<mpDynamicDetector->LastRGBDInstances().size()) {
+            const auto& a=mpDynamicDetector->LastRGBDInstances()[id].association;
+            row["association_status"]=AssociationStatusName(a.associationStatus);
+            if(std::isfinite(a.associationCost))row["association_cost"]=Number(a.associationCost);
+            if(std::isfinite(a.rowMargin))row["association_row_margin"]=Number(a.rowMargin);
+            if(std::isfinite(a.columnMargin))row["association_column_margin"]=Number(a.columnMargin);
+            row["allow_state_inheritance"]=Number(int(a.allowStateInheritance));
+            row["allow_geometry_pair"]=Number(int(a.allowGeometryPair));
+            row["association_reason"]=a.reason;row["state_reset_reason"]=a.stateResetReason;
+            row["association_ms"]=Number(mpInstanceTrackManager->ProcessingMs());
+        }
         row["semantic_region"]=visible ? "PERSON_INSTANCE" : "NOT_VISIBLE";
         TemporalState previous=TemporalState::UNKNOWN,current=TemporalState::UNKNOWN;
         if(b4) {
             // Coarse policy used the timestamp-aware pre-evidence query, not
             // the unexpired raw state. Keep both histories in the CSV.
             previous=Temporal(b4->stateAfterExpiry); current=Temporal(b4->state);
+            if(visible && row["allow_state_inheritance"]=="0") previous=TemporalState::PENDING;
             row["historical_b4_state"]=B4MotionStateName(b4->previousState);
             row["has_reliable_history"]=Number(int(b4->hasReliableHistory));
             if(std::isfinite(b4->evidenceAgeSeconds)) row["evidence_age_seconds"]=Number(b4->evidenceAgeSeconds);

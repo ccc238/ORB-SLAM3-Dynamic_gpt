@@ -197,7 +197,17 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
             sensor != System::RGBD && sensor != System::IMU_RGBD)
             throw std::runtime_error("FeatureSemantic annotation currently supports RGB-D input only");
         // One identity authority for YOLO instances, B2, B3, and B4.
-        mpInstanceTrackManager.reset(new InstanceTrackManager(mB4Config));
+        mpInstanceTrackManager.reset(new InstanceTrackManager(mB4Config,mpDynamicDetector->Association()));
+        if(mpDynamicDetector->Enabled() && mpDynamicDetector->Association().saveCsv) {
+            const auto path=mB2Config.csvOutputParent+"/instance_association_"+
+                std::to_string(std::chrono::system_clock::now().time_since_epoch().count())+".csv";
+            if(std::ifstream(path).good()) throw std::runtime_error("Association CSV already exists");
+            mAssociationCsv.open(path);
+            if(!mAssociationCsv) throw std::runtime_error("Cannot create association CSV: "+path);
+            mAssociationCsv<<"row_type,frame_id,timestamp,sequence_id,instance_id,track_id,association_status,association_cost,"
+                "row_margin,column_margin,allow_state_inheritance,allow_geometry_pair,reason,state_reset_reason,"
+                "prediction,flow_support,depth_available,association_ms,previous_matched_frame,previous_matched_timestamp\n";
+        }
         if (mB3Config.enable)
         {
             mpB3Fusion.reset(new B3Fusion(mB3Config.evidenceOnly,
@@ -1675,11 +1685,66 @@ Sophus::SE3f Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat 
 }
 
 
+void Tracking::ResetDynamicIdentityHistory() {
+    // A map may be created inside Track(). Finish/retire the current owned
+    // input once; clear the pending identity/geometry stream before next RGB-D.
+    if(mbRGBDEvidenceReady) {
+        mbIdentityResetPending=true;
+        if(mpB4StateMachine) mpB4StateMachine->Reset();
+        mCurrentB4Results.clear();
+        return;
+    }
+    if(mpInstanceTrackManager) {mpInstanceTrackManager->Reset();LogInstanceAssociations(-1,-1);}
+    if(mpB2Processor) mpB2Processor->Reset();
+    if(mpB4StateMachine) mpB4StateMachine->Reset();
+    mCurrentB3Results.clear();mCurrentB4Results.clear();
+    mPendingRGBDB2Frame=B2CandidateFrame();mRGBDCoarsePolicySnapshot.clear();
+    mbRGBDEvidenceProcessed=false;mbIdentityResetPending=false;
+    mLastCoarseMapId=-1;mbCoarseRecoveryPending=false;
+}
+void Tracking::LogInstanceAssociations(long frameId,double timestamp) {
+    const auto& cfg=mpDynamicDetector->Association();
+    auto number=[](double value) {std::ostringstream out;if(std::isfinite(value))out<<std::setprecision(17)<<value;return out.str();};
+    auto write=[&](const std::vector<std::string>& fields) {
+        if(!mAssociationCsv) return;
+        for(size_t i=0;i<fields.size();++i) {
+            if(i) mAssociationCsv<<',';mAssociationCsv<<'"';
+            for(char c:fields[i]) {if(c=='"')mAssociationCsv<<'"';mAssociationCsv<<c;}
+            mAssociationCsv<<'"';
+        }
+        mAssociationCsv<<'\n';
+    };
+    const auto sequence=number(mpInstanceTrackManager->SequenceId());
+    if(frameId>=0) for(const auto& person:mpDynamicDetector->LastRGBDInstances()) {
+        const auto& a=person.association;
+        write({"INSTANCE",number(frameId),number(timestamp),sequence,number(a.instanceId),number(a.trackId),
+            AssociationStatusName(a.associationStatus),number(a.associationCost),number(a.rowMargin),number(a.columnMargin),
+            number(a.allowStateInheritance),number(a.allowGeometryPair),a.reason,a.stateResetReason,a.prediction,
+            number(a.flowSupport),number(a.depthAvailable),number(mpInstanceTrackManager->ProcessingMs()),
+            number(a.previousMatchedFrame),number(a.previousMatchedTimestamp)});
+        if(cfg.printSummary) std::cout<<"[ASSOC] frame="<<frameId<<" inst="<<a.instanceId<<" track="<<a.trackId
+            <<" status="<<AssociationStatusName(a.associationStatus)<<" cost="<<number(a.associationCost)
+            <<" row_margin="<<number(a.rowMargin)<<" column_margin="<<number(a.columnMargin)
+            <<" inherit="<<a.allowStateInheritance<<" geometry_pair="<<a.allowGeometryPair
+            <<" reason="<<a.reason<<" reset="<<a.stateResetReason<<" prediction="<<a.prediction
+            <<" flow="<<a.flowSupport<<" association_ms="<<mpInstanceTrackManager->ProcessingMs()<<std::endl;
+    }
+    for(const auto& event:mpInstanceTrackManager->Events()) {
+        std::vector<std::string> fields(20);fields[0]="EVENT";fields[1]=number(frameId);
+        fields[2]=timestamp>=0?number(timestamp):"";fields[3]=sequence;fields[5]=number(event.trackId);
+        fields[6]=event.type;fields[12]=event.reason;write(fields);
+        if(cfg.printSummary) std::cout<<"[ASSOC EVENT] track="<<event.trackId<<" type="<<event.type<<" reason="<<event.reason<<std::endl;
+    }
+    if(mAssociationCsv) {mAssociationCsv.flush();if(!mAssociationCsv)throw std::runtime_error("Association CSV write failed");}
+}
 Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const double &timestamp, string filename)
 {
+    if(mbIdentityResetPending) ResetDynamicIdentityHistory();
+    if(mpInstanceTrackManager) mpInstanceTrackManager->ValidateInputTime(Frame::nNextId,timestamp);
     if (mpB4StateMachine && mB4Config.evidenceExpiryEnable)
         mpB4StateMachine->ValidateTimestamp(timestamp);
     mDiagnosticStages=FrontendStageMetrics();
+    mIdentityOptimizerUses.clear();
     mbCollectStageDiagnostics=mpDynamicDetector->Frontend().CollectDiagnostics();
     mbRGBDEvidenceReady = false;
     mbRGBDEvidenceProcessed = false;
@@ -1705,26 +1770,6 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
         mLastCoarseMapId = mapId;
     }
     const cv::Mat dynamicMask = mpDynamicDetector->Detect(imRGB, mbRGB, timestamp);
-    if (mpInstanceTrackManager)
-    {
-        mpInstanceTrackManager->Associate(mpDynamicDetector->MutableLastRGBDInstances(), imRGB.size());
-        std::unordered_set<int> assignedIds;
-        std::ostringstream ids;
-        for (const auto& person : mpDynamicDetector->LastRGBDInstances())
-        {
-            if (person.trackId < 0 || !assignedIds.insert(person.trackId).second)
-                throw std::runtime_error("Person track_id must be valid and unique before Frame construction");
-            if (assignedIds.size() > 1) ids << ';';
-            ids << person.trackId;
-        }
-        if (mB4Config.enable && mB4Config.printFrameSummary)
-        {
-            std::ostringstream association;
-            association << "[INSTANCE TRACK] timestamp=" << std::setprecision(17) << timestamp
-                        << " persons=" << assignedIds.size() << " track_ids=" << ids.str();
-            cout << association.str() << endl;
-        }
-    }
     const DynamicFrontendConfig& frontend = mpDynamicDetector->Frontend();
     // Explicit modes own the extraction policy. In particular, evidence-only
     // mode keeps person features in the main Frame; its independent B2 ORB
@@ -1755,6 +1800,25 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
     if((fabs(mDepthMapFactor-1.0f)>1e-5) || imDepth.type()!=CV_32F)
         imDepth.convertTo(imDepth,CV_32F,mDepthMapFactor);
 
+    if(mpInstanceTrackManager) {
+        auto& instances=mpDynamicDetector->MutableLastRGBDInstances();
+        mpInstanceTrackManager->Associate(instances,mImGray.size(),Frame::nNextId,timestamp,mImGray,imDepth);
+        for(const auto& event:mpInstanceTrackManager->Events()) if(event.type=="TERMINATED") {
+            if(mpB4StateMachine) mpB4StateMachine->RemoveTrack(event.trackId);
+            if(mpB2Processor) mpB2Processor->ForgetTrack(event.trackId);
+        }
+        std::unordered_set<int> ids;
+        for(const auto& person:instances) {
+            if(person.trackId<0||!ids.insert(person.trackId).second)
+                throw std::runtime_error("Person track_id must be unique before Frame construction");
+            if(person.association.resetEvidence) {
+                if(mpB4StateMachine) mpB4StateMachine->ResetTrackEvidence(person.trackId);
+                if(mpB2Processor) mpB2Processor->ForgetTrack(person.trackId);
+            }
+        }
+        LogInstanceAssociations(Frame::nNextId,timestamp);
+    }
+
     B2CandidateFrame b2Frame;
     if (mpB2Processor)
         b2Frame = mpB2Processor->ExtractCandidates(
@@ -1777,7 +1841,8 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
             for (const auto& person : mpDynamicDetector->LastRGBDInstances())
             {
                 B4MotionState state = B4MotionState::PENDING;
-                mpB4StateMachine->GetUsableState(person.trackId, timestamp, state); // NEW/stale S starts P.
+                if(person.association.allowStateInheritance)
+                    mpB4StateMachine->GetUsableState(person.trackId, timestamp, state);
                 previousStates[person.trackId] = temporalState(state);
             }
         AnnotateRGBDFeatures(mCurrentFrame, mImGray.size(), imDepth,
@@ -1991,6 +2056,7 @@ void Tracking::OptimizeNormalInitialPose(int& matches, const char* branch)
 
 int Tracking::OptimizeInitialPoseWithDiagnostics()
 {
+    RecordIdentityOptimizerInputs(false);
     const bool active = mbRGBDEvidenceReady && mpDynamicDetector->Frontend().useCoarsePoseForB2;
     if (!active) return Optimizer::PoseOptimization(&mCurrentFrame);
     mCoarsePoseQuality = CoarsePoseQuality();
@@ -2369,9 +2435,11 @@ void Tracking::RunB4TemporalStateMachine(double timestamp)
         return;
     const float imageDiagonal = std::sqrt(float(mImGray.cols * mImGray.cols +
                                                 mImGray.rows * mImGray.rows));
+    std::unordered_map<int,InstanceAssociationResult> associations;
+    for(const auto& person:mpDynamicDetector->LastRGBDInstances()) associations.emplace(person.trackId,person.association);
     mCurrentB4Results = mpB4StateMachine->Process(
         mbRGBDEvidenceReady ? mPendingRGBDB2Frame.frameId : mCurrentFrame.mnId, timestamp,
-                                                   mCurrentB3Results, imageDiagonal);
+        mCurrentB3Results, imageDiagonal,mpDynamicDetector->Association().mode>=3 ? &associations : nullptr);
 }
 
 void Tracking::UpdateDynamicLogs()
@@ -3774,10 +3842,7 @@ void Tracking::CreateInitialMapMonocular()
 
 void Tracking::CreateMapInAtlas()
 {
-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
-        mpB4StateMachine->Reset();
-        mCurrentB4Results.clear();
-    }
+    ResetDynamicIdentityHistory();
     if (mbRGBDEvidenceReady && mpDynamicDetector->Frontend().useCoarsePoseForB2)
         mCoarsePoseContext.new_map = true;
     mnLastInitFrameId = mCurrentFrame.mnId;
@@ -4107,6 +4172,7 @@ bool Tracking::TrackLocalMap()
         }
 
     if(finePolicy) VerifyFineOptimizerInputs(mCurrentFrame);
+    RecordIdentityOptimizerInputs(true);
     int inliers;
     if (!mpAtlas->isImuInitialized())
         Optimizer::PoseOptimization(&mCurrentFrame);
@@ -5051,10 +5117,7 @@ bool Tracking::Relocalization()
 
 void Tracking::Reset(bool bLocMap)
 {
-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
-        mpB4StateMachine->Reset();
-        mCurrentB4Results.clear();
-    }
+    ResetDynamicIdentityHistory();
     Verbose::PrintMess("System Reseting", Verbose::VERBOSITY_NORMAL);
 
     if(mpViewer)
@@ -5116,10 +5179,7 @@ void Tracking::Reset(bool bLocMap)
 
 void Tracking::ResetActiveMap(bool bLocMap)
 {
-    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
-        mpB4StateMachine->Reset();
-        mCurrentB4Results.clear();
-    }
+    ResetDynamicIdentityHistory();
     Verbose::PrintMess("Active map Reseting", Verbose::VERBOSITY_NORMAL);
     if(mpViewer)
     {

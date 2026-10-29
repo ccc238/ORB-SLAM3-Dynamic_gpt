@@ -1,0 +1,1 @@
+/home/aaa/ORB-SLAM3_original0/build_instance_association/bin/yolo_seg_smoke --config-only /home/aaa/ORB-SLAM3_original0/configs/instance_association/rgbd_tum3/A3_controlled.yaml

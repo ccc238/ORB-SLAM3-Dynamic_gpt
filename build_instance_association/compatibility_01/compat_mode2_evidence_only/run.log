@@ -1,0 +1,126 @@
+
+ORB-SLAM3 Copyright (C) 2017-2020 Carlos Campos, Richard Elvira, Juan J. Gómez, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
+ORB-SLAM2 Copyright (C) 2014-2016 Raúl Mur-Artal, José M.M. Montiel and Juan D. Tardós, University of Zaragoza.
+This program comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions. See LICENSE.txt.
+
+Input sensor was set to: RGB-D
+Loading settings from /home/aaa/ORB-SLAM3_original0/build_instance_association/compatibility_01/mode2_evidence_only.yaml
+Camera1.k3 optional parameter does not exist...
+	-Loaded camera 1
+Camera.newHeight optional parameter does not exist...
+Camera.newWidth optional parameter does not exist...
+	-Loaded image info
+	-Loaded RGB-D calibration
+	-Loaded ORB settings
+Viewer.imageViewScale optional parameter does not exist...
+	-Loaded viewer settings
+System.LoadAtlasFromFile optional parameter does not exist...
+System.SaveAtlasToFile optional parameter does not exist...
+	-Loaded Atlas settings
+System.thFarPoints optional parameter does not exist...
+	-Loaded misc parameters
+----------------------------------
+SLAM settings: 
+	-Camera 1 parameters (Pinhole): [ 535.4 539.2 320.1 247.6 ]
+	-Camera 1 distortion parameters: [  0 0 0 0 ]
+	-Original image size: [ 640 , 480 ]
+	-Current image size: [ 640 , 480 ]
+	-Sequence FPS: 30
+	-RGB-D depth map factor: 5000
+	-Features per image: 1000
+	-ORB scale factor: 1.2
+	-ORB number of scales: 8
+	-Initial FAST threshold: 20
+	-Min FAST threshold: 7
+
+
+Loading ORB Vocabulary. This could take a while...
+Vocabulary loaded!
+
+Initialization of Atlas from scratch 
+Creation of new map with id: 0
+Creation of new map with last KF id: 0
+Seq. Name: 
+[INSTANCE ASSOCIATION CONFIG] Mode=3 PreExpiry=1 Global=1 Prediction=1 Ambiguity=1 ControlledInheritance=1 MaxCost=0.65 UnmatchedPairCost=0.8 MinMargin=0.08 initial_values_not_accuracy_validated=1
+[FRONTEND DIAGNOSTICS] SaveCsv=0 ShowOverlay=0 SaveOverlay=0
+[B2 CONFIG] New Geometry.*Threshold keys override legacy instance gates; Decision.MovingThreshold still defines the point-level high_ratio cutoff.
+[FEATURE POLICY CONFIG] Enable=0 EvidenceOnly=1 SaveSummaryCsv=1 PrintFrameSummary=1 CoarseAction=0 FineAction=0 MapAction=0
+[FEATURE SEMANTIC CONFIG] Enable=0 SafeBoundaryDistancePixels=3 DepthEdge.Enable=1 DepthEdge.Radius=1 DepthEdge.AbsoluteMeters=0.05 DepthEdge.Relative=0.02 ShowOverlay=1
+[DYNAMIC FRONTEND CONFIG] mode=TWO_STAGE_EVIDENCE_ONLY TwoStage.Enable=1 CoarseFilter.Enable=0 UseCoarsePoseForB2=0 FinePolicy.Enable=0 MapAdmission.Enable=0 Fallback.Enable=1 MinCoarseInliers=30 MinCoarseInlierRatio=0.3
+[DYNAMIC FRONTEND STAGE] evidence pose=final Track(); feature filtering and map policies remain disabled
+[MODULES] Yolo.Enable=1 MaskPostProcess.Enable=0 DilateRadius=3 Yolo.ShowMask=0 MaskFeatureReject.Enable=0
+[B2 CONFIG]
+Enable=1
+EvidenceOnly=1
+Candidate.Enable=1 Candidate.MaxFeaturesPerInstance=300 Candidate.ErodeRadius=3 Candidate.MinBoundaryDistance=3
+Association.Enable=1 Association.UseMutualMatch=1 Association.LoweRatio=0.75 Association.MaxHammingDistance=64 Association.MinInstanceIoU=0.1 Association.MaxCenterDistancePixels=100 Association.MinInstanceScore=0.3
+Geometry.Enable=1 Geometry.UseDepthMedian3x3=1 Geometry.MinDepthMeters=0.3 Geometry.MaxDepthMeters=5 Geometry.UseNormalizedResidual=1 Geometry.MinMatchedFeatures=30 Geometry.MinMatchRatio=0.15 Geometry.MinValidFeatures=10 Geometry.MinValidMatchRatio=0.4 Geometry.BackgroundExclusionDilateRadius=3
+Geometry.Decision.Enable=1 Geometry.Decision.Method=background_mad Geometry.Decision.DepthBinMeters=0.5 Geometry.Decision.MinSamplesPerBin=30 Geometry.Decision.MinBackgroundSamples=50 Geometry.Decision.SigmaFloorMeters=0.01 Geometry.RawMovingThreshold=0.02 Geometry.NormMovingThreshold=0.4 Geometry.HighRatioMovingThreshold=0.1 Geometry.RawStaticThreshold=0.018 Geometry.NormStaticThreshold=0.1 Geometry.HighRatioStaticThreshold=0.06 HighRatio.PointNormCutoff=3.5
+Debug.Enable=1 Debug.SaveCsv=1 Debug.SaveFeatureCsv=1 Debug.SaveSummaryCsv=1 Debug.VerbosePerFeature=0 Debug.PrintFrameSummary=1 Debug.ShowOverlay=1
+[B3 CONFIG]
+Enable=1
+EvidenceOnly=1
+Semantic.PersonAsDynamicPrior=1
+Debug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1
+[B4 EVIDENCE EXPIRY CONFIG] Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3 clock=image_acquisition expiry=strict_greater_than
+[B4 CONFIG]
+Enable=1
+EvidenceOnly=1
+DynamicEnterCount=3 StaticEnterCount=6 DynamicRecoveryCount=10 TrackTTL=15
+UseContinuousQuality=0 QualityMin=0.65
+Track.MinMaskIoU=0.05 Track.MinBoxIoU=0.1 Track.MaxCenterDistance=0.15 (normalized image diagonal; mask-IoU deferred)
+Pending.UseForPose=0 Pending.AllowMapCreation=0 Dynamic.AllowMapCreation=0
+Debug.PrintFrameSummary=1 Debug.SaveSummaryCsv=1 Debug.ShowOverlay=1
+[YOLO] output output0 [1 116 8400 ]
+[YOLO] output output1 [1 32 160 160 ]
+[YOLO] input images [1 3 640 640] FP32 ORT=1.17.3
+[YOLO] loaded /home/aaa/models/yolo/yolo11s-seg.onnx using CPU
+[B2 CSV] output_directory=./b2_evidence_1793265898119152630_130
+There are 1 cameras in the atlas
+Camera 0 is pinhole
+[ASSOC] frame=0 inst=0 track=0 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=0 reason=NO_ELIGIBLE_MATCH reset=NONE prediction=NONE flow=0 association_ms=0.218284
+[ASSOC] frame=0 inst=1 track=1 status=NEW_TRACK cost= row_margin= column_margin= inherit=0 geometry_pair=0 reason=NO_ELIGIBLE_MATCH reset=NONE prediction=NONE flow=0 association_ms=0.218284
+[ASSOC EVENT] track=0 type=NEW_TRACK reason=NO_ELIGIBLE_MATCH
+[ASSOC EVENT] track=1 type=NEW_TRACK reason=NO_ELIGIBLE_MATCH
+[DYNAMIC FRONTEND] frame_id=0 dynamic_frontend_mode=2 raw_fast=7880 b1_mask_rejected=0 final_orb=1004 person_main_orb=367
+First KF:0; Map init KF:0
+New Map created with 807 points
+[B2 INPUT] frame=0 previous_frame=-1 pose_source=final current_pose_reliable=1 pair_pose_reliable=0 explicit_relative=1
+[B2 READONLY] frame=0 map_points_unchanged=1 frame_pose_unchanged=1 descriptors_unchanged=1 applied_action=NONE_EVIDENCE_ONLY
+[B3] frame=0 track=0 inst=0 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_ASSOCIATION_UNTRUSTED
+[B3] frame=0 track=1 inst=1 sem=person sem_dynamic=1 geom=UNRELIABLE reliable=0 raw=-1.0000 norm=-1.0000 high=-1.0000 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=IDENTITY_ASSOCIATION_UNTRUSTED
+[B4] frame=0 track=0 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;IDENTITY_UNTRUSTED_FREEZE recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[B4] frame=0 track=1 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=NEW_TO_P;IDENTITY_UNTRUSTED_FREEZE recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[FRONTEND] frame_id=0 timestamp=1341845688.561749 yolo_ms=177.945 person_mask_ratio=0.0000 raw_fast=7880 mask_rejected=0 final_orb=1004 matches=807 pose_inliers=0 state=2 keyframe=1
+[ASSOC] frame=1 inst=0 track=0 status=CONTINUOUS_CONFIRMED cost=0.027202656684142113 row_margin= column_margin= inherit=1 geometry_pair=1 reason=CONFIRMED_ADJACENT reset=NONE prediction=LK_FB_MEDIAN flow=80 association_ms=7.6935
+[ASSOC] frame=1 inst=1 track=1 status=CONTINUOUS_CONFIRMED cost=0.058772999193814436 row_margin= column_margin= inherit=1 geometry_pair=1 reason=CONFIRMED_ADJACENT reset=NONE prediction=LK_FB_MEDIAN flow=80 association_ms=7.6935
+[DYNAMIC FRONTEND] frame_id=1 dynamic_frontend_mode=2 raw_fast=6479 b1_mask_rejected=0 final_orb=1012 person_main_orb=369
+[B2 INPUT] frame=1 previous_frame=0 pose_source=final current_pose_reliable=1 pair_pose_reliable=1 explicit_relative=1
+[B2 SUMMARY] frame=1 track_id=0 instance_id=0 candidate=300 matched=109 valid=107 match_ratio=0.3633 valid_match_ratio=0.9817 bg_n=161 bg_median=0.0302 bg_sigma=0.0340 raw_median=0.0115 norm_median=0.0000 high_ratio=0.1028 state=GEOM_UNCERTAIN reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B2 SUMMARY] frame=1 track_id=1 instance_id=1 candidate=296 matched=101 valid=100 match_ratio=0.3412 valid_match_ratio=0.9901 bg_n=161 bg_median=0.0302 bg_sigma=0.0340 raw_median=0.0156 norm_median=0.0000 high_ratio=0.1600 state=GEOM_UNCERTAIN reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B2 READONLY] frame=1 map_points_unchanged=1 frame_pose_unchanged=1 descriptors_unchanged=1 applied_action=NONE_EVIDENCE_ONLY
+[B3] frame=1 track=0 inst=0 sem=person sem_dynamic=1 geom=UNCERTAIN reliable=0 raw=0.0115 norm=0.0000 high=0.1028 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B3] frame=1 track=1 inst=1 sem=person sem_dynamic=1 geom=UNCERTAIN reliable=0 raw=0.0156 norm=0.0000 high=0.1600 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B4] frame=1 track=0 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[B4] frame=1 track=1 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[FRONTEND] frame_id=1 timestamp=1341845688.593654 yolo_ms=174.910 person_mask_ratio=0.0000 raw_fast=6479 mask_rejected=0 final_orb=1012 matches=376 pose_inliers=376 state=2 keyframe=0
+[ASSOC] frame=2 inst=0 track=0 status=CONTINUOUS_CONFIRMED cost=0.023401046644520293 row_margin= column_margin= inherit=1 geometry_pair=1 reason=CONFIRMED_ADJACENT reset=NONE prediction=LK_FB_MEDIAN flow=80 association_ms=8.3206
+[ASSOC] frame=2 inst=1 track=1 status=CONTINUOUS_CONFIRMED cost=0.089178005557896317 row_margin= column_margin= inherit=1 geometry_pair=1 reason=CONFIRMED_ADJACENT reset=NONE prediction=LK_FB_MEDIAN flow=78 association_ms=8.3206
+[DYNAMIC FRONTEND] frame_id=2 dynamic_frontend_mode=2 raw_fast=6123 b1_mask_rejected=0 final_orb=1008 person_main_orb=351
+[B2 INPUT] frame=2 previous_frame=1 pose_source=final current_pose_reliable=1 pair_pose_reliable=1 explicit_relative=1
+[B2 SUMMARY] frame=2 track_id=0 instance_id=0 candidate=300 matched=109 valid=106 match_ratio=0.3633 valid_match_ratio=0.9725 bg_n=129 bg_median=0.0159 bg_sigma=0.0107 raw_median=0.0100 norm_median=0.0000 high_ratio=0.0472 state=GEOM_STATIC_CANDIDATE reason=GEOMETRY_DECISION_VALID
+[B2 SUMMARY] frame=2 track_id=1 instance_id=1 candidate=300 matched=121 valid=121 match_ratio=0.4033 valid_match_ratio=1.0000 bg_n=129 bg_median=0.0159 bg_sigma=0.0107 raw_median=0.0140 norm_median=0.0000 high_ratio=0.2066 state=GEOM_UNCERTAIN reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B2 READONLY] frame=2 map_points_unchanged=1 frame_pose_unchanged=1 descriptors_unchanged=1 applied_action=NONE_EVIDENCE_ONLY
+[B3] frame=2 track=0 inst=0 sem=person sem_dynamic=1 geom=STATIC reliable=1 raw=0.0100 norm=0.0000 high=0.0472 fusion=SEM_DYNAMIC_GEOM_STATIC recommend=DEFER_TO_TEMPORAL applied=NONE_EVIDENCE_ONLY reason=PERSON_GEOM_STATIC
+[B3] frame=2 track=1 inst=1 sem=person sem_dynamic=1 geom=UNCERTAIN reliable=0 raw=0.0140 norm=0.0000 high=0.2066 fusion=FUSION_UNRELIABLE recommend=NO_HARD_DECISION applied=NONE_EVIDENCE_ONLY reason=AMBIGUOUS_GEOMETRIC_EVIDENCE
+[B4] frame=2 track=0 prev=P curr=P evidence=STATIC Ns=1 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=P_ACCUMULATE_STATIC recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[B4] frame=2 track=1 prev=P curr=P evidence=UNRELIABLE Ns=0 Nd=0 Nr=0 evidence_age_seconds=NA counter_expired=0 counters_reset=0 static_state_expired=0 expiry_reason=NO_RELIABLE_HISTORY expiry_prev=P expiry_curr=P reason=UNRELIABLE_EVIDENCE_FREEZE recommend=EXCLUDE_PENDING applied=NONE_EVIDENCE_ONLY
+[FRONTEND] frame_id=2 timestamp=1341845688.629688 yolo_ms=162.247 person_mask_ratio=0.0000 raw_fast=6123 mask_rejected=0 final_orb=1008 matches=332 pose_inliers=332 state=2 keyframe=0
+Shutdown
+
+Saving camera trajectory to CameraTrajectory.txt ...
+
+Saving keyframe trajectory to KeyFrameTrajectory.txt ...
+[RUN] frames=3 OK=3 RECENTLY_LOST=0 LOST=0

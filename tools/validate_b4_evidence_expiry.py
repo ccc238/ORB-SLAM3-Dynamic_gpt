@@ -59,7 +59,8 @@ def main():
     # Config-only Mode 0 needs no model; new parameters are always validated.
     base = (ROOT/'configs/frontend_modes/rgbd_tum3/mode0_original.yaml').read_text()
     cases = [
-        ('default_off', '', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=0'),
+        ('default_on', '', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=1'),
+        ('explicit_off', 'Enable: 0', 0, '[B4 EVIDENCE EXPIRY CONFIG] Enable=0'),
         ('valid_on', 'Enable: 1\nMaxGapSeconds: 0.20\nMaxStaticAgeSeconds: 0.30', 0, 'Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3'),
         ('equal_limits', 'MaxGapSeconds: 0.25\nMaxStaticAgeSeconds: 0.25', 0, 'MaxGapSeconds=0.25'),
         ('zero_gap', 'MaxGapSeconds: 0', 2, 'B4.EvidenceExpiry'),
@@ -79,6 +80,12 @@ def main():
     for switch in ('off', 'on'):
         config = configs/f'mode3_b4_evidence_expiry_{switch}.yaml'
         run('config_mode3_'+switch, [build/'bin/yolo_seg_smoke', '--config-only', config])
+
+    missing_expiry = output/'mode3_missing_expiry.yaml'
+    missing_expiry.write_text(re.sub(r'^B4\.EvidenceExpiry\.[^\n]*\n?', '',
+        (configs/'mode3_b4_evidence_expiry_on.yaml').read_text(), flags=re.M))
+    run('config_mode3_missing_expiry', [build/'bin/yolo_seg_smoke', '--config-only', missing_expiry],
+        text_required='Enable=1 MaxGapSeconds=0.2 MaxStaticAgeSeconds=0.3')
 
     if args.short_sequences:
         runs = []

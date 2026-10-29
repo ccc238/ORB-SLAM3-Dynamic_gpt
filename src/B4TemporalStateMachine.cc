@@ -133,6 +133,13 @@ void B4TemporalStateMachine::Reset() {
     mLastProcessedFrameId = -1;
     mLastProcessedTimestamp = 0.0;
 }
+void B4TemporalStateMachine::ResetTrackEvidence(int trackId) {
+    const auto found=mB4Tracks.find(trackId);if(found==mB4Tracks.end()) return;
+    auto& track=found->second;track.state=B4MotionState::PENDING;
+    track.static_count=track.dynamic_count=track.recovery_count=0;
+    track.hasReliableEvidence=false;track.lastReliableTimestamp=std::numeric_limits<double>::quiet_NaN();
+    track.transition_reason="IDENTITY_REACQUIRED_RESET";
+}
 
 B4StateResult B4TemporalStateMachine::ApplyEvidenceExpiry(B4TrackState& track,
                                                          double timestamp) const {
@@ -178,7 +185,8 @@ bool B4TemporalStateMachine::GetUsableState(int trackId, double timestamp,
 }
 
 std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double timestamp,
-    const std::vector<B3FusionResult>& instances, float imageDiagonalPixels) {
+    const std::vector<B3FusionResult>& instances, float imageDiagonalPixels,
+    const std::unordered_map<int,InstanceAssociationResult>* associations) {
     (void)imageDiagonalPixels; // association is already completed by InstanceTrackManager.
     // Validate the entire update before changing ages, TTL or evidence counts.
     // Duplicate dispatch must not silently accumulate evidence twice.
@@ -199,6 +207,11 @@ std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double 
     mbHasProcessedFrame = true;
     mLastProcessedFrameId = frameId;
     mLastProcessedTimestamp = timestamp;
+    if(associations) for(const auto& instance:instances) {
+        const auto identity=associations->find(instance.track_id);
+        if(identity==associations->end() || !identity->second.allowStateInheritance)
+            ResetTrackEvidence(instance.track_id); // Idempotent; no age/TTL advancement.
+    }
     std::unordered_map<int, B4StateResult> history;
     for (auto& entry : mB4Tracks) {
         history.emplace(entry.first, ApplyEvidenceExpiry(entry.second, timestamp));
@@ -219,8 +232,15 @@ std::vector<B4StateResult> B4TemporalStateMachine::Process(long frameId, double 
         track.last_center = cv::Point2f(track.last_bbox.x + .5f*track.last_bbox.width,
                                         track.last_bbox.y + .5f*track.last_bbox.height);
         track.last_frame_id = frameId; track.missed_frames = 0; ++track.age;
-        const B4EvidenceType evidence = ConvertB3ToB4Evidence(instance);
+        B4EvidenceType evidence = ConvertB3ToB4Evidence(instance);
+        bool identityBlocked=false;
+        if(associations) {
+            const auto identity=associations->find(id);
+            identityBlocked=identity==associations->end() || !identity->second.allowGeometryPair;
+            if(identityBlocked) evidence=B4EvidenceType::UNRELIABLE;
+        }
         UpdateB4State(track, evidence);
+        if(identityBlocked) track.transition_reason="IDENTITY_UNTRUSTED_FREEZE";
         if (evidence != B4EvidenceType::UNRELIABLE) {
             track.hasReliableEvidence = true;
             track.lastReliableTimestamp = timestamp;

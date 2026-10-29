@@ -1,0 +1,11 @@
+run,frames,exit_code,camera_poses,visible_instances,new,continuous,reacquired,ambiguous,unique_system_ids,untrusted_instances,untrusted_authorized_coarse,untrusted_actual_coarse_uses,untrusted_actual_coarse_S_uses,untrusted_actual_fine_uses,untrusted_map_authorized,association_ms_mean_visible_frames,state_S_visible,state_P_visible,state_D_visible,tracking_not_OK
+A0_legacy_sitting_static_100,100,0,100,200,2,198,0,0,2,2,0,0,0,0,0,0.26744265,170,30,0,0
+A0_legacy_walking_xyz_100,100,0,100,203,4,198,1,0,4,4,0,0,0,0,0,0.30636826,66,137,0,0
+A1_global_sitting_static_100,100,0,100,200,2,198,0,0,2,2,0,0,0,0,0,0.39089127,170,30,0,0
+A1_global_walking_xyz_100,100,0,100,203,5,198,0,0,5,5,0,0,0,0,0,0.38252549,96,107,0,0
+A2_predict_ambiguity_sitting_static_100,100,0,100,200,2,198,0,0,2,2,0,0,0,0,0,8.07908727,170,30,0,0
+A2_predict_ambiguity_walking_xyz_100,100,0,100,203,4,178,3,18,22,22,0,0,0,0,0,9.78874454,35,99,69,0
+A3_controlled_sitting_static_100,100,0,100,200,2,198,0,0,2,2,0,0,0,0,0,8.18253243,170,30,0,0
+A3_controlled_walking_xyz_100,100,0,100,203,4,178,3,18,22,25,0,0,0,0,0,9.90992129,52,151,0,0
+A3_controlled_sitting_static_full,680,0,680,1360,2,1358,0,0,2,2,0,0,0,0,0,8.927341936764705,1323,37,0,0
+A3_controlled_walking_xyz_full,827,0,827,1020,14,963,18,25,39,57,0,0,0,0,0,7.721005493449781,227,610,183,0

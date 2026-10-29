@@ -1,0 +1,62 @@
+{
+  "sequence": "fr3_walking_xyz",
+  "input_frames": 827,
+  "camera_poses": 827,
+  "keyframe_poses": 154,
+  "exit_code": 0,
+  "OK": 827,
+  "RECENTLY_LOST": 0,
+  "LOST": 0,
+  "matched_poses": 826,
+  "ate": {
+    "stats": {
+      "rmse": 0.020816791469196832,
+      "mean": 0.014266900508183364,
+      "median": 0.01157596275685327,
+      "std": 0.015158969521759165,
+      "min": 0.001297059519287301,
+      "max": 0.225815114652808,
+      "sse": 0.3579378546414934
+    },
+    "info": {
+      "title": "APE w.r.t. translation part (m)\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_xyz/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/CameraTrajectory.txt",
+      "label": "APE (m)"
+    }
+  },
+  "rpe_trans": {
+    "stats": {
+      "rmse": 0.014306363856596508,
+      "mean": 0.010157753390463466,
+      "median": 0.008123225983668428,
+      "std": 0.010074328407187194,
+      "min": 0.00023523935429595514,
+      "max": 0.22540074439538843,
+      "sse": 0.168854438607798
+    },
+    "info": {
+      "title": "RPE w.r.t. translation part (m)\nfor delta = 1 (frames) using all pairs\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_xyz/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/CameraTrajectory.txt",
+      "label": "RPE (m)"
+    }
+  },
+  "rpe_rot": {
+    "stats": {
+      "rmse": 0.4222944570892539,
+      "mean": 0.2875918143518876,
+      "median": 0.23599264649942708,
+      "std": 0.30923058840628476,
+      "min": 0.029730958067345284,
+      "max": 5.029841656561109,
+      "sse": 147.12440200285383
+    },
+    "info": {
+      "title": "RPE w.r.t. rotation angle in degrees (deg)\nfor delta = 1 (frames) using all pairs\n(with SE(3) Umeyama alignment)",
+      "ref_name": "/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_xyz/groundtruth.txt",
+      "est_name": "/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/CameraTrajectory.txt",
+      "label": "RPE (deg)"
+    }
+  }
+}

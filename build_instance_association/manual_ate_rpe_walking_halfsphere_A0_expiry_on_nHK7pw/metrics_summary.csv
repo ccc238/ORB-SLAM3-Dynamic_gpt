@@ -1,0 +1,2 @@
+sequence,input_frames,camera_poses,keyframe_poses,exit_code,OK,RECENTLY_LOST,LOST,matched_poses,ate_rmse_m,ate_median_m,rpe_trans_rmse_m,rpe_rot_rmse_deg
+fr3_walking_halfsphere,1021,1021,242,0,1021,0,0,1018,0.03158376947056124,0.023249159024959068,0.013567133859774188,0.42173159120038267

@@ -8,12 +8,15 @@ thresholds, BA, identity matching, or historical MapPoints. It is not a solution
 to missed person detections: without a current person mask, image features can
 still be labeled background by the existing annotation path.
 
-The implementation is disabled by default. Legacy YAML without the new keys
-retains the old S/P/D/counter/TTL behavior for valid input sequences. New CSV
-columns and startup diagnostics are present even when expiry is disabled.
+The implementation is now ENABLED by default. YAML without the new keys uses
+acquisition-time expiry with the limits below. This deliberately changes the
+behavior of old B4-enabled YAML that previously omitted these settings. To
+reproduce the old unlimited freeze behavior, explicitly set Enable to 0, or
+use the existing off configuration. B4.Enable itself is unchanged: this
+default does not turn on B4 in ORIGINAL/B1 modes.
 
 ```yaml
-B4.EvidenceExpiry.Enable: 0
+B4.EvidenceExpiry.Enable: 1
 B4.EvidenceExpiry.MaxGapSeconds: 0.20
 B4.EvidenceExpiry.MaxStaticAgeSeconds: 0.30
 ```
@@ -187,6 +190,10 @@ tracking coverage and ATE remain necessary before selecting expiry limits.
 
 ## Validation completed in this workspace (2026-10-29)
 
+The following results were obtained before the default changed from off to
+on. Both dataset ablations explicitly specify Enable, so their interpretation
+is unchanged. The later default-on regression is recorded separately below.
+
 The independent Release build and incremental rebuild both completed with
 `-j2`. The optional RealSense SDK was not found; configured RGB-D/stereo/mono
 and test targets built successfully. Existing upstream/compiler warnings were
@@ -223,3 +230,31 @@ covered by unit tests and its Tracking call sites were inspected. Real D
 expiry/recovery was tested synthetically, not claimed from these short runs.
 No original build_yolo11 binaries, old YAML or old experiment directories were
 overwritten, and no Git commit was made.
+
+## Default-on change
+
+Both B4Config's C++ initializer and the shared YAML reader now default to
+Enable=1. The explicit off/on YAML files are unchanged. The original legacy
+state/identity tests explicitly disable expiry because their frameId-as-time
+fixtures intentionally test unlimited freeze; enabled expiry tests continue
+to use 1/30-second intervals. The validator checks the omitted-key default,
+explicit off override, and a real B4-enabled Mode 3 YAML with expiry keys
+omitted. MaxGapSeconds=0.20 and MaxStaticAgeSeconds=0.30 are unchanged.
+
+On this 6.2 GiB RAM machine, Optimizer.cc was built separately before the
+remaining `-j2` build, retaining the original -O3/-march=native options and
+using GCC compile-time garbage collection parameters
+`--param=ggc-min-expand=10 --param=ggc-min-heapsize=32768` to reduce compiler
+memory pressure. These are compiler heap-management settings, not SLAM
+runtime parameters or changes to the optimizer source/BA objective. The
+completed heavy-object build log is
+`build_b4_expiry/optimizer_default_on_lowmem.log`.
+
+Default-on validation completed successfully: the remaining full build used
+`cmake --build build_b4_expiry -j2` (log: `default_on_build.log`). All 13
+unit/regression tests and 14 configuration checks met their expected exit
+codes. In particular, omitted fields enabled expiry, explicit Enable=0
+disabled it, and B4-enabled Mode 3 without any EvidenceExpiry fields used
+Enable=1 / 0.20 / 0.30. Results are in
+`results/B4_evidence_expiry/default_on_validation_20261029_01/summary.json`.
+No dataset sequence or ATE/RPE experiment was rerun for this default change.

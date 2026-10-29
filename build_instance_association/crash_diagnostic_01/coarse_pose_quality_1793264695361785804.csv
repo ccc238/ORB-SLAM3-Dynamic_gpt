@@ -1,0 +1,2 @@
+frame_id,timestamp,match_count,inlier_count,inlier_ratio,median_reprojection_error,background_features,background_inliers,just_relocalized,initialized,new_map,relocalizing,just_recovered,initial_success,finite_pose,pure_vo,reliable,fallback,fallback_reason,min_coarse_inliers,min_coarse_inlier_ratio
+0,1341845688.561749,0,0,0,-1,573,393,0,0,0,0,0,0,1,0,0,1,NOT_INITIALIZED,30,0.30000001192092896

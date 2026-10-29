@@ -1,0 +1,36 @@
+--------------------------------------------------------------------------------
+Loaded 2884 stamps and poses from: /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_xyz/groundtruth.txt
+Loaded 827 stamps and poses from: /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/CameraTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories (nearest_time method)...
+Timestamps are sorted, using binary search for matching.
+Found 826 of max. 827 possible matching timestamps between...
+	/home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_walking_xyz/groundtruth.txt
+and:	/home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/CameraTrajectory.txt
+..with max. time diff.: 0.02 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method...
+Rotation of alignment:
+[[ 0.99610949  0.08317967 -0.02910384]
+ [ 0.04367663 -0.17915394  0.98285107]
+ [ 0.07653916 -0.98029843 -0.18208995]]
+Translation of alignment:
+[-0.69984142 -3.13373895  1.42162129]
+Scale correction: 1.0
+--------------------------------------------------------------------------------
+Compared 826 absolute pose pairs.
+Calculating APE for translation part pose relation...
+--------------------------------------------------------------------------------
+APE w.r.t. translation part (m)
+(with SE(3) Umeyama alignment)
+
+       max	0.225815
+      mean	0.014267
+    median	0.011576
+       min	0.001297
+      rmse	0.020817
+       sse	0.357938
+       std	0.015159
+
+--------------------------------------------------------------------------------
+Saving results to /home/aaa/ORB-SLAM3_original0/build_instance_association/manual_ate_rpe_walking_MAdgIv/ate.zip...

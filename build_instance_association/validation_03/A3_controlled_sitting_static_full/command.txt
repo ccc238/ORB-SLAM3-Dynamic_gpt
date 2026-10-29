@@ -1,0 +1,1 @@
+/home/aaa/ORB-SLAM3_original0/build_instance_association/bin/ablation_sequence rgbd /home/aaa/ORB-SLAM3_original0/Vocabulary/ORBvoc.txt /home/aaa/ORB-SLAM3_original0/configs/instance_association/rgbd_tum3/A3_controlled.yaml /home/aaa/Datasets/TUM/rgbd_dataset_freiburg3_sitting_static /home/aaa/dynamic_slam_experiments/associations/fr3_sitting_static_associations.txt 0 0 1
