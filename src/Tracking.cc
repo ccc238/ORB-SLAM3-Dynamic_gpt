@@ -232,7 +232,9 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
                 mB4SummaryCsv << "timestamp,frame_id,instance_id,track_id,"
                               << "b3_category,b3_reliable,b3_reason,previous_state,current_state,"
                               << "static_count,dynamic_count,recovery_count,unreliable_count,missed_frames,track_age,"
-                              << "transition_reason,recommended_policy,applied_policy,evidence_only\n";
+                              << "transition_reason,recommended_policy,applied_policy,evidence_only,"
+                              << "has_reliable_history,evidence_age_seconds,counter_expired,counters_reset,"
+                              << "static_state_expired,expiry_reason,expiry_previous_state,expiry_current_state,current_update_reason\n";
             }
         }
         if (mB2Config.enable)
@@ -1675,6 +1677,8 @@ Sophus::SE3f Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat 
 
 Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const double &timestamp, string filename)
 {
+    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable)
+        mpB4StateMachine->ValidateTimestamp(timestamp);
     mDiagnosticStages=FrontendStageMetrics();
     mbCollectStageDiagnostics=mpDynamicDetector->Frontend().CollectDiagnostics();
     mbRGBDEvidenceReady = false;
@@ -1773,7 +1777,7 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
             for (const auto& person : mpDynamicDetector->LastRGBDInstances())
             {
                 B4MotionState state = B4MotionState::PENDING;
-                mpB4StateMachine->GetState(person.trackId, state); // NEW starts P.
+                mpB4StateMachine->GetUsableState(person.trackId, timestamp, state); // NEW/stale S starts P.
                 previousStates[person.trackId] = temporalState(state);
             }
         AnnotateRGBDFeatures(mCurrentFrame, mImGray.size(), imDepth,
@@ -2513,6 +2517,14 @@ void Tracking::UpdateDynamicLogs()
                                              result.evidenceType == B4EvidenceType::RELIABLE_MOVING ? "MOVING" : "UNRELIABLE")
                       << " Ns=" << result.nStatic << " Nd=" << result.nDynamic
                       << " Nr=" << result.nRecovery
+                      << " evidence_age_seconds=" << (std::isfinite(result.evidenceAgeSeconds) ?
+                          std::to_string(result.evidenceAgeSeconds) : "NA")
+                      << " counter_expired=" << result.counterExpired
+                      << " counters_reset=" << result.countersReset
+                      << " static_state_expired=" << result.staticStateExpired
+                      << " expiry_reason=" << result.expiryReason
+                      << " expiry_prev=" << B4MotionStateName(result.previousState)
+                      << " expiry_curr=" << B4MotionStateName(result.stateAfterExpiry)
                       << " reason=" << result.reasonCode
                       << " recommend=" << result.recommendedPolicy
                       << " applied=" << result.appliedPolicy << std::endl;
@@ -2525,7 +2537,14 @@ void Tracking::UpdateDynamicLogs()
                           << result.nDynamic << ',' << result.nRecovery << ',' << result.nUnreliable << ','
                           << result.missedFrames << ',' << result.ageFrames << ',' << result.reasonCode << ','
                           << result.recommendedPolicy << ',' << result.appliedPolicy << ','
-                          << int(result.evidenceOnly) << '\n';
+                          << int(result.evidenceOnly) << ',' << int(result.hasReliableHistory) << ',';
+        if (mB4SummaryCsv) {
+            if (std::isfinite(result.evidenceAgeSeconds)) mB4SummaryCsv << result.evidenceAgeSeconds;
+            mB4SummaryCsv << ',' << int(result.counterExpired) << ',' << int(result.countersReset) << ','
+                          << int(result.staticStateExpired) << ',' << result.expiryReason << ','
+                          << B4MotionStateName(result.previousState) << ','
+                          << B4MotionStateName(result.stateAfterExpiry) << ',' << result.reasonCode << '\n';
+        }
     }
     if (mB4SummaryCsv)
         mB4SummaryCsv.flush();
@@ -3755,6 +3774,10 @@ void Tracking::CreateInitialMapMonocular()
 
 void Tracking::CreateMapInAtlas()
 {
+    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+        mpB4StateMachine->Reset();
+        mCurrentB4Results.clear();
+    }
     if (mbRGBDEvidenceReady && mpDynamicDetector->Frontend().useCoarsePoseForB2)
         mCoarsePoseContext.new_map = true;
     mnLastInitFrameId = mCurrentFrame.mnId;
@@ -5028,6 +5051,10 @@ bool Tracking::Relocalization()
 
 void Tracking::Reset(bool bLocMap)
 {
+    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+        mpB4StateMachine->Reset();
+        mCurrentB4Results.clear();
+    }
     Verbose::PrintMess("System Reseting", Verbose::VERBOSITY_NORMAL);
 
     if(mpViewer)
@@ -5089,6 +5116,10 @@ void Tracking::Reset(bool bLocMap)
 
 void Tracking::ResetActiveMap(bool bLocMap)
 {
+    if (mpB4StateMachine && mB4Config.evidenceExpiryEnable) {
+        mpB4StateMachine->Reset();
+        mCurrentB4Results.clear();
+    }
     Verbose::PrintMess("Active map Reseting", Verbose::VERBOSITY_NORMAL);
     if(mpViewer)
     {

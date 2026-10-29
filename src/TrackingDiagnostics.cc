@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <cerrno>
 #include <stdexcept>
+#include <cmath>
 namespace ORB_SLAM3 {
 namespace {
 template<class T> std::string Number(T value) {
@@ -117,7 +118,19 @@ void Tracking::CollectDynamicDiagnostics() {
         row["semantic_region"]=visible ? "PERSON_INSTANCE" : "NOT_VISIBLE";
         TemporalState previous=TemporalState::UNKNOWN,current=TemporalState::UNKNOWN;
         if(b4) {
-            previous=Temporal(b4->previousState); current=Temporal(b4->state);
+            // Coarse policy used the timestamp-aware pre-evidence query, not
+            // the unexpired raw state. Keep both histories in the CSV.
+            previous=Temporal(b4->stateAfterExpiry); current=Temporal(b4->state);
+            row["historical_b4_state"]=B4MotionStateName(b4->previousState);
+            row["has_reliable_history"]=Number(int(b4->hasReliableHistory));
+            if(std::isfinite(b4->evidenceAgeSeconds)) row["evidence_age_seconds"]=Number(b4->evidenceAgeSeconds);
+            row["counter_expired"]=Number(int(b4->counterExpired));
+            row["counters_reset"]=Number(int(b4->countersReset));
+            row["static_state_expired"]=Number(int(b4->staticStateExpired));
+            row["expiry_reason"]=b4->expiryReason;
+            row["expiry_previous_state"]=B4MotionStateName(b4->previousState);
+            row["expiry_current_state"]=B4MotionStateName(b4->stateAfterExpiry);
+            row["current_update_reason"]=b4->reasonCode;
             row["previous_b4_state"]=State(previous); row["current_b4_state"]=State(current);
             row["Ns"]=Number(b4->nStatic);row["Nd"]=Number(b4->nDynamic);row["Nr"]=Number(b4->nRecovery);
             row["missed_frames"]=Number(b4->missedFrames);row["b4_transition_reason"]=b4->reasonCode;
@@ -152,6 +165,8 @@ void Tracking::CollectDynamicDiagnostics() {
         label.secondaryLabel="interior coarse_action="+row["coarse_action"];
         label.tertiaryLabel="fine_action="+row["fine_action"]+" map_action="+row["map_action"];
         label.quaternaryLabel="Ns/Nd/Nr="+row["Ns"]+'/'+row["Nd"]+'/'+row["Nr"]+" "+row["b4_transition_reason"];
+        if(b4 && (b4->counterExpired || b4->staticStateExpired))
+            label.quaternaryLabel+=" expiry="+b4->expiryReason;
         if(!b4 || visible || b4->missedFrames<=mB4Config.trackTTL)
             view.stateActionInstances.push_back(label);
     };

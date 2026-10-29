@@ -1,0 +1,463 @@
+Consolidate compiler generated dependencies of target coarse_pose_quality_test
+[  2%] Built target coarse_pose_quality_test
+Consolidate compiler generated dependencies of target keyframe_decision_guard_test
+[  4%] Built target keyframe_decision_guard_test
+Consolidate compiler generated dependencies of target yolo_seg_smoke
+[  9%] Built target yolo_seg_smoke
+Consolidate compiler generated dependencies of target ORB_SLAM3
+[ 10%] Building CXX object CMakeFiles/ORB_SLAM3.dir/src/FrontendDiagnosticLog.cc.o
+[ 11%] Linking CXX shared library lib/libORB_SLAM3.so
+[ 43%] Built target ORB_SLAM3
+Consolidate compiler generated dependencies of target stereo_kitti
+Consolidate compiler generated dependencies of target rgbd_tum
+[ 44%] Linking CXX executable bin/rgbd_tum
+[ 45%] Linking CXX executable bin/stereo_kitti
+[ 45%] Built target rgbd_tum
+[ 46%] Built target stereo_kitti
+Consolidate compiler generated dependencies of target stereo_euroc
+Consolidate compiler generated dependencies of target stereo_tum_vi
+[ 46%] Linking CXX executable bin/stereo_euroc
+[ 47%] Linking CXX executable bin/stereo_tum_vi
+[ 48%] Built target stereo_euroc
+[ 48%] Built target stereo_tum_vi
+Consolidate compiler generated dependencies of target mono_tum
+Consolidate compiler generated dependencies of target mono_kitti
+[ 50%] Linking CXX executable bin/mono_kitti
+[ 50%] Linking CXX executable bin/mono_tum
+[ 51%] Built target mono_kitti
+[ 52%] Built target mono_tum
+Consolidate compiler generated dependencies of target mono_euroc
+Consolidate compiler generated dependencies of target mono_tum_vi
+[ 53%] Linking CXX executable bin/mono_euroc
+[ 54%] Linking CXX executable bin/mono_tum_vi
+[ 55%] Built target mono_tum_vi
+[ 56%] Built target mono_euroc
+Consolidate compiler generated dependencies of target mono_inertial_euroc
+Consolidate compiler generated dependencies of target mono_inertial_tum_vi
+[ 56%] Linking CXX executable bin/mono_inertial_tum_vi
+[ 57%] Linking CXX executable bin/mono_inertial_euroc
+[ 58%] Built target mono_inertial_tum_vi
+[ 58%] Built target mono_inertial_euroc
+Consolidate compiler generated dependencies of target stereo_inertial_euroc
+Consolidate compiler generated dependencies of target stereo_inertial_tum_vi
+[ 59%] Linking CXX executable bin/stereo_inertial_euroc
+[ 60%] Linking CXX executable bin/stereo_inertial_tum_vi
+[ 61%] Built target stereo_inertial_euroc
+[ 62%] Built target stereo_inertial_tum_vi
+Consolidate compiler generated dependencies of target rgbd_tum_old
+Consolidate compiler generated dependencies of target stereo_kitti_old
+[ 63%] Linking CXX executable bin/rgbd_tum_old
+[ 64%] Linking CXX executable bin/stereo_kitti_old
+[ 65%] Built target rgbd_tum_old
+Consolidate compiler generated dependencies of target stereo_euroc_old
+[ 66%] Linking CXX executable bin/stereo_euroc_old
+[ 67%] Built target stereo_kitti_old
+Consolidate compiler generated dependencies of target stereo_tum_vi_old
+[ 68%] Linking CXX executable bin/stereo_tum_vi_old
+[ 69%] Built target stereo_euroc_old
+Consolidate compiler generated dependencies of target mono_tum_old
+[ 69%] Linking CXX executable bin/mono_tum_old
+[ 70%] Built target stereo_tum_vi_old
+Consolidate compiler generated dependencies of target mono_kitti_old
+[ 71%] Linking CXX executable bin/mono_kitti_old
+[ 72%] Built target mono_tum_old
+Consolidate compiler generated dependencies of target mono_euroc_old
+[ 73%] Linking CXX executable bin/mono_euroc_old
+[ 73%] Built target mono_kitti_old
+Consolidate compiler generated dependencies of target mono_tum_vi_old
+[ 74%] Linking CXX executable bin/mono_tum_vi_old
+[ 75%] Built target mono_euroc_old
+Consolidate compiler generated dependencies of target mono_inertial_euroc_old
+[ 76%] Linking CXX executable bin/mono_inertial_euroc_old
+[ 77%] Built target mono_tum_vi_old
+Consolidate compiler generated dependencies of target mono_inertial_tum_vi_old
+[ 78%] Linking CXX executable bin/mono_inertial_tum_vi_old
+[ 79%] Built target mono_inertial_euroc_old
+Consolidate compiler generated dependencies of target stereo_inertial_euroc_old
+[ 80%] Linking CXX executable bin/stereo_inertial_euroc_old
+[ 81%] Built target mono_inertial_tum_vi_old
+Consolidate compiler generated dependencies of target stereo_inertial_tum_vi_old
+[ 81%] Linking CXX executable bin/stereo_inertial_tum_vi_old
+[ 81%] Built target stereo_inertial_euroc_old
+Consolidate compiler generated dependencies of target ablation_sequence
+[ 82%] Linking CXX executable bin/ablation_sequence
+[ 83%] Built target stereo_inertial_tum_vi_old
+Consolidate compiler generated dependencies of target frontend_mask_test
+[ 84%] Linking CXX executable bin/frontend_mask_test
+[ 85%] Built target ablation_sequence
+Consolidate compiler generated dependencies of target b2_candidate_test
+[ 86%] Built target frontend_mask_test
+[ 87%] Linking CXX executable bin/b2_candidate_test
+Consolidate compiler generated dependencies of target b4_state_machine_test
+[ 87%] Linking CXX executable bin/b4_state_machine_test
+[ 87%] Built target b2_candidate_test
+[ 88%] Built target b4_state_machine_test
+Consolidate compiler generated dependencies of target b4_evidence_expiry_test
+Consolidate compiler generated dependencies of target instance_track_lifecycle_test
+[ 89%] Building CXX object CMakeFiles/b4_evidence_expiry_test.dir/tools/b4_evidence_expiry_test.cc.o
+[ 90%] Linking CXX executable bin/instance_track_lifecycle_test
+[ 90%] Built target instance_track_lifecycle_test
+Consolidate compiler generated dependencies of target feature_semantic_test
+[ 91%] Linking CXX executable bin/feature_semantic_test
+[ 92%] Built target feature_semantic_test
+Consolidate compiler generated dependencies of target feature_policy_test
+[ 93%] Linking CXX executable bin/feature_policy_test
+[ 93%] Built target feature_policy_test
+Consolidate compiler generated dependencies of target coarse_feature_filter_test
+[ 94%] Linking CXX executable bin/coarse_feature_filter_test
+[ 95%] Built target coarse_feature_filter_test
+Consolidate compiler generated dependencies of target fine_feature_policy_test
+[ 95%] Linking CXX executable bin/fine_feature_policy_test
+In file included from /home/aaa/ORB-SLAM3_original0/include/Frame.h:30,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h: In member function ‘void ORB_SLAM3::IMU::Preintegrated::printMeasurements() const’:
+/home/aaa/ORB-SLAM3_original0/include/ImuTypes.h:204:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<ORB_SLAM3::IMU::Preintegrated::integrable>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  204 |         for(int i=0; i<mvMeasurements.size(); i++){
+      |                      ~^~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: At global scope:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+[ 96%] Built target fine_feature_policy_test
+Consolidate compiler generated dependencies of target map_admission_test
+[ 96%] Linking CXX executable bin/map_admission_test
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+[ 97%] Built target map_admission_test
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+Consolidate compiler generated dependencies of target frontend_diagnostics_test
+[ 98%] Linking CXX executable bin/frontend_diagnostics_test
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /home/aaa/ORB-SLAM3_original0/include/Converter.h:26,
+                 from /home/aaa/ORB-SLAM3_original0/include/Frame.h:33,
+                 from /home/aaa/ORB-SLAM3_original0/include/FeaturePolicyEvaluator.h:3,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:3:
+/home/aaa/ORB-SLAM3_original0/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/Core:161,
+                 from /usr/include/eigen3/Eigen/Dense:1,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/rotation_matrix.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/so3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/Thirdparty/Sophus/sophus/se3.hpp:7,
+                 from /home/aaa/ORB-SLAM3_original0/include/B2MotionEvidence.h:15,
+                 from /home/aaa/ORB-SLAM3_original0/include/B3SemanticGeometryFusion.h:11,
+                 from /home/aaa/ORB-SLAM3_original0/include/B4TemporalStateMachine.h:5,
+                 from /home/aaa/ORB-SLAM3_original0/tools/b4_evidence_expiry_test.cc:1:
+/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+[ 99%] Built target frontend_diagnostics_test
+[100%] Linking CXX executable bin/b4_evidence_expiry_test
+[100%] Built target b4_evidence_expiry_test

@@ -6,6 +6,7 @@
 #include "Deep/B4Config.h"
 #include <opencv2/core/core.hpp>
 #include <string>
+#include <limits>
 #include <unordered_map>
 #include <vector>
 
@@ -32,6 +33,8 @@ struct B4TrackState {
     cv::Mat last_mask;
     float last_quality = -1.0f;
     std::string transition_reason;
+    bool hasReliableEvidence = false;
+    double lastReliableTimestamp = std::numeric_limits<double>::quiet_NaN();
 };
 
 struct B4StateResult {
@@ -45,6 +48,14 @@ struct B4StateResult {
     B4MotionState previousState = B4MotionState::PENDING;
     B4MotionState state = B4MotionState::PENDING;
     bool stateTransition = false;
+    // History at the current acquisition time, BEFORE this frame's evidence.
+    B4MotionState stateAfterExpiry = B4MotionState::PENDING;
+    bool hasReliableHistory = false;
+    double evidenceAgeSeconds = std::numeric_limits<double>::quiet_NaN();
+    bool counterExpired = false;
+    bool countersReset = false; // At least one nonzero Ns/Nd/Nr was cleared.
+    bool staticStateExpired = false;
+    std::string expiryReason = "DISABLED";
     std::string reasonCode;
     B4EvidenceType evidenceType = B4EvidenceType::UNRELIABLE;
     int nDynamic = 0, nStatic = 0, nRecovery = 0, nUnreliable = 0;
@@ -64,9 +75,15 @@ struct B4StateResult {
 
 class B4TemporalStateMachine {
 public:
-    explicit B4TemporalStateMachine(const B4Config& config) : mConfig(config) {}
+    explicit B4TemporalStateMachine(const B4Config& config) : mConfig(config) {
+        ValidateB4EvidenceExpiry(config);
+    }
     // Read history only: no association, TTL advancement or counter updates.
     bool GetState(int trackId, B4MotionState& state) const;
+    bool GetUsableState(int trackId, double timestamp, B4MotionState& state) const;
+    // Read-only preflight, also used before RGB-D inference/association.
+    void ValidateTimestamp(double timestamp) const;
+    void Reset();
 
     // Advances the state machine once per input frame. B3 values are copied;
     // they are never modified and never escape through mutable references.
@@ -79,6 +96,7 @@ private:
     // temporal state.  Every other B3 outcome is deliberately a freeze.
     B4EvidenceType ConvertB3ToB4Evidence(const B3FusionResult& b3) const;
     void UpdateB4State(B4TrackState& track, B4EvidenceType evidence) const;
+    B4StateResult ApplyEvidenceExpiry(B4TrackState& track, double timestamp) const;
 
     B4Config mConfig;
     std::unordered_map<int, B4TrackState> mB4Tracks;

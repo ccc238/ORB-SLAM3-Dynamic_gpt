@@ -1,5 +1,7 @@
 #ifndef ORB_SLAM3_B4_CONFIG_H
 #define ORB_SLAM3_B4_CONFIG_H
+#include <cmath>
+#include <stdexcept>
 
 namespace ORB_SLAM3 {
 
@@ -13,6 +15,9 @@ struct B4Config {
     int staticEnterCount = 6;
     int dynamicRecoveryCount = 10;
     int trackTTL = 15;
+    bool evidenceExpiryEnable = false;
+    double maxEvidenceGapSeconds = 0.20;
+    double maxStaticAgeSeconds = 0.30;
     bool useContinuousQuality = false;
     float qualityMin = 0.65f;
     // B4-A does not approximate mask IoU from a bounding box. The setting is
@@ -27,6 +32,13 @@ struct B4Config {
     bool saveSummaryCsv = true;
     bool showOverlay = true;
 };
+
+inline void ValidateB4EvidenceExpiry(const B4Config& config) {
+    if (!std::isfinite(config.maxEvidenceGapSeconds) || config.maxEvidenceGapSeconds <= 0.0 ||
+        !std::isfinite(config.maxStaticAgeSeconds) || config.maxStaticAgeSeconds <= 0.0 ||
+        config.maxEvidenceGapSeconds > config.maxStaticAgeSeconds)
+        throw std::runtime_error("B4.EvidenceExpiry requires finite positive MaxGapSeconds <= MaxStaticAgeSeconds");
+}
 
 } // namespace ORB_SLAM3
 #endif

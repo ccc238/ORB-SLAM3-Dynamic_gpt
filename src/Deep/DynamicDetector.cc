@@ -38,6 +38,16 @@ float Number(const cv::FileStorage& fs, const char* key, float fallback) {
         throw std::runtime_error(std::string(key) + " must be finite");
     return value;
 }
+double Seconds(const cv::FileStorage& fs, const char* key, double fallback) {
+    const auto n = fs[key];
+    if (n.empty()) return fallback;
+    if (!n.isInt() && !n.isReal())
+        throw std::runtime_error(std::string(key) + " must be a number");
+    const double value = n.real();
+    if (!std::isfinite(value))
+        throw std::runtime_error(std::string(key) + " must be finite");
+    return value;
+}
 void ValidateB2(const B2Config& b2) {
     if (b2.maxFeaturesPerInstance <= 0)
         throw std::runtime_error("B2.Candidate.MaxFeaturesPerInstance must be > 0");
@@ -308,6 +318,10 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     b4_.staticEnterCount = Integer(fs,"B4.StaticEnterCount",6);
     b4_.dynamicRecoveryCount = Integer(fs,"B4.DynamicRecoveryCount",10);
     b4_.trackTTL = Integer(fs,"B4.TrackTTL",15);
+    b4_.evidenceExpiryEnable = Flag(fs,"B4.EvidenceExpiry.Enable",false);
+    b4_.maxEvidenceGapSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxGapSeconds",0.20);
+    b4_.maxStaticAgeSeconds = Seconds(fs,"B4.EvidenceExpiry.MaxStaticAgeSeconds",0.30);
+    ValidateB4EvidenceExpiry(b4_);
     b4_.useContinuousQuality = Flag(fs,"B4.UseContinuousQuality",false);
     b4_.qualityMin = Number(fs,"B4.QualityMin",0.65f);
     b4_.minMaskIoU = Number(fs,"B4.Track.MinMaskIoU",0.05f);
@@ -461,6 +475,10 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
               << "Debug.PrintFrameSummary=" << b3_.printFrameSummary
               << " Debug.SaveSummaryCsv=" << b3_.saveSummaryCsv
               << " Debug.ShowOverlay=" << b3_.showOverlay << std::endl;
+    std::cout << "[B4 EVIDENCE EXPIRY CONFIG] Enable=" << b4_.evidenceExpiryEnable
+              << " MaxGapSeconds=" << b4_.maxEvidenceGapSeconds
+              << " MaxStaticAgeSeconds=" << b4_.maxStaticAgeSeconds
+              << " clock=image_acquisition expiry=strict_greater_than" << std::endl;
     std::cout << "[B4 CONFIG]" << std::endl
               << "Enable=" << b4_.enable << std::endl
               << "EvidenceOnly=" << b4_.evidenceOnly << std::endl
