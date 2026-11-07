@@ -1,5 +1,6 @@
 #ifndef ORB_SLAM3_B4_CONFIG_H
 #define ORB_SLAM3_B4_CONFIG_H
+#include "Deep/SemanticClassConfig.h"
 #include <cmath>
 #include <stdexcept>
 
@@ -8,6 +9,7 @@ namespace ORB_SLAM3 {
 // Kept dependency-free so the shared YAML reader does not introduce a
 // B2/B3/B4 include cycle.
 struct B4Config {
+    SemanticClassConfig classes;
     bool enable = false;
     bool evidenceOnly = true;
     bool associationEnable = true;

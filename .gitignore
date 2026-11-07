@@ -94,6 +94,8 @@ borrar/*
 
 # --- ORB-SLAM3-Dynamic_gpt snapshot exclusions ---
 build_yolo11/
+build_multiclass/
+build_b2_reliability/
 results/
 freezes/
 .trae/
@@ -103,3 +105,4 @@ freezes/
 b2_evidence_*/
 b3_fusion_summary_*.csv
 b4_state_summary_*.csv
+build_static_quality/

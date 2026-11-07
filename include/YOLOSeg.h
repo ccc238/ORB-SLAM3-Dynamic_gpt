@@ -23,7 +23,7 @@ struct YOLOSegOptions {
 };
 
 // Original-image coordinates.  mask is CV_8UC1, 255 inside exactly this
-// detected person instance; it is deliberately never post-processed here.
+// detected selected-class instance; it is never post-processed here.
 struct YOLOSegInstance {
     cv::Mat mask;
     cv::Rect boundingBox;
@@ -37,7 +37,7 @@ struct YOLOSegInstance {
 
 struct YOLOSegResult {
     // Union of the unmodified instance masks (before any B1 dilation).
-    cv::Mat personMask;
+    cv::Mat personMask; // Legacy name: union of ALL selected classes, not just person.
     std::vector<YOLOSegInstance> instances;
 };
 

@@ -32,13 +32,21 @@ int main(int argc, char** argv) {
         cv::Mat invalid = (mask!=0) & (mask!=255);
         if (cv::countNonZero(invalid)) throw std::runtime_error("Nonbinary mask");
         const auto instances = detector.LastRGBDInstances();
-        if (instances.empty()) throw std::runtime_error("Smoke image must produce person instances");
+        if (instances.empty()) throw std::runtime_error("Smoke image must produce selected-class instances");
+        for (const auto& instance : instances) {
+            if (!detector.Classes().Contains(instance.classId))
+                throw std::runtime_error("YOLO returned an unselected class");
+            std::cout << "[YOLO INSTANCE] class_id=" << instance.classId
+                      << " class_name=" << detector.Classes().Name(instance.classId)
+                      << " confidence=" << instance.confidence
+                      << " pixels=" << cv::countNonZero(instance.mask) << '\n';
+        }
         cv::Mat rawUnion = cv::Mat::zeros(image.size(),CV_8UC1);
         for (const auto& person : instances) {
             if (person.mask.type()!=CV_8UC1 || person.mask.size()!=image.size() ||
                 (person.boundingBox & cv::Rect(0,0,image.cols,image.rows)) != person.boundingBox ||
                 person.confidence <= 0.f)
-                throw std::runtime_error("Invalid raw person instance");
+                throw std::runtime_error("Invalid raw selected-class instance");
             cv::bitwise_or(rawUnion,person.mask,rawUnion);
         }
         ORB_SLAM3::MaskPostProcessor b1Post(detector.PostProcessEnabled(),detector.PostProcessRadius());
@@ -48,9 +56,9 @@ int main(int argc, char** argv) {
         if (pair.left.data==pair.right.data || cv::norm(pair.left,mask,cv::NORM_INF)!=0)
             throw std::runtime_error("Stereo masks are shared or nondeterministic");
         if (cv::countNonZero(mask)==0 || cv::countNonZero(pair.right)!=0)
-            throw std::runtime_error("Smoke image must contain person; blank right must have none");
+            throw std::runtime_error("Smoke image must contain a selected class; blank right must have none");
         if (!detector.LastRightInstances().empty())
-            throw std::runtime_error("Blank right image produced person instances");
+            throw std::runtime_error("Blank right image produced selected-class instances");
         if (detector.PostProcessCalls() != (detector.PostProcessEnabled() ? 3u : 0u))
             throw std::runtime_error("Postprocess not exactly once per view");
         cv::Mat dot=cv::Mat::zeros(19,19,CV_8UC1); dot.at<uchar>(9,9)=255;

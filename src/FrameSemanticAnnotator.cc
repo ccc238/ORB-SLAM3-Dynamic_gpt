@@ -1,4 +1,5 @@
 #include "FrameSemanticAnnotator.h"
+#include "DepthNeighborhood.h"
 #include <opencv2/imgproc.hpp>
 #include <algorithm>
 #include <cmath>
@@ -28,7 +29,7 @@ bool IsDepthEdge(const cv::Mat& depth, int x, int y, const FeatureSemanticConfig
     if (!config.depthEdgeEnable || depth.empty()) return false;
     const float center = depth.at<float>(y,x);
     if (!std::isfinite(center) || center <= 0.f) return false;
-    const float limit = std::max(config.depthEdgeAbsoluteMeters, config.depthEdgeRelative * center);
+    const float limit = DepthEdgeLimit(center,config.depthEdgeAbsoluteMeters,config.depthEdgeRelative);
     for (int v = std::max(0,y-config.depthEdgeRadius); v <= std::min(depth.rows-1,y+config.depthEdgeRadius); ++v)
         for (int u = std::max(0,x-config.depthEdgeRadius); u <= std::min(depth.cols-1,x+config.depthEdgeRadius); ++u) {
             const float neighbor = depth.at<float>(v,u);
@@ -54,7 +55,7 @@ void AnnotateRGBDFeatures(Frame& frame, const cv::Size& imageSize,
             throw std::runtime_error("Feature annotation mask/image coordinate mismatch");
         cv::Mat binary, padded, distance;
         cv::compare(person.mask, 0, binary, cv::CMP_GT);
-        if (person.classId != 0) binary.setTo(0); // Only person is annotated here.
+        if (!config.classes.Managed(person.classId)) binary.setTo(0);
         // Treat clipped silhouettes at image edges as boundaries too.
         cv::copyMakeBorder(binary, padded, 1,1,1,1,cv::BORDER_CONSTANT,cv::Scalar(0));
         cv::distanceTransform(padded, distance, cv::DIST_L2, cv::DIST_MASK_PRECISE);

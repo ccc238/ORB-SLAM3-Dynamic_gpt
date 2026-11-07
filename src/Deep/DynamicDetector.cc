@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
+#include <algorithm>
+#include <unordered_set>
 
 namespace ORB_SLAM3 {
 namespace {
@@ -179,6 +181,43 @@ std::string FileSha256(const std::string& path) {
 DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     cv::FileStorage fs(settingsPath,cv::FileStorage::READ);
     if (!fs.isOpened()) throw std::runtime_error("Cannot open settings: " + settingsPath);
+    classes_.multiClassEnable = Flag(fs,"Semantic.MultiClass.Enable",false);
+    const int numClasses = Integer(fs,"Yolo.NumClasses",80);
+    if (numClasses <= 0) throw std::runtime_error("Yolo.NumClasses must be positive and match the model outputs");
+    const auto selected = fs["Yolo.DynamicClasses"];
+    if (!selected.empty()) {
+        if (!selected.isSeq()) throw std::runtime_error("Yolo.DynamicClasses must be a sequence");
+        classes_.classIds.clear();
+        std::unordered_set<int> unique;
+        for (const auto& node : selected) {
+            if (!node.isInt()) throw std::runtime_error("Yolo.DynamicClasses IDs must be integers");
+            const int id = int(node);
+            if (id < 0 || id >= numClasses || !unique.insert(id).second)
+                throw std::runtime_error("Yolo.DynamicClasses contains duplicate/out-of-range IDs");
+            classes_.classIds.push_back(id);
+        }
+    }
+    if (classes_.classIds.empty()) throw std::runtime_error("Yolo.DynamicClasses must not be empty");
+    const auto names = fs["Semantic.SelectedClassNames"];
+    if (!names.empty()) {
+        if (!names.isSeq() || names.size() != classes_.classIds.size())
+            throw std::runtime_error("Semantic.SelectedClassNames must align with Yolo.DynamicClasses");
+        for (const auto& node : names) {
+            if (!node.isString()) throw std::runtime_error("Semantic class names must be strings");
+            const std::string name = std::string(node);
+            if (name.empty() || name.find_first_of(",\n\r\"") != std::string::npos)
+                throw std::runtime_error("Semantic class names must be nonempty CSV-safe strings");
+            classes_.classNames.push_back(name);
+        }
+    }
+    b3_.classes = b4_.classes = frontend_.featureSemantics.classes = classes_;
+    std::cout << "[SEMANTIC CLASSES] MultiClass=" << classes_.multiClassEnable
+              << " NumClasses=" << numClasses << " Selected=";
+    for (const int id : classes_.classIds) std::cout << id << ':' << classes_.Name(id) << ' ';
+    std::cout << " prior=potentially_movable_not_motion_truth" << std::endl;
+    if (!classes_.multiClassEnable &&
+        std::any_of(classes_.classIds.begin(),classes_.classIds.end(),[](int id){return id!=0;}))
+        std::cout << "[SEMANTIC WARNING] Non-person masks selected but multi-class state/policy is disabled (legacy behavior)" << std::endl;
     association_.mode=Integer(fs,"InstanceAssociation.Mode",3);
     association_.maxCost=Seconds(fs,"InstanceAssociation.MaxCost",.65);
     association_.unmatchedTrackCost=Seconds(fs,"InstanceAssociation.UnmatchedTrackCost",.40);
@@ -343,6 +382,8 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     b3_.enable = Flag(fs,"B3.Enable",false);
     b3_.evidenceOnly = Flag(fs,"B3.EvidenceOnly",true);
     b3_.personAsDynamicPrior = Flag(fs,"B3.Semantic.PersonAsDynamicPrior",true);
+    if (classes_.multiClassEnable && !b3_.personAsDynamicPrior && classes_.Contains(0))
+        throw std::runtime_error("Multi-class selected person prior conflicts with B3.Semantic.PersonAsDynamicPrior=0");
     b3_.printFrameSummary = Flag(fs,"B3.Debug.PrintFrameSummary",true);
     b3_.saveSummaryCsv = Flag(fs,"B3.Debug.SaveSummaryCsv",true);
     b3_.showOverlay = Flag(fs,"B3.Debug.ShowOverlay",true);
@@ -379,7 +420,8 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
               << " EvidenceOnly=" << policy.evidenceOnly << " SaveSummaryCsv=" << policy.saveSummaryCsv
               << " PrintFrameSummary=" << policy.printFrameSummary
               << " CoarseAction=" << frontend_.coarseFilterEnable
-              << " FineAction=" << frontend_.finePolicyEnable << " MapAction=0" << std::endl;
+              << " FineAction=" << frontend_.finePolicyEnable
+              << " MapAction=" << frontend_.mapAdmissionEnable << std::endl;
     if (annotation.enable && (!frontend_.explicitMode ||
         (frontend_.mode != DynamicFrontendMode::TWO_STAGE_EVIDENCE_ONLY &&
          frontend_.mode != DynamicFrontendMode::TWO_STAGE_ACTION)))
@@ -535,16 +577,14 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
               << " Debug.ShowOverlay=" << b4_.showOverlay << std::endl;
     if (!enabled_) return; // No model path checks, session, conversion, or masks.
     YOLOSegOptions options;
+    options.numClasses = numClasses;
+    options.inputWidth = Integer(fs,"Yolo.InputWidth",640);
+    options.inputHeight = Integer(fs,"Yolo.InputHeight",640);
     if (!fs["Yolo.Confidence"].empty()) options.confidence = float(fs["Yolo.Confidence"]);
     if (!fs["Yolo.NmsIoU"].empty()) options.nmsIoU = float(fs["Yolo.NmsIoU"]);
     if (!fs["Yolo.MaskThreshold"].empty()) options.maskThreshold = float(fs["Yolo.MaskThreshold"]);
     options.intraOpThreads = Integer(fs,"Yolo.IntraOpThreads",2);
-    auto classes = fs["Yolo.DynamicClasses"];
-    if (!classes.empty()) {
-        if (!classes.isSeq()) throw std::runtime_error("Yolo.DynamicClasses must be a sequence");
-        options.dynamicClasses.clear();
-        for (const auto& c : classes) options.dynamicClasses.push_back(int(c));
-    }
+    options.dynamicClasses = classes_.classIds;
     const std::string model = fs["Yolo.ModelPath"].empty() ? "" : std::string(fs["Yolo.ModelPath"]);
     struct stat st;
     if (model.empty() || ::stat(model.c_str(),&st) != 0 || !S_ISREG(st.st_mode))
@@ -626,6 +666,9 @@ void DynamicDetector::WriteSummary(const std::string& path) const {
     cv::FileStorage out(path,cv::FileStorage::WRITE);
     if (!out.isOpened()) throw std::runtime_error("Cannot save module timing: " + path);
     out << "yolo_enabled" << int(enabled_) << "postprocess_enabled" << int(post_.Enabled())
+        << "semantic_multiclass_enabled" << int(classes_.multiClassEnable)
+        << "selected_class_ids" << classes_.classIds
+        << "selected_class_names" << classes_.classNames
         << "mask_feature_reject_enabled" << int(maskFeatureRejectEnabled_)
         << "b2_enabled" << int(b2_.enable) << "b2_evidence_only" << int(b2_.evidenceOnly)
         << "show_mask" << int(showMask_)

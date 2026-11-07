@@ -22,10 +22,10 @@ void Render(const cv::Mat& bgr, const cv::Mat& mask, const std::string& view) {
     cv::Mat colored=bgr.clone(),overlay;
     colored.setTo(cv::Scalar(0,0,255),mask);
     cv::addWeighted(bgr,.65,colored,.35,0,overlay);
-    cv::putText(overlay,"Person excluded (red) | Q / Esc: stop",
+    cv::putText(overlay,"Selected-class segmentation (red) | Q / Esc: stop",
                 cv::Point(10,24),cv::FONT_HERSHEY_SIMPLEX,.55,cv::Scalar(0,255,255),1,cv::LINE_AA);
-    const std::string prefix=std::string("YOLO person - ")+view;
-    const std::string maskName=prefix+" - mask (white=exclude)";
+    const std::string prefix=std::string("YOLO selected objects - ")+view;
+    const std::string maskName=prefix+" - mask (white=selected)";
     const std::string overlayName=prefix+" - overlay";
     for (const auto& name : {maskName,overlayName}) {
         if (windows.insert(name).second) {

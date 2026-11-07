@@ -36,8 +36,11 @@ B4EvidenceType B4TemporalStateMachine::ConvertB3ToB4Evidence(const B3FusionResul
     if (!b3.fusion_reliable)
         return B4EvidenceType::UNRELIABLE;
 
-    // B4 tracks people.  A non-person geometric result is useful diagnostic
-    // data, but must never advance a person's S/P/D state machine.
+    // Legacy mode remains person-only. Multi-class mode additionally checks
+    // the managed model ID: unselected objects cannot inherit action rights.
+    if (mConfig.classes.multiClassEnable &&
+        (!mConfig.classes.Contains(b3.semantic_class_id) || !b3.semantic_dynamic_prior))
+        return B4EvidenceType::UNRELIABLE;
     if (b3.fusion_category == B3_SEM_DYNAMIC_GEOM_MOVING)
         return B4EvidenceType::RELIABLE_MOVING;
     if (b3.fusion_category == B3_SEM_DYNAMIC_GEOM_STATIC)

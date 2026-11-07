@@ -46,6 +46,9 @@ YOLOSeg::YOLOSeg(const std::string& modelPath,
             "Expected fixed batch=1 FP32 NCHW input matching configured image size");
 
     Ort::AllocatorWithDefaultOptions allocator;
+    const auto metadata = session_->GetModelMetadata();
+    const auto names = metadata.LookupCustomMetadataMapAllocated("names", allocator);
+    if (names) std::cout << "[YOLO] model_class_names=" << names.get() << std::endl;
     auto inputName = session_->GetInputNameAllocated(0, allocator);
     inputName_ = inputName.get();
     for (size_t i = 0; i < session_->GetOutputCount(); ++i) {
@@ -281,7 +284,7 @@ YOLOSegResult YOLOSeg::inferInstances(const cv::Mat& bgr)
         const cv::Rect roi(x1, y1, x2 - x1, y2 - y1);
         cv::Mat instance = cv::Mat::zeros(bgr.size(), CV_8UC1);
         binary(roi).copyTo(instance(roi));
-        YOLOSegInstance person;
+        YOLOSegInstance person; // All selected classes; legacy variable name only.
         person.mask = instance;
         person.boundingBox = roi;
         person.confidence = detection.confidence;

@@ -9,6 +9,7 @@
 #define ORB_SLAM3_B3_SEMANTIC_GEOMETRY_FUSION_H
 
 #include "B2MotionEvidence.h"
+#include "Deep/SemanticClassConfig.h"
 
 #include <string>
 
@@ -88,8 +89,9 @@ struct B3FusionResult {
 
 class B3Fusion {
 public:
-    B3Fusion(bool evidenceOnly, bool personAsDynamicPrior)
-        : mbEvidenceOnly(evidenceOnly), mbPersonAsDynamicPrior(personAsDynamicPrior) {}
+    B3Fusion(bool evidenceOnly, bool personAsDynamicPrior,
+             const SemanticClassConfig& classes = SemanticClassConfig())
+        : mbEvidenceOnly(evidenceOnly), mbPersonAsDynamicPrior(personAsDynamicPrior), mClasses(classes) {}
 
     // The geometry pointer may be null for a YOLO instance with no B2
     // candidate/result in the current frame.  The method never mutates B2,
@@ -100,6 +102,7 @@ public:
 private:
     bool mbEvidenceOnly = true;
     bool mbPersonAsDynamicPrior = true;
+    SemanticClassConfig mClasses;
 };
 
 } // namespace ORB_SLAM3

@@ -4,6 +4,8 @@
 #include "Deep/B4Config.h"
 #include "Deep/DynamicFrontendConfig.h"
 #include "Deep/MaskPostProcessor.h"
+#include "Deep/B2ReliabilityConfig.h"
+#include "Deep/StaticQualityConfig.h"
 #include <fstream>
 #include <limits>
 namespace ORB_SLAM3 {
@@ -14,6 +16,7 @@ struct StereoMasks { cv::Mat left, right; };
 // and validation path.  B3 remains evidence-only until a later feature-policy
 // stage consumes its proposed actions.
 struct B3Config {
+    SemanticClassConfig classes;
     bool enable = false;
     bool evidenceOnly = true;
     bool personAsDynamicPrior = true;
@@ -112,6 +115,8 @@ public:
     const B2Config& B2() const { return b2_; }
     const B3Config& B3() const { return b3_; }
     const B4Config& B4() const { return b4_; }
+    const StaticQualityConfig& StaticQuality() const { return staticQuality_; }
+    const SemanticClassConfig& Classes() const { return classes_; }
     const InstanceAssociationConfig& Association() const { return association_; }
     bool PostProcessEnabled() const { return post_.Enabled(); }
     int PostProcessRadius() const { return post_.Radius(); }
@@ -133,6 +138,8 @@ private:
     B2Config b2_;
     B3Config b3_;
     B4Config b4_;
+    StaticQualityConfig staticQuality_;
+    SemanticClassConfig classes_;
     InstanceAssociationConfig association_;
     DynamicFrontendConfig frontend_;
     MaskPostProcessor post_;

@@ -32,6 +32,8 @@ const char* GeometryReason(B2InstanceGeometryStatus state,
     case POSE_WEAK: return "POSE_WEAK";
     case IDENTITY_ASSOCIATION_UNTRUSTED: return "IDENTITY_ASSOCIATION_UNTRUSTED";
     case IDENTITY_HISTORY_MISMATCH: return "IDENTITY_HISTORY_MISMATCH";
+    case NUMERIC_INVALID: return "NUMERIC_INVALID";
+    case DUPLICATE_CANDIDATE_ID: return "DUPLICATE_CANDIDATE_ID";
     default: return "GEOMETRY_UNRELIABLE";
     }
 }
@@ -75,6 +77,7 @@ B3FusionResult B3Fusion::Fuse(const SemanticInstance& semantic,
     result.semantic_class_name = semantic.className;
     result.semantic_confidence = semantic.confidence;
     result.semantic_dynamic_prior =
+        mClasses.multiClassEnable ? mClasses.Contains(semantic.classId) :
         mbPersonAsDynamicPrior && semantic.className == "person";
 
     if (!geometry)
@@ -117,7 +120,7 @@ B3FusionResult B3Fusion::Fuse(const SemanticInstance& semantic,
     {
         result.fusion_category = B3_SEM_DYNAMIC_GEOM_MOVING;
         result.fusion_reliable = true;
-        result.fusion_reason = "PERSON_GEOM_MOVING";
+        result.fusion_reason = semantic.className == "person" ? "PERSON_GEOM_MOVING" : "MANAGED_CLASS_GEOM_MOVING";
         result.recommended_action = "DYNAMIC_CANDIDATE";
     }
     else if (result.semantic_dynamic_prior &&
@@ -125,7 +128,7 @@ B3FusionResult B3Fusion::Fuse(const SemanticInstance& semantic,
     {
         result.fusion_category = B3_SEM_DYNAMIC_GEOM_STATIC;
         result.fusion_reliable = true;
-        result.fusion_reason = "PERSON_GEOM_STATIC";
+        result.fusion_reason = semantic.className == "person" ? "PERSON_GEOM_STATIC" : "MANAGED_CLASS_GEOM_STATIC";
         result.recommended_action = "DEFER_TO_TEMPORAL";
     }
     else if (!result.semantic_dynamic_prior &&
