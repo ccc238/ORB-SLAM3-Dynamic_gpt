@@ -87,6 +87,7 @@ src/Frame.cc
 src/FrameSemanticAnnotator.cc
 src/FeaturePolicyEvaluator.cc
 src/FineFeaturePolicy.cc
+src/StaticQuality.cc
 src/MapAdmission.cc
 src/KeyFrameDatabase.cc
 src/Sim3Solver.cc
@@ -435,9 +436,16 @@ add_executable(identity_system_reset_test tools/identity_system_reset_test.cc)
 target_link_libraries(identity_system_reset_test ${PROJECT_NAME})
 add_executable(feature_semantic_test tools/feature_semantic_test.cc)
 target_link_libraries(feature_semantic_test ${PROJECT_NAME})
+add_executable(multiclass_frontend_test tools/multiclass_frontend_test.cc)
+target_link_libraries(multiclass_frontend_test ${PROJECT_NAME})
+add_executable(b2_reliability_test tools/b2_reliability_test.cc)
+target_link_libraries(b2_reliability_test ${PROJECT_NAME})
+add_executable(static_quality_test tools/static_quality_test.cc)
+target_link_libraries(static_quality_test ${PROJECT_NAME})
 add_executable(feature_policy_test tools/feature_policy_test.cc)
 target_link_libraries(feature_policy_test ${PROJECT_NAME})
 add_executable(coarse_pose_quality_test tools/coarse_pose_quality_test.cc)
+target_include_directories(coarse_pose_quality_test PRIVATE ${OpenCV_INCLUDE_DIRS})
 add_executable(coarse_feature_filter_test tools/coarse_feature_filter_test.cc)
 target_link_libraries(coarse_feature_filter_test ${PROJECT_NAME})
 add_executable(fine_feature_policy_test tools/fine_feature_policy_test.cc)

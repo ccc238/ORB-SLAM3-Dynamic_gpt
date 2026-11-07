@@ -18,6 +18,7 @@
 
 
 #include "Tracking.h"
+#include "StaticQuality.h"
 #include "FrameSemanticAnnotator.h"
 #include "FeaturePolicyEvaluator.h"
 #include "CoarseFeatureFilter.h"
@@ -74,6 +75,12 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     mnInitialFrameId(0), mbCreatedMap(false), mnFirstFrameId(0), mpCamera2(nullptr), mpLastKeyFrame(static_cast<KeyFrame*>(NULL))
 {
     // Load camera parameters from settings file
+    if(sensor!=System::RGBD) {
+        cv::FileStorage config(strSettingPath,cv::FileStorage::READ);
+        const auto flag=config["StaticQuality.Enable"];
+        if(!flag.empty() && (!flag.isInt() || int(flag)!=0))
+            throw std::runtime_error("StaticQuality supports pure visual RGB-D only");
+    }
     if(settings){
         newParameterLoader(settings);
     }
@@ -128,6 +135,14 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
         mB2Config = mpDynamicDetector->B2();
         mB3Config = mpDynamicDetector->B3();
         mB4Config = mpDynamicDetector->B4();
+        if(mpDynamicDetector->StaticQuality().enable && mpDynamicDetector->StaticQuality().saveSummaryCsv) {
+            const auto path=mB2Config.csvOutputParent+"/static_quality_"+
+                std::to_string(std::chrono::system_clock::now().time_since_epoch().count())+".csv";
+            if(std::ifstream(path).good()) throw std::runtime_error("StaticQuality CSV exists: "+path);
+            mStaticQualityCsv.open(path);
+            if(!mStaticQualityCsv) throw std::runtime_error("Cannot create StaticQuality CSV: "+path);
+            mStaticQualityCsv<<"frame_id,timestamp,quality_applied,skip_reason,allowed_matches,depth_quality_valid,neutral_weight_count,weight_min,weight_mean,weight_sum,effective_sample_size,final_inliers,quality_compute_ms\n";
+        }
         if (mpDynamicDetector->Frontend().diagnosticSaveCsv)
             mpFrontendDiagnosticLog.reset(new FrontendDiagnosticLog(mB2Config.csvOutputParent));
         if (mpDynamicDetector->Frontend().useCoarsePoseForB2)
@@ -213,7 +228,7 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
         if (mB3Config.enable)
         {
             mpB3Fusion.reset(new B3Fusion(mB3Config.evidenceOnly,
-                                           mB3Config.personAsDynamicPrior));
+                                           mB3Config.personAsDynamicPrior, mB3Config.classes));
             if (mB3Config.saveSummaryCsv)
             {
                 const std::string path = mB2Config.csvOutputParent +
@@ -1759,6 +1774,8 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
     mKeyFrameDecision=KeyFrameDecisionContext();
     const int incomingState = mState;
     mCoarsePoseQuality = CoarsePoseQuality();
+    mStaticQualityCoarseFrame=-1;
+    mStaticQualityLoggedFrame=-1;
     mCoarsePoseContext = CoarsePoseContext();
     mCoarsePoseContext.initialized = mState != NO_IMAGES_YET && mState != NOT_INITIALIZED;
     mCoarsePoseContext.just_recovered = mbCoarseRecoveryPending;
@@ -1895,6 +1912,7 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
         mKeyFrameDecision.semanticFrameId=static_cast<long>(mCurrentFrame.mnId);
     mRGBDCoarsePolicySnapshot = std::move(coarsePolicySnapshot);
     mbRGBDEvidenceReady = true;
+    const long qualityInputFrameId=static_cast<long>(mCurrentFrame.mnId);
     Track();
     if (mpDynamicDetector->Frontend().useCoarsePoseForB2 &&
         ((mState == OK && (incomingState == RECENTLY_LOST || incomingState == LOST)) ||
@@ -2258,6 +2276,10 @@ void Tracking::RunRGBDGeometryEvidence(bool poseReliable, const char* poseSource
             B2BackgroundObservation observation;
             observation.mapPointId = mapPoint->mnId;
             observation.pixel = mCurrentFrame.mvKeysUn[i].pt;
+            if(i<mCurrentFrame.mvKeys.size()) {
+                observation.maskPixel=mCurrentFrame.mvKeys[i].pt;
+                observation.hasMaskPixel=true;
+            }
             observation.depthMeters = depth;
             b2Frame.backgroundObservations.push_back(observation);
         }
@@ -2471,8 +2493,7 @@ void Tracking::RunB3SemanticGeometryFusion(const B2Result* b2Result, double time
         semantic.instanceId = static_cast<int>(instanceIndex);
         semantic.trackId = source.trackId;
         semantic.classId = source.classId;
-        semantic.className = source.classId == 0 ? "person" :
-            "class_" + std::to_string(source.classId);
+        semantic.className = mpDynamicDetector->Classes().Name(source.classId);
         semantic.confidence = source.confidence;
         semantic.boundingBox = source.boundingBox;
         const B2PersonInstance* geometry = nullptr;
@@ -2488,8 +2509,8 @@ void Tracking::RunB3SemanticGeometryFusion(const B2Result* b2Result, double time
             if (instanceIt != geometryByInstance.end())
                 geometry = instanceIt->second;
         }
-        if (geometry && geometry->trackId != semantic.trackId)
-            throw std::runtime_error("Shared instance track_id mismatch between YOLO and B2");
+        if (geometry && (geometry->trackId != semantic.trackId || geometry->classId != semantic.classId))
+            throw std::runtime_error("Shared instance track_id/class_id mismatch between YOLO and B2");
         mCurrentB3Results.push_back(mpB3Fusion->Fuse(semantic, geometry));
     }
 }
@@ -2541,13 +2562,13 @@ void Tracking::UpdateDynamicLogs()
         else if (result.fusion_category == B3_SEM_DYNAMIC_GEOM_MOVING)
         {
             viewerInstance.color = cv::Scalar(0, 0, 255); // red, BGR
-            viewerInstance.primaryLabel = "ID" + std::to_string(result.instance_id) + " PERSON+MOVING";
+            viewerInstance.primaryLabel = "ID" + std::to_string(result.instance_id) + " " + result.semantic_class_name + "+MOVING";
             viewerInstance.secondaryLabel = "B3 DYNAMIC CANDIDATE";
         }
         else if (result.fusion_category == B3_SEM_DYNAMIC_GEOM_STATIC)
         {
             viewerInstance.color = cv::Scalar(0, 255, 255); // yellow, BGR
-            viewerInstance.primaryLabel = "ID" + std::to_string(result.instance_id) + " PERSON+STATIC";
+            viewerInstance.primaryLabel = "ID" + std::to_string(result.instance_id) + " " + result.semantic_class_name + "+STATIC";
             viewerInstance.secondaryLabel = "B3 DEFER";
         }
         else if (result.fusion_category == B3_SEM_STATIC_GEOM_MOVING)
@@ -2578,7 +2599,7 @@ void Tracking::UpdateDynamicLogs()
             else
                 viewerInstance.color = cv::Scalar(0, 0, 255);       // red
             viewerInstance.primaryLabel = "ID" + std::to_string(b4->trackId) +
-                " " + B4MotionStateName(b4->state);
+                " " + result.semantic_class_name + " " + B4MotionStateName(b4->state);
             viewerInstance.secondaryLabel = "Ns/Nd/Nr=" + std::to_string(b4->nStatic) + "/" +
                 std::to_string(b4->nDynamic) + "/" + std::to_string(b4->nRecovery);
             viewerInstance.tertiaryLabel = "reason=" + b4->reasonCode;
@@ -3316,6 +3337,10 @@ void Tracking::Track()
             const bool poseFinite = mCurrentFrame.HasPose() &&
                 mCurrentFrame.GetPose().matrix().allFinite();
             FinalizeCoarsePoseQuality(bOK);
+            if(mpDynamicDetector->StaticQuality().enable && poseFinite) {
+                mStaticQualityCoarsePose=mCurrentFrame.GetPose();
+                mStaticQualityCoarseFrame=static_cast<long>(mCurrentFrame.mnId);
+            }
             const bool coarseReliable = mCoarsePoseQuality.reliable;
             cout << "[TWO STAGE] frame=" << mCurrentFrame.mnId
                  << " event=coarse_boundary initial_success=" << int(bOK)
@@ -4239,9 +4264,24 @@ bool Tracking::TrackLocalMap()
 
     if(finePolicy) VerifyFineOptimizerInputs(mCurrentFrame);
     RecordIdentityOptimizerInputs(true);
+    const bool staticQuality=finePolicy && mSensor==System::RGBD &&
+        mpDynamicDetector->StaticQuality().enable;
+    StaticQualitySummary qualitySummary;
+    if(staticQuality) {
+        const bool reliable=mStaticQualityCoarseFrame==static_cast<long>(mCurrentFrame.mnId) &&
+            mCoarsePoseQuality.reliable && mCoarseFilterFallbackReason.empty();
+        const std::string reason=!mCoarseFilterFallbackReason.empty()?"COARSE_FALLBACK":
+            (mStaticQualityCoarseFrame!=static_cast<long>(mCurrentFrame.mnId)?"NO_COARSE_SNAPSHOT":
+             "COARSE_POSE_UNRELIABLE");
+        qualitySummary=PrepareStaticQuality(mCurrentFrame,mStaticQualityCoarsePose,reliable,reason,
+            mpDynamicDetector->StaticQuality());
+    }
     int inliers;
     if (!mpAtlas->isImuInitialized())
-        Optimizer::PoseOptimization(&mCurrentFrame);
+    {
+        if(staticQuality) Optimizer::PoseOptimizationStaticQuality(&mCurrentFrame);
+        else Optimizer::PoseOptimization(&mCurrentFrame);
+    }
     else
     {
         if(mCurrentFrame.mnId<=mnLastRelocFrameId+mnFramesToResetIMU)
@@ -4300,6 +4340,17 @@ bool Tracking::TrackLocalMap()
     // Decide if the tracking was succesful
     // More restrictive if there was a relocalization recently
     mpLocalMapper->mnMatchesInliers=mnMatchesInliers;
+    if(staticQuality && mStaticQualityCsv) {
+        const auto& s=qualitySummary;
+        mStaticQualityCsv<<std::setprecision(17)<<mCurrentFrame.mnId<<','<<mCurrentFrame.mTimeStamp<<','
+            <<s.applied<<','<<s.skipReason<<','<<s.allowed<<','<<s.valid<<','<<s.neutral<<',';
+        if(s.allowed) mStaticQualityCsv<<s.minimum<<','<<s.mean<<','<<s.sum<<','<<s.effective;
+        else mStaticQualityCsv<<",,0,"; // Empty statistics mean no data, not high quality.
+        mStaticQualityCsv<<','<<mnMatchesInliers<<','<<s.computeMs<<'\n';
+        mStaticQualityCsv.flush();
+        if(!mStaticQualityCsv) throw std::runtime_error("StaticQuality CSV write failed");
+        mStaticQualityLoggedFrame=static_cast<long>(mCurrentFrame.mnId);
+    }
     if(finePolicy)
     {
         const bool success=FinePoseSupported(mnMatchesInliers,requiredSupport,

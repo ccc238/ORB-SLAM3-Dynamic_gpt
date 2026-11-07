@@ -18,6 +18,7 @@
 
 
 #include "Optimizer.h"
+#include "FineFeaturePolicy.h"
 
 
 #include <complex>
@@ -811,8 +812,30 @@ void Optimizer::FullInertialBA(Map *pMap, int its, const bool bFixLocal, const l
 }
 
 
-int Optimizer::PoseOptimization(Frame *pFrame)
+static int PoseOptimizationInternal(Frame* pFrame,bool weighted);
+
+int Optimizer::PoseOptimization(Frame* pFrame)
 {
+    return PoseOptimizationInternal(pFrame,false);
+}
+
+int Optimizer::PoseOptimizationStaticQuality(Frame* pFrame)
+{
+    if(!pFrame->mbStaticQualityPrepared || pFrame->mpCamera2 ||
+       pFrame->mvStaticQualityWeight.size()!=size_t(pFrame->N) ||
+       pFrame->mvStaticQualityValid.size()!=size_t(pFrame->N) ||
+       pFrame->mvStaticQualityReason.size()!=size_t(pFrame->N))
+        throw std::runtime_error("StaticQuality optimizer requires prepared aligned single-camera visual observations");
+    VerifyFineOptimizerInputs(*pFrame);
+    for(double w:pFrame->mvStaticQualityWeight)
+        if(!std::isfinite(w) || w<=0 || w>1)
+            throw std::runtime_error("Invalid StaticQuality optimizer weight");
+    return PoseOptimizationInternal(pFrame,true);
+}
+
+static int PoseOptimizationInternal(Frame *pFrame,bool weighted)
+{
+    const auto weight=[&](size_t i) {return weighted?pFrame->mvStaticQualityWeight[i]:1.0;};
     g2o::SparseOptimizer optimizer;
     g2o::BlockSolver_6_3::LinearSolverType * linearSolver;
 
@@ -877,11 +900,11 @@ int Optimizer::PoseOptimization(Frame *pFrame)
                     e->setVertex(0, dynamic_cast<g2o::OptimizableGraph::Vertex*>(optimizer.vertex(0)));
                     e->setMeasurement(obs);
                     const float invSigma2 = pFrame->mvInvLevelSigma2[kpUn.octave];
-                    e->setInformation(Eigen::Matrix2d::Identity()*invSigma2);
+                    e->setInformation(Eigen::Matrix2d::Identity()*invSigma2*weight(i));
 
                     g2o::RobustKernelHuber* rk = new g2o::RobustKernelHuber;
                     e->setRobustKernel(rk);
-                    rk->setDelta(deltaMono);
+                    rk->setDelta(std::sqrt(weight(i))*deltaMono);
 
                     e->pCamera = pFrame->mpCamera;
                     e->Xw = pMP->GetWorldPos().cast<double>();
@@ -907,11 +930,11 @@ int Optimizer::PoseOptimization(Frame *pFrame)
                     e->setMeasurement(obs);
                     const float invSigma2 = pFrame->mvInvLevelSigma2[kpUn.octave];
                     Eigen::Matrix3d Info = Eigen::Matrix3d::Identity()*invSigma2;
-                    e->setInformation(Info);
+                    e->setInformation(Info*weight(i));
 
                     g2o::RobustKernelHuber* rk = new g2o::RobustKernelHuber;
                     e->setRobustKernel(rk);
-                    rk->setDelta(deltaStereo);
+                    rk->setDelta(std::sqrt(weight(i))*deltaStereo);
 
                     e->fx = pFrame->fx;
                     e->fy = pFrame->fy;
@@ -1023,7 +1046,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
                 e->computeError();
             }
 
-            const float chi2 = e->chi2();
+            const float chi2 = e->chi2()/weight(idx);
 
             if(chi2>chi2Mono[it])
             {                
@@ -1052,7 +1075,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
                 e->computeError();
             }
 
-            const float chi2 = e->chi2();
+            const float chi2 = e->chi2()/weight(idx);
 
             if(chi2>chi2Mono[it])
             {
@@ -1081,7 +1104,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
                 e->computeError();
             }
 
-            const float chi2 = e->chi2();
+            const float chi2 = e->chi2()/weight(idx);
 
             if(chi2>chi2Stereo[it])
             {

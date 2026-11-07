@@ -185,6 +185,10 @@ public:
     bool mbRGBDEvidenceProcessed = false;
     bool mbTwoStageFineCompleted = false;
     CoarsePoseQuality mCoarsePoseQuality;
+    Sophus::SE3f mStaticQualityCoarsePose;
+    long mStaticQualityCoarseFrame=-1;
+    std::ofstream mStaticQualityCsv;
+    long mStaticQualityLoggedFrame=-1;
     CoarsePoseContext mCoarsePoseContext;
     bool mbCoarseRecoveryPending = false;
     long mLastCoarseMapId = -1;

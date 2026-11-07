@@ -57,6 +57,8 @@ public:
     void static LocalBundleAdjustment(KeyFrame* pKF, bool *pbStopFlag, Map *pMap, int& num_fixedKF, int& num_OptKF, int& num_MPs, int& num_edges);
 
     int static PoseOptimization(Frame* pFrame);
+    // Explicit final visual RGB-D entry. Other callers never consume weights.
+    int static PoseOptimizationStaticQuality(Frame* pFrame);
     int static PoseInertialOptimizationLastKeyFrame(Frame* pFrame, bool bRecInit = false);
     int static PoseInertialOptimizationLastFrame(Frame *pFrame, bool bRecInit = false);
 

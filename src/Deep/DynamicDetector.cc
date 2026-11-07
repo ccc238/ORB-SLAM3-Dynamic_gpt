@@ -436,6 +436,23 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     b4_.saveSummaryCsv = Flag(fs,"B4.Debug.SaveSummaryCsv",true);
     b4_.showOverlay = Flag(fs,"B4.Debug.ShowOverlay",true);
     ValidateFrontend(fs,frontend_,enabled_,maskFeatureRejectEnabled_,b2_,b3_,b4_);
+    staticQuality_.enable=Flag(fs,"StaticQuality.Enable",false);
+    staticQuality_.weightMin=Seconds(fs,"StaticQuality.WeightMin",0.10);
+    staticQuality_.depthSigmaA=Seconds(fs,"StaticQuality.DepthSigmaA",0.01);
+    staticQuality_.depthSigmaB=Seconds(fs,"StaticQuality.DepthSigmaB",0.01);
+    staticQuality_.saveSummaryCsv=Flag(fs,"StaticQuality.SaveSummaryCsv",false);
+    ValidateStaticQuality(staticQuality_);
+    if(staticQuality_.enable && (!frontend_.explicitMode ||
+       frontend_.mode!=DynamicFrontendMode::TWO_STAGE_ACTION || !frontend_.twoStageEnable ||
+       !frontend_.coarseFilterEnable || !frontend_.useCoarsePoseForB2 ||
+       !frontend_.finePolicyEnable || !frontend_.mapAdmissionEnable))
+        throw std::runtime_error("StaticQuality.Enable=1 requires complete Mode 3, coarse/fine policy and map admission");
+    std::cout<<"[STATIC QUALITY CONFIG] Enable="<<staticQuality_.enable
+        <<" WeightMin="<<staticQuality_.weightMin<<" DepthSigmaA_m="<<staticQuality_.depthSigmaA
+        <<" DepthSigmaB_inverse_m="<<staticQuality_.depthSigmaB
+        <<" SaveSummaryCsv="<<staticQuality_.saveSummaryCsv<<" experimental_not_calibrated=1"<<std::endl;
+    if (classes_.multiClassEnable && !enabled_)
+        throw std::runtime_error("Semantic.MultiClass.Enable=1 requires Yolo.Enable=1");
     if (policy.enable && (!annotation.enable || !frontend_.explicitMode ||
         (frontend_.mode != DynamicFrontendMode::TWO_STAGE_EVIDENCE_ONLY &&
          frontend_.mode != DynamicFrontendMode::TWO_STAGE_ACTION)))
