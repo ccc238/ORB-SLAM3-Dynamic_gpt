@@ -282,6 +282,30 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     annotation.depthEdgeAbsoluteMeters = Number(fs,"FeatureSemantic.DepthEdge.AbsoluteMeters",.05f);
     annotation.depthEdgeRelative = Number(fs,"FeatureSemantic.DepthEdge.Relative",.02f);
     annotation.showOverlay = Flag(fs,"FeatureSemantic.ShowOverlay",true);
+    auto& reliability=b2_.reliability;
+    reliability.enable=Flag(fs,"B2.Reliability.Enable",false);
+    reliability.depthRadius=Integer(fs,"B2.Reliability.Depth.Radius",annotation.depthEdgeRadius);
+    reliability.depthEdgeAbsolute=Number(fs,"B2.Reliability.Depth.AbsoluteMeters",annotation.depthEdgeAbsoluteMeters);
+    reliability.depthEdgeRelative=Number(fs,"B2.Reliability.Depth.Relative",annotation.depthEdgeRelative);
+    reliability.minDepthSamples=Integer(fs,"B2.Reliability.Depth.MinValidSamples",5);
+    reliability.minDepthValidRatio=Number(fs,"B2.Reliability.Depth.MinValidRatio",.60f);
+    reliability.minBackgroundInliers=Integer(fs,"B2.Reliability.Coarse.MinBackgroundInliers",frontend_.minCoarseInliers);
+    reliability.minBackgroundInlierRatio=Number(fs,"B2.Reliability.Coarse.MinBackgroundInlierRatio",frontend_.minCoarseInlierRatio);
+    reliability.maxBackgroundReprojection=Number(fs,"B2.Reliability.Coarse.MaxMedianReprojectionPixels",2.5f);
+    reliability.gridCols=Integer(fs,"B2.Reliability.Coarse.GridCols",4);
+    reliability.gridRows=Integer(fs,"B2.Reliability.Coarse.GridRows",3);
+    reliability.minBackgroundCoverage=Number(fs,"B2.Reliability.Coarse.MinGridCoverage",.25f);
+    ValidateB2Reliability(reliability);
+    if(reliability.enable && !frontend_.useCoarsePoseForB2)
+        throw std::runtime_error("B2.Reliability.Enable requires TwoStage.UseCoarsePoseForB2=1");
+    std::cout<<"[B2 RELIABILITY CONFIG] Enable="<<reliability.enable
+        <<" Depth.Radius="<<reliability.depthRadius<<" Depth.MinValidSamples="<<reliability.minDepthSamples
+        <<" Depth.MinValidRatio="<<reliability.minDepthValidRatio<<" Depth.AbsoluteMeters="<<reliability.depthEdgeAbsolute
+        <<" Depth.Relative="<<reliability.depthEdgeRelative<<" Coarse.MinBackgroundInliers="<<reliability.minBackgroundInliers
+        <<" Coarse.MinBackgroundInlierRatio="<<reliability.minBackgroundInlierRatio
+        <<" Coarse.MaxMedianReprojectionPixels="<<reliability.maxBackgroundReprojection
+        <<" Coarse.Grid="<<reliability.gridCols<<'x'<<reliability.gridRows
+        <<" Coarse.MinGridCoverage="<<reliability.minBackgroundCoverage<<" initial_not_accuracy_validated=1"<<std::endl;
     auto& policy = frontend_.featurePolicy;
     policy.enable = Flag(fs,"FeaturePolicy.Enable",false);
     policy.evidenceOnly = Flag(fs,"FeaturePolicy.EvidenceOnly",true);
@@ -379,6 +403,8 @@ DynamicDetector::DynamicDetector(const std::string& settingsPath) {
     b2_.yamlPath = settingsPath;
     b2_.yamlSha256 = FileSha256(settingsPath);
     ValidateB2(b2_);
+    if(b2_.reliability.enable && (!b2_.enable || !b2_.geometryEnable || !b2_.geometryDecisionEnable))
+        throw std::runtime_error("B2.Reliability.Enable requires B2.Enable, Geometry.Enable and Decision.Enable");
     b3_.enable = Flag(fs,"B3.Enable",false);
     b3_.evidenceOnly = Flag(fs,"B3.EvidenceOnly",true);
     b3_.personAsDynamicPrior = Flag(fs,"B3.Semantic.PersonAsDynamicPrior",true);

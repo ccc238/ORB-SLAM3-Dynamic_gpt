@@ -61,7 +61,9 @@ enum B2GeometryFailureReason {
     AMBIGUOUS_GEOMETRIC_EVIDENCE = 7,
     POSE_WEAK = 8,
     IDENTITY_ASSOCIATION_UNTRUSTED = 9,
-    IDENTITY_HISTORY_MISMATCH = 10
+    IDENTITY_HISTORY_MISMATCH = 10,
+    NUMERIC_INVALID = 11,
+    DUPLICATE_CANDIDATE_ID = 12
 };
 
 struct B2CandidateFeature {
@@ -78,6 +80,9 @@ struct B2CandidateFeature {
     B2DepthStatus depthStatus = DEPTH_NOT_EVALUATED;
     bool nearMaskBoundary = false;
     bool nearDepthEdge = false;
+    bool depthQualityChecked = false;
+    float depthValidSampleRatio = 0, depthSpread = -1;
+    std::string depthFailureReason = "DEPTH_MISSING";
 };
 
 struct B2CandidateMatch {
@@ -93,6 +98,7 @@ struct B2CandidateMatch {
     float rawR3D = -1.0f;
     float normalizedR3D = -1.0f;
     float r2D = -1.0f;
+    std::string rejectionReason;
 };
 
 // A Tracking inlier snapshot.  It is copied into B2's own frame record, so
@@ -101,6 +107,8 @@ struct B2BackgroundObservation {
     unsigned long mapPointId = 0;
     cv::Point2f pixel;
     float depthMeters = -1.0f;
+    cv::Point2f maskPixel;
+    bool hasMaskPixel = false;
 };
 
 struct B2PersonInstance {
@@ -138,6 +146,8 @@ struct B2PersonInstance {
     float movingFraction = -1.0f;
     B2InstanceGeometryStatus geometryDecision = GEOM_NOT_EVALUATED;
     B2GeometryFailureReason geometryFailureReason = GEOM_FAILURE_NONE;
+    int depthInvalidCount=0, depthEdgeCount=0, matchInvalidCount=0, duplicateMatchCount=0;
+    int associationInvalidCount=0, numericInvalidCount=0;
 
     cv::Rect boundingBox;
     cv::Mat mask;
@@ -154,6 +164,10 @@ struct B2CandidateFrame {
     Sophus::SE3f Tcw;
     // Prevent a coarse history from being silently paired with a final pose.
     std::string poseSource;
+    std::string poseQualityReason;
+    int poseBackgroundSamples=0;
+    float poseBackgroundReprojection=-1, poseBackgroundCoverage=0;
+    double reliabilityMs=0;
     cv::Size imageSize;
     std::vector<B2BackgroundObservation> backgroundObservations;
 

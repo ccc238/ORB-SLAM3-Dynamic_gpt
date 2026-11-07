@@ -52,8 +52,17 @@ Frame::Frame(): mpcpi(NULL), mpImuPreintegrated(NULL), mpPrevFrame(NULL), mpImuP
 }
 
 
+void Frame::ResetStaticQuality()
+{
+    mvStaticQualityWeight.assign(N,1.0);
+    mvStaticQualityValid.assign(N,false);
+    mvStaticQualityReason.assign(N,"NOT_EVALUATED");
+    mbStaticQualityPrepared=false;
+}
+
 void Frame::ResetSemanticMetadata()
 {
+    ResetStaticQuality();
     mvSemanticRegion.assign(N, SemanticRegion::UNKNOWN);
     mvInstanceId.assign(N, -1);
     mvTrackId.assign(N, -1);
@@ -106,6 +115,10 @@ Frame::Frame(const Frame &frame)
     mvMaskedRejectedLeft=frame.mvMaskedRejectedLeft;
     mvMaskedRejectedRight=frame.mvMaskedRejectedRight;
     mvSemanticRegion = frame.mvSemanticRegion;
+    mvStaticQualityWeight = frame.mvStaticQualityWeight;
+    mvStaticQualityValid = frame.mvStaticQualityValid;
+    mvStaticQualityReason = frame.mvStaticQualityReason;
+    mbStaticQualityPrepared = frame.mbStaticQualityPrepared;
     mvInstanceId = frame.mvInstanceId;
     mvTrackId = frame.mvTrackId;
     mvPreviousB4State = frame.mvPreviousB4State;

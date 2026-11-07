@@ -71,6 +71,12 @@ public:
     bool mbSemanticOverlayEnabled = false;
     void ResetSemanticMetadata();
     bool SemanticMetadataAligned() const;
+    // Current-frame only; never serialized into KeyFrame/Atlas.
+    std::vector<double> mvStaticQualityWeight;
+    std::vector<bool> mvStaticQualityValid;
+    std::vector<std::string> mvStaticQualityReason;
+    bool mbStaticQualityPrepared=false;
+    void ResetStaticQuality();
 
     cv::Mat mDynamicMaskLeft, mDynamicMaskRight; // CV_8UC1, nonzero excludes FAST candidates.
     // Feature-extraction diagnostics; raw candidates are before mask/octree.

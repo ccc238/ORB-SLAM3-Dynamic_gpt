@@ -1,5 +1,6 @@
 #include "B2MotionEvidence.h"
 #include "ORBextractor.h"
+#include "DepthNeighborhood.h"
 
 #include <opencv2/imgproc.hpp>
 
@@ -17,6 +18,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 
 namespace ORB_SLAM3 {
@@ -44,6 +46,7 @@ struct NearestDescriptor {
     int index = -1;
     int distance = -1;
     bool accepted = false;
+    const char* reason="DESCRIPTOR_INVALID";
 };
 
 bool IsOrbDescriptor(const cv::Mat& descriptor)
@@ -84,6 +87,12 @@ NearestDescriptor FindNearest(const B2CandidateFeature& query,
         result.distance <= maxHammingDistance &&
         static_cast<float>(result.distance) < loweRatio * static_cast<float>(secondDistance))
         result.accepted = true;
+    if(result.accepted) result.reason="OK";
+    else if(result.index>=0) {
+        if(secondDistance==std::numeric_limits<int>::max()) result.reason="MATCH_INSUFFICIENT_NEIGHBORS";
+        else if(result.distance>maxHammingDistance) result.reason="MATCH_HAMMING_REJECTED";
+        else result.reason="MATCH_RATIO_REJECTED";
+    }
     return result;
 }
 
@@ -176,12 +185,15 @@ const char* FailureReasonName(B2GeometryFailureReason reason)
     case POSE_WEAK: return "POSE_WEAK";
     case IDENTITY_ASSOCIATION_UNTRUSTED: return "IDENTITY_ASSOCIATION_UNTRUSTED";
     case IDENTITY_HISTORY_MISMATCH: return "IDENTITY_HISTORY_MISMATCH";
+    case NUMERIC_INVALID: return "NUMERIC_INVALID";
+    case DUPLICATE_CANDIDATE_ID: return "DUPLICATE_CANDIDATE_ID";
     default: return "GEOMETRY_UNRELIABLE";
     }
 }
 
 const char* MatchReason(const B2CandidateMatch& match)
 {
+    if (!match.rejectionReason.empty()) return match.rejectionReason.c_str();
     if (!match.descriptorMatched) return "MATCH_INVALID";
     if (match.status != MATCH_VALID) return "DEPTH_INVALID";
     if (match.geometryStatus != GEOMETRY_VALID) return "GEOMETRY_INVALID";
@@ -222,12 +234,16 @@ void B2MotionEvidence::InitializeCsvOutput()
     if (mConfig.saveFeatureCsv)
         mCandidateCsv << "frame_id,timestamp,instance_id,candidate_id,"
                       << "u_prev,v_prev,u_curr,v_curr,descriptor_distance,depth_prev,depth_curr,"
-                      << "boundary_distance,r3d,r3d_normalized,r2d,valid,reason_code\n";
+                      << "boundary_distance,r3d,r3d_normalized,r2d,valid,reason_code,track_id,previous_candidate_id\n";
     if (mConfig.saveSummaryCsv)
         mInstanceCsv << "frame_id,timestamp,instance_id,track_id,candidate_count,matched_count,valid_count,"
                      << "match_ratio,valid_match_ratio,background_sample_count,background_median_r3d,"
                      << "background_sigma_r3d,median_r3d,mean_r3d,mad_r3d,median_normalized_r3d,"
-                     << "high_residual_ratio,median_r2d,pose_valid,geometry_state,decision_reason,processing_ms\n";
+                     << "high_residual_ratio,median_r2d,pose_valid,geometry_state,decision_reason,processing_ms,"
+                     << "class_id,depth_invalid_count,depth_edge_count,match_invalid_count,duplicate_match_count,"
+                     << "association_invalid_count,numeric_invalid_count,pose_background_sample_count,"
+                     << "background_reprojection_median_px,background_grid_coverage,pose_quality_reason,"
+                     << "geometry_reliable,evidence_update_blocked,quality_sampling_ms,reliability_enabled\n";
 #ifdef ORB_SLAM3_GIT_COMMIT
     metadata << "git_commit=" << ORB_SLAM3_GIT_COMMIT << '\n';
 #else
@@ -284,6 +300,15 @@ void B2MotionEvidence::InitializeCsvOutput()
              << "B2.Debug.OutputDir=" << mConfig.csvOutputParent << '\n'
              << "B2.Debug.DatasetName=" << mConfig.datasetName << '\n';
     if (!metadata) throw std::runtime_error("Cannot write B2 metadata");
+    const auto& q=mConfig.reliability;
+    metadata<<"B2.Reliability.Enable="<<q.enable<<'\n'
+        <<"Depth.Radius="<<q.depthRadius<<"\nDepth.MinValidSamples="<<q.minDepthSamples
+        <<"\nDepth.MinValidRatio="<<q.minDepthValidRatio<<"\nDepth.AbsoluteMeters="<<q.depthEdgeAbsolute
+        <<"\nDepth.Relative="<<q.depthEdgeRelative<<"\nCoarse.MinBackgroundInliers="<<q.minBackgroundInliers
+        <<"\nCoarse.MinBackgroundInlierRatio="<<q.minBackgroundInlierRatio
+        <<"\nCoarse.MaxMedianReprojectionPixels="<<q.maxBackgroundReprojection
+        <<"\nCoarse.GridCols="<<q.gridCols<<"\nCoarse.GridRows="<<q.gridRows
+        <<"\nCoarse.MinGridCoverage="<<q.minBackgroundCoverage<<'\n';
     std::cout << "[B2 CSV] output_directory=" << mCsvOutputDirectory << std::endl;
 }
 
@@ -462,12 +487,23 @@ B2CandidateFrame B2MotionEvidence::ExtractCandidates(
             feature.descriptor = descriptors.row(static_cast<int>(keypointIndex)).clone();
             feature.boundaryDistance = boundaryDistance;
             feature.nearMaskBoundary = boundaryDistance < static_cast<float>(mConfig.minBoundaryDistance);
-            feature.depthMeters = SampleDepth(depthMeters, keypoint.pt, feature.depthValid);
-            feature.depthStatus = feature.depthValid ? DEPTH_VALID : DEPTH_INVALID;
-            // A depth-edge threshold is intentionally not invented here; the
-            // flag is reserved until the B2 geometry decision design defines
-            // one explicitly.
+            if(!mConfig.reliability.enable) {
+                feature.depthMeters = SampleDepth(depthMeters, keypoint.pt, feature.depthValid);
+                feature.depthStatus = feature.depthValid ? DEPTH_VALID : DEPTH_INVALID;
+            }
             feature.nearDepthEdge = false;
+            if(mConfig.reliability.enable) {
+                const auto qualityStart=std::chrono::steady_clock::now();
+                const auto quality=InspectDepthNeighborhood(depthMeters,keypoint.pt,person.mask,
+                    mConfig.reliability,mConfig.minDepthMeters,mConfig.maxDepthMeters);
+                feature.depthQualityChecked=true;feature.depthMeters=quality.depth;
+                feature.depthValid=quality.valid;feature.nearDepthEdge=quality.edge;
+                feature.depthStatus=quality.valid ? DEPTH_VALID : DEPTH_INVALID;
+                feature.depthValidSampleRatio=quality.validRatio;feature.depthSpread=quality.spread;
+                feature.depthFailureReason=quality.reason;
+                frame.reliabilityMs+=std::chrono::duration<double,std::milli>(
+                    std::chrono::steady_clock::now()-qualityStart).count();
+            }
             person.features.push_back(std::move(feature));
         }
         frame.persons.push_back(std::move(person));
@@ -506,7 +542,7 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
     if (previous && !previous->poseSource.empty() && !current.poseSource.empty() &&
         previous->poseSource != current.poseSource)
         throw std::runtime_error("B2 cannot mix coarse and final pose histories");
-    if (currentPoseReliable && (!current.poseValid || !currentFromPrevious.matrix().allFinite()))
+    if (!mConfig.reliability.enable && currentPoseReliable && (!current.poseValid || !currentFromPrevious.matrix().allFinite()))
         throw std::runtime_error("B2 reliable input requires a valid current pose and finite relative pose");
     // Copy before replacing owned history: previous may alias PreviousFrame().
     const B2CandidateFrame previousSnapshot = previous ? *previous : B2CandidateFrame();
@@ -515,6 +551,11 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
     mCurrentFromPrevious = currentFromPrevious;
     mbPosePairReliable = mbHasPreviousFrame && currentPoseReliable &&
         current.poseValid && mPreviousFrame.poseValid;
+    if(mConfig.reliability.enable)
+        mbPosePairReliable=mbPosePairReliable && current.Tcw.matrix().allFinite() &&
+            mPreviousFrame.Tcw.matrix().allFinite() && currentFromPrevious.matrix().allFinite() &&
+            std::isfinite(current.timestamp) && std::isfinite(mPreviousFrame.timestamp) &&
+            current.timestamp>mPreviousFrame.timestamp && current.frameId==mPreviousFrame.frameId+1;
     mbExplicitPoseInput = explicitInput;
     const auto started = std::chrono::steady_clock::now();
     // Never mutate the caller's snapshot. This is deliberately a deep-ish
@@ -526,10 +567,22 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
     // InstanceTrackManager. B2 only joins its current instances to its own
     // previous measurements; it must never allocate or replace track IDs.
     mLastEndedTrackIds.clear();
-    for(auto& person:working.persons) person.previousInstanceId=-1;
+    for(auto& person:working.persons) {
+        person.previousInstanceId=-1;
+        if(mConfig.reliability.enable) {
+            person.matches.clear();person.candidateCount=person.matchedCount=person.validGeometryCount=0;
+            person.depthInvalidCount=person.depthEdgeCount=person.matchInvalidCount=person.duplicateMatchCount=0;
+            person.numericInvalidCount=person.associationInvalidCount=0;
+            person.geometryDecision=GEOM_UNRELIABLE;person.geometryFailureReason=GEOM_FAILURE_NONE;
+        }
+    }
     if (mbHasPreviousFrame)
         for (B2PersonInstance& person : working.persons) {
             if(!person.association.allowGeometryPair) continue;
+            if(mConfig.reliability.enable &&
+                (!person.association.evaluated || !person.association.allowStateInheritance ||
+                 person.association.associationStatus!=AssociationStatus::CONTINUOUS_CONFIRMED ||
+                 person.association.trackId!=person.trackId || person.association.instanceId!=person.instanceId)) continue;
             if(person.association.evaluated &&
                (!std::isfinite(person.association.previousMatchedTimestamp) ||
                 person.association.previousMatchedFrame!=working.frameId-1 ||
@@ -537,7 +590,8 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
                 std::abs(person.association.previousMatchedTimestamp-mPreviousFrame.timestamp)>1e-6)) continue;
             const auto previous = std::find_if(mPreviousFrame.persons.begin(),
                 mPreviousFrame.persons.end(), [&](const B2PersonInstance& item) {
-                    return item.trackId == person.trackId && person.trackId >= 0;
+                    return item.trackId == person.trackId && person.trackId >= 0 &&
+                        (!mConfig.reliability.enable || item.classId==person.classId);
                 });
             if (previous != mPreviousFrame.persons.end())
                 person.previousInstanceId = previous->instanceId;
@@ -559,10 +613,21 @@ B2Result B2MotionEvidence::ProcessInput(const B2CandidateFrame* previous,
             person.geometryFailureReason = POSE_WEAK;
         }
     for(auto& person:working.persons) {
+        if(mConfig.reliability.enable)
+            person.associationInvalidCount=(!person.association.allowGeometryPair || person.previousInstanceId<0) ? 1 : 0;
+        if(mConfig.reliability.enable && !mbPosePairReliable) {
+            person.geometryDecision=GEOM_UNRELIABLE;person.geometryFailureReason=POSE_WEAK;
+            for(auto& match:person.matches) match.rejectionReason="POSE_WEAK";
+            continue; // Frame-level gate has priority over point/instance gates.
+        }
         if(!person.association.allowGeometryPair) {
             person.geometryDecision=GEOM_UNRELIABLE;
             person.geometryFailureReason=IDENTITY_ASSOCIATION_UNTRUSTED;
         } else if(person.association.evaluated && person.previousInstanceId<0) {
+            person.geometryDecision=GEOM_UNRELIABLE;
+            person.geometryFailureReason=IDENTITY_HISTORY_MISMATCH;
+        }
+        if(mConfig.reliability.enable && person.association.allowGeometryPair && person.previousInstanceId<0) {
             person.geometryDecision=GEOM_UNRELIABLE;
             person.geometryFailureReason=IDENTITY_HISTORY_MISMATCH;
         }
@@ -629,7 +694,8 @@ void B2MotionEvidence::WriteCsv(const B2CandidateFrame& current,
                           << currentPixel.x << ',' << currentPixel.y << ','
                           << match.hammingDistance << ',' << previousDepth << ',' << currentDepth << ','
                           << boundaryDistance << ',' << match.rawR3D << ',' << match.normalizedR3D << ','
-                          << match.r2D << ',' << int(valid) << ',' << MatchReason(match) << '\n';
+                          << match.r2D << ',' << int(valid) << ',' << MatchReason(match) << ','
+                          << person.trackId << ',' << match.previousCandidateId << '\n';
         }
         const bool poseValid = mbExplicitPoseInput ? mbPosePairReliable :
             current.poseValid && (!mbHasPreviousFrame || mPreviousFrame.poseValid);
@@ -646,7 +712,14 @@ void B2MotionEvidence::WriteCsv(const B2CandidateFrame& current,
                      << person.r2DMedian << ',' << int(poseValid) << ','
                      << EvidenceName(person.geometryDecision) << ','
                      << FailureReasonName(person.geometryFailureReason) << ','
-                         << processingMs << '\n';
+                         << processingMs << ',' << person.classId << ',' << person.depthInvalidCount << ','
+                         << person.depthEdgeCount << ',' << person.matchInvalidCount << ',' << person.duplicateMatchCount << ','
+                         << person.associationInvalidCount << ',' << person.numericInvalidCount << ','
+                         << current.poseBackgroundSamples << ',' << current.poseBackgroundReprojection << ','
+                         << current.poseBackgroundCoverage << ',' << current.poseQualityReason << ','
+                         << int(person.geometryDecision==GEOM_STATIC_CANDIDATE || person.geometryDecision==GEOM_MOVING_CANDIDATE) << ','
+                         << int(person.geometryDecision!=GEOM_STATIC_CANDIDATE && person.geometryDecision!=GEOM_MOVING_CANDIDATE)
+                         << ',' << current.reliabilityMs << ',' << int(mConfig.reliability.enable) << '\n';
     }
     if (mConfig.saveFeatureCsv)
         mCandidateCsv.flush();
@@ -705,6 +778,7 @@ void B2MotionEvidence::ComputeGeometryResiduals(B2CandidateFrame& current) const
             if (match.status != MATCH_VALID)
                 continue;
             match.geometryStatus = GEOMETRY_INVALID;
+            if(mConfig.reliability.enable) match.rejectionReason="GEOMETRY_INVALID";
             const auto previousFeature = std::find_if(previousPerson->features.begin(),
                 previousPerson->features.end(), [&](const B2CandidateFeature& feature) {
                     return feature.candidateId == match.previousCandidateId;
@@ -717,6 +791,12 @@ void B2MotionEvidence::ComputeGeometryResiduals(B2CandidateFrame& current) const
                 currentFeature == currentPerson.features.end() ||
                 !previousFeature->depthValid || !currentFeature->depthValid)
                 continue;
+            if(mConfig.reliability.enable &&
+                (!std::isfinite(previousFeature->depthMeters) || !std::isfinite(currentFeature->depthMeters) ||
+                 !std::isfinite(previousFeature->keypoint.pt.x) || !std::isfinite(previousFeature->keypoint.pt.y) ||
+                 !std::isfinite(currentFeature->keypoint.pt.x) || !std::isfinite(currentFeature->keypoint.pt.y))) {
+                match.rejectionReason="NUMERIC_INVALID";continue;
+            }
             if (previousFeature->keypoint.pt.x < 0.0f || previousFeature->keypoint.pt.x >= mPreviousFrame.imageSize.width ||
                 previousFeature->keypoint.pt.y < 0.0f || previousFeature->keypoint.pt.y >= mPreviousFrame.imageSize.height ||
                 currentFeature->keypoint.pt.x < 0.0f || currentFeature->keypoint.pt.x >= current.imageSize.width ||
@@ -740,11 +820,13 @@ void B2MotionEvidence::ComputeGeometryResiduals(B2CandidateFrame& current) const
             match.r2D = cv::norm(currentFeature->keypoint.pt - predictedPixel);
             if (!std::isfinite(match.rawR3D) || !std::isfinite(match.r2D))
             {
+                if(mConfig.reliability.enable) match.rejectionReason="NUMERIC_INVALID";
                 match.rawR3D = -1.0f;
                 match.r2D = -1.0f;
                 continue;
             }
             match.geometryStatus = GEOMETRY_VALID;
+            if(mConfig.reliability.enable) match.rejectionReason.clear();
             if (mConfig.debugEnable && mConfig.verbosePerFeature)
                 std::cout << "[B2 GEOMETRY] track_id=" << currentPerson.trackId
                           << " previous_candidate_id=" << match.previousCandidateId
@@ -762,20 +844,24 @@ void B2MotionEvidence::ComputeInstanceDecisions(B2CandidateFrame& current) const
     // established background correspondence; they are never changed here.
     std::unordered_map<unsigned long, const B2BackgroundObservation*> previousByMapPoint;
     for (const B2BackgroundObservation& observation : mPreviousFrame.backgroundObservations)
-        if (IsOutsideAllPersonMasks(mPreviousFrame, observation.pixel,
+        if (IsOutsideAllPersonMasks(mPreviousFrame,
+                                    mConfig.reliability.enable && observation.hasMaskPixel ? observation.maskPixel : observation.pixel,
                                     mConfig.backgroundExclusionDilateRadius))
             previousByMapPoint[observation.mapPointId] = &observation;
 
     std::vector<float> allBackgroundResiduals;
+    std::unordered_set<unsigned long> backgroundUsed;
     std::unordered_map<int, std::vector<float> > residualsByBin;
     if (mbCameraCalibrated && mbPosePairReliable)
     {
         const Sophus::SE3f& currentFromPrevious = mCurrentFromPrevious;
         for (const B2BackgroundObservation& currentObservation : current.backgroundObservations)
         {
+            if(mConfig.reliability.enable && !backgroundUsed.insert(currentObservation.mapPointId).second) continue;
             const auto previousIt = previousByMapPoint.find(currentObservation.mapPointId);
             if (previousIt == previousByMapPoint.end() ||
-                !IsOutsideAllPersonMasks(current, currentObservation.pixel,
+                !IsOutsideAllPersonMasks(current,
+                                         mConfig.reliability.enable && currentObservation.hasMaskPixel ? currentObservation.maskPixel : currentObservation.pixel,
                                          mConfig.backgroundExclusionDilateRadius))
                 continue;
             const B2BackgroundObservation& previousObservation = *previousIt->second;
@@ -818,12 +904,28 @@ void B2MotionEvidence::ComputeInstanceDecisions(B2CandidateFrame& current) const
         person.rawR3DMedian = person.rawR3DMean = person.rawR3DMad = -1.0f;
         person.normalizedR3DMedian = person.r2DMedian = person.movingFraction = -1.0f;
         person.geometryDecision = GEOM_UNRELIABLE;
+        const bool duplicateIds=person.geometryFailureReason==DUPLICATE_CANDIDATE_ID;
         person.geometryFailureReason = GEOM_FAILURE_NONE;
+        if(mConfig.reliability.enable) {
+            person.matchInvalidCount=person.candidateCount-person.matchedCount;
+            for(const auto& match:person.matches) {
+                if(match.descriptorMatched && match.status!=MATCH_VALID) {
+                    if(match.rejectionReason=="DEPTH_EDGE") ++person.depthEdgeCount;
+                    else ++person.depthInvalidCount;
+                }
+                if(match.rejectionReason=="NUMERIC_INVALID") ++person.numericInvalidCount;
+            }
+        }
         std::vector<float> raw, normalized, r2d;
         for (B2CandidateMatch& match : person.matches)
         {
             if (match.geometryStatus != GEOMETRY_VALID)
                 continue;
+            if(mConfig.reliability.enable && (!std::isfinite(match.rawR3D) ||
+               !std::isfinite(match.r2D) || match.rawR3D<0 || match.r2D<0)) {
+                match.rejectionReason="NUMERIC_INVALID";match.geometryStatus=GEOMETRY_INVALID;
+                ++person.numericInvalidCount;continue;
+            }
             raw.push_back(match.rawR3D);
             r2d.push_back(match.r2D);
             if (backgroundReferenceValid)
@@ -836,6 +938,10 @@ void B2MotionEvidence::ComputeInstanceDecisions(B2CandidateFrame& current) const
                     const auto binIt = binStatistics.find(bin);
                     const BackgroundStatistics& reference = binIt == binStatistics.end() ? fallback : binIt->second;
                     match.normalizedR3D = std::max(0.0f, match.rawR3D - reference.median) / reference.sigma;
+                    if(mConfig.reliability.enable && (!reference.valid || reference.sigma<=0 ||
+                       !std::isfinite(match.normalizedR3D))) {
+                        match.rejectionReason="NUMERIC_INVALID";++person.numericInvalidCount;continue;
+                    }
                     normalized.push_back(match.normalizedR3D);
                 }
             }
@@ -868,6 +974,15 @@ void B2MotionEvidence::ComputeInstanceDecisions(B2CandidateFrame& current) const
         // for every failed gate; residual magnitudes cannot override a failure.
         if (!mbPosePairReliable)
             person.geometryFailureReason = POSE_WEAK;
+        else if(mConfig.reliability.enable && person.previousInstanceId<0)
+            person.geometryFailureReason = IDENTITY_HISTORY_MISMATCH;
+        else if(mConfig.reliability.enable && duplicateIds)
+            person.geometryFailureReason = DUPLICATE_CANDIDATE_ID;
+        else if(mConfig.reliability.enable && (person.numericInvalidCount ||
+            (!raw.empty() && (!std::isfinite(person.rawR3DMedian) || !std::isfinite(person.rawR3DMean) ||
+                             !std::isfinite(person.rawR3DMad))) ||
+            (!normalized.empty() && (!std::isfinite(person.normalizedR3DMedian) || !std::isfinite(person.movingFraction)))))
+            person.geometryFailureReason = NUMERIC_INVALID;
         else if (person.candidateCount <= 0)
             person.geometryFailureReason = INSUFFICIENT_CANDIDATES;
         else if (person.matchedCount < mConfig.minMatchedFeatures)
@@ -949,6 +1064,19 @@ void B2MotionEvidence::MatchPersonFeatures(const B2PersonInstance& previous,
     current.depthValidMatchCount = 0;
     current.matches.clear();
     current.matches.reserve(previous.features.size());
+    std::unordered_set<int> usedTargets;
+    if(mConfig.reliability.enable) {
+        const std::vector<B2CandidateFeature>* featureSets[]={&previous.features,&current.features};
+        for(const auto* features:featureSets) {
+            std::unordered_set<int> unique;
+            for(const auto& feature:*features)
+                if(feature.candidateId<0 || !unique.insert(feature.candidateId).second) {
+                    current.geometryFailureReason=DUPLICATE_CANDIDATE_ID;
+                    current.matchInvalidCount=current.candidateCount;
+                    return;
+                }
+        }
+    }
 
     for (size_t previousIndex = 0; previousIndex < previous.features.size(); ++previousIndex)
     {
@@ -961,6 +1089,7 @@ void B2MotionEvidence::MatchPersonFeatures(const B2PersonInstance& previous,
             mConfig.maxHammingDistance);
         if (!forward.accepted)
         {
+            if(mConfig.reliability.enable) match.rejectionReason=forward.reason;
             current.matches.push_back(match);
             continue;
         }
@@ -978,11 +1107,27 @@ void B2MotionEvidence::MatchPersonFeatures(const B2PersonInstance& previous,
             ++current.mutualMatchCount;
         if (mConfig.useMutualMatch && !mutual)
         {
+            if(mConfig.reliability.enable) match.rejectionReason="MATCH_MUTUAL_REJECTED";
             current.matches.push_back(match);
             continue;
         }
+        if(mConfig.reliability.enable && !usedTargets.insert(currentFeature.candidateId).second) {
+            match.rejectionReason="MATCH_DUPLICATE_TARGET";++current.duplicateMatchCount;
+            current.matches.push_back(match);continue;
+        }
         ++current.matchedCount;
         match.descriptorMatched = true;
+        if(mConfig.reliability.enable &&
+            (!previousFeature.depthQualityChecked || !currentFeature.depthQualityChecked ||
+             previousFeature.nearDepthEdge || currentFeature.nearDepthEdge ||
+             !previousFeature.depthValid || !currentFeature.depthValid)) {
+            if(previousFeature.nearDepthEdge || currentFeature.nearDepthEdge)
+                match.rejectionReason="DEPTH_EDGE";
+            else if(!previousFeature.depthQualityChecked || !currentFeature.depthQualityChecked)
+                match.rejectionReason="DEPTH_QUALITY_NOT_CHECKED";
+            else match.rejectionReason=!previousFeature.depthValid ? previousFeature.depthFailureReason : currentFeature.depthFailureReason;
+            current.matches.push_back(match);continue;
+        }
         if (!previousFeature.depthValid || !currentFeature.depthValid)
         {
             current.matches.push_back(match);

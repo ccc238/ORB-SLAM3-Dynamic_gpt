@@ -29,6 +29,7 @@ struct B3Config {
 // B2 deliberately contains configuration only at this stage. Evidence-only
 // mode must not influence tracking or pose estimation.
 struct B2Config {
+    B2ReliabilityConfig reliability;
     bool enable = false;
     bool evidenceOnly = true;
 

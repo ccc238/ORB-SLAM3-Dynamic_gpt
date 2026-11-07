@@ -140,7 +140,9 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
             mCoarseQualityCsv << "frame_id,timestamp,match_count,inlier_count,inlier_ratio,median_reprojection_error,"
                 "background_features,background_inliers,just_relocalized,initialized,new_map,relocalizing,"
                 "just_recovered,initial_success,finite_pose,pure_vo,reliable,fallback,fallback_reason,"
-                "min_coarse_inliers,min_coarse_inlier_ratio\n";
+                "min_coarse_inliers,min_coarse_inlier_ratio,background_pose_matches,background_pose_samples,"
+                "background_pose_invalid,background_pose_inlier_ratio,background_reprojection_median_px,"
+                "background_grid_cells,background_grid_coverage,reliability_ms\n";
         }
         const auto& policyConfig = mpDynamicDetector->Frontend().featurePolicy;
         if(mpDynamicDetector->Frontend().mapAdmissionEnable) {
@@ -1919,6 +1921,19 @@ Sophus::SE3f Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, co
     UpdateDynamicLogs();
     EmitFrontendDiagnostics();
 
+    if(mpDynamicDetector->StaticQuality().enable && mStaticQualityCsv &&
+       mStaticQualityLoggedFrame!=qualityInputFrameId) {
+        // Initialization/early returns/support failure did not build any fine edges.
+        // Track() may have replaced mCurrentFrame with an empty Frame. Use
+        // acquisition metadata, not the now-invalid Frame identity/timestamp.
+        mStaticQualityCsv<<std::setprecision(17)<<qualityInputFrameId<<','<<timestamp
+            <<",0,"<<(mbFineTrackingFailed?"FINE_STATIC_SUPPORT_INSUFFICIENT":"FINAL_OPTIMIZATION_NOT_RUN")
+            <<",0,0,0,,,0,,0,0\n";
+        mStaticQualityCsv.flush();
+        if(!mStaticQualityCsv) throw std::runtime_error("StaticQuality CSV write failed");
+        mStaticQualityLoggedFrame=qualityInputFrameId;
+    }
+
     return mCurrentFrame.GetPose();
 }
 
@@ -2062,6 +2077,21 @@ int Tracking::OptimizeInitialPoseWithDiagnostics()
     mCoarsePoseQuality = CoarsePoseQuality();
     for (const auto* point : mCurrentFrame.mvpMapPoints)
         if (point) ++mCoarsePoseQuality.match_count;
+    if(mB2Config.reliability.enable) {
+        const cv::Mat excluded=BackgroundExclusionMask(mImGray.size(),
+            mpDynamicDetector->LastRGBDInstances(),mB2Config.backgroundExclusionDilateRadius);
+        for(int i=0;i<mCurrentFrame.N;++i) {
+            auto* point=mCurrentFrame.mvpMapPoints[i];
+            if(!point || point->isBad() || point->Observations()<1 || i>=int(mCurrentFrame.mvDepth.size())) continue;
+            const auto pixel=mCurrentFrame.mvKeys[i].pt;
+            if(!std::isfinite(pixel.x) || !std::isfinite(pixel.y)) continue;
+            const int x=cvRound(pixel.x),y=cvRound(pixel.y);
+            const float depth=mCurrentFrame.mvDepth[i];
+            if(x<0 || y<0 || x>=excluded.cols || y>=excluded.rows || excluded.at<uchar>(y,x) ||
+               !std::isfinite(depth) || depth<mB2Config.minDepthMeters || depth>mB2Config.maxDepthMeters) continue;
+            ++mCoarsePoseQuality.background_matches;
+        }
+    }
     const int inliers = Optimizer::PoseOptimization(&mCurrentFrame); // Same single original call.
     mCoarsePoseQuality.inlier_count = inliers;
     std::vector<float> errors;
@@ -2089,6 +2119,7 @@ int Tracking::OptimizeInitialPoseWithDiagnostics()
 
 void Tracking::FinalizeCoarsePoseQuality(bool initialSuccess)
 {
+    const auto reliabilityStart=std::chrono::steady_clock::now();
     const auto& config = mpDynamicDetector->Frontend();
     auto& context = mCoarsePoseContext;
     context.initial_success = initialSuccess;
@@ -2099,6 +2130,9 @@ void Tracking::FinalizeCoarsePoseQuality(bool initialSuccess)
     const cv::Mat excluded = BackgroundExclusionMask(mImGray.size(),
         mpDynamicDetector->LastRGBDInstances(),mB2Config.backgroundExclusionDilateRadius);
     context.background_features = context.background_inliers = 0;
+    std::vector<CoarseBackgroundSample> backgroundSamples;
+    int backgroundMatches=mCoarsePoseQuality.background_matches,backgroundInvalid=0;
+    const auto& reliability=mB2Config.reliability;
     for (int i=0;i<mCurrentFrame.N;++i)
     {
         const auto& pixel=mCurrentFrame.mvKeys[i].pt;
@@ -2107,9 +2141,30 @@ void Tracking::FinalizeCoarsePoseQuality(bool initialSuccess)
         ++context.background_features;
         if (mCurrentFrame.mvpMapPoints[i] && !mCurrentFrame.mvbOutlier[i])
             ++context.background_inliers;
+        if(reliability.enable) {
+            auto* point=mCurrentFrame.mvpMapPoints[i];
+            if(!point || point->isBad() || point->Observations()<1 || i>=int(mCurrentFrame.mvDepth.size()) ||
+               !std::isfinite(mCurrentFrame.mvDepth[i]) || mCurrentFrame.mvDepth[i]<mB2Config.minDepthMeters ||
+               mCurrentFrame.mvDepth[i]>mB2Config.maxDepthMeters) continue;
+            if(mCurrentFrame.mvbOutlier[i]) continue;
+            if(!context.finite_pose || i>=int(mCurrentFrame.mvKeysUn.size())) {++backgroundInvalid;continue;}
+            const Eigen::Vector3f p=mCurrentFrame.GetPose()*point->GetWorldPos();
+            if(!p.allFinite() || p.z()<=0) {++backgroundInvalid;continue;}
+            const Eigen::Vector2f projected=mpCamera->project(p);
+            const auto measured=mCurrentFrame.mvKeysUn[i].pt;
+            const float error=(projected-Eigen::Vector2f(measured.x,measured.y)).norm();
+            if(!std::isfinite(error)) {++backgroundInvalid;continue;}
+            backgroundSamples.push_back({pixel,error});
+        }
     }
     mCoarsePoseQuality=EvaluateCoarsePoseQuality(mCoarsePoseQuality,context,
         config.minCoarseInliers,config.minCoarseInlierRatio);
+    if(reliability.enable) {
+        MeasureBackgroundQuality(mCoarsePoseQuality,backgroundSamples,backgroundMatches,backgroundInvalid,mImGray.size(),reliability);
+        mCoarsePoseQuality=EvaluateBackgroundQuality(mCoarsePoseQuality,reliability);
+        mCoarsePoseQuality.reliability_ms=std::chrono::duration<double,std::milli>(
+            std::chrono::steady_clock::now()-reliabilityStart).count();
+    }
     if (!mCoarseFilterFallbackReason.empty())
     {
         mCoarsePoseQuality.reliable = false;
@@ -2123,6 +2178,9 @@ void Tracking::FinalizeCoarsePoseQuality(bool initialSuccess)
          << " background_features=" << context.background_features
          << " background_inliers=" << context.background_inliers
          << " reliable=" << int(quality.reliable)
+         << " bg_pose_samples=" << quality.background_samples
+         << " bg_reprojection=" << quality.background_reprojection
+         << " bg_coverage=" << quality.background_coverage
          << " fallback_reason=" << (quality.reliable ? "NA" : quality.reason) << endl;
     mCoarseQualityCsv << std::setprecision(17) << mPendingRGBDB2Frame.frameId << ','
         << mPendingRGBDB2Frame.timestamp << ',' << quality.match_count << ',' << quality.inlier_count << ','
@@ -2134,7 +2192,10 @@ void Tracking::FinalizeCoarsePoseQuality(bool initialSuccess)
         << int(context.finite_pose) << ',' << int(context.pure_vo) << ','
         << int(quality.reliable) << ',' << int(!quality.reliable) << ','
         << (quality.reliable ? "" : quality.reason) << ','
-        << config.minCoarseInliers << ',' << config.minCoarseInlierRatio << '\n';
+        << config.minCoarseInliers << ',' << config.minCoarseInlierRatio << ','
+        << quality.background_matches << ',' << quality.background_samples << ',' << quality.background_invalid << ','
+        << quality.background_inlier_ratio << ',' << quality.background_reprojection << ','
+        << quality.background_cells << ',' << quality.background_coverage << ',' << quality.reliability_ms << '\n';
     mCoarseQualityCsv.flush();
     if (!mCoarseQualityCsv) throw std::runtime_error("Cannot write coarse pose quality CSV");
 }
@@ -2170,6 +2231,11 @@ void Tracking::RunRGBDGeometryEvidence(bool poseReliable, const char* poseSource
     if (mpB2Processor)
     {
         b2Frame.poseSource = frontend.useCoarsePoseForB2 ? "coarse" : "final";
+        b2Frame.poseQualityReason=mCoarsePoseQuality.reason;
+        b2Frame.poseBackgroundSamples=mCoarsePoseQuality.background_samples;
+        b2Frame.poseBackgroundReprojection=mCoarsePoseQuality.background_reprojection;
+        b2Frame.poseBackgroundCoverage=mCoarsePoseQuality.background_coverage;
+        b2Frame.reliabilityMs+=mCoarsePoseQuality.reliability_ms;
         // The saved input identity survives Atlas early returns.
         b2Frame.poseValid = poseReliable && mCurrentFrame.HasPose() &&
             mCurrentFrame.GetPose().matrix().allFinite();
